@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2017 Till Uhlig <till.uhlig@student.uni-halle.de>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -19,19 +19,22 @@ package treeNormalizer.structure;
 import java.util.ArrayList;
 
 /**
+ * Diese Knotenreferenzen beziehen sich auf treeBucketNode Objekte, sodass diese
+ * Klasse die Element zur Nachbildung eines Baums darstellt.
  *
  * @author Till
  */
 public class nodeReference extends Object {
 
     /**
-     * die Kinder
+     * die Kinder dieser Referenz
      */
     private ArrayList<nodeReference> childs = new ArrayList<>();
+
     /**
      * eine ID des Zielknotens, diese ID wird durch durch eine übergeordnete
      * Verwaltung (in einer HashMap) behandelt und soll zu der ID einen
-     * entsprechenden Knoten liefern
+     * entsprechenden Knoten liefern (diese id ist also global eindeutig)
      */
     private int id;
 
@@ -39,8 +42,10 @@ public class nodeReference extends Object {
      * der Elternteil (null = kein Elterknoten)
      */
     private nodeReference parent = null;
+
     /**
-     * der verknüpfte Baum
+     * der verknüpfte Baum (wir gehören also zu diesem Baum oder sind sogar die
+     * Wurzel)
      */
     private tree tree;
 

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2017 Till Uhlig <till.uhlig@student.uni-halle.de>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -137,13 +137,13 @@ public class rule {
         // führe nun die Regel aus
         search search = transform.getSearch();
         pattern result = search.fillPattern(sourcePattern, transform);
-        
-        if (result == null){
+
+        if (result == null) {
             // das Muster konnte nicht befüllt werden, damit ist diese Regel
             // nicht anwendbar
             return;
         }
-        
+
         // nun soll das Muster angwendet werden
     }
 

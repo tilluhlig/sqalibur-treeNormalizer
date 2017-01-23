@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2017 Till Uhlig <till.uhlig@student.uni-halle.de>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -21,21 +21,34 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Diese Klasse verwaltet eine Menge von Bäumen, möglichst kompakt.
  *
  * @author Till
  */
 public class treeBucket {
 
+    /*
+     * beim Vergeben von Referenz-IDs merken wir uns hier die aktuelle
+     * Obergrenze (also die zuletzt vergebene Position)
+     *
+     * TODO: es wird derzeit nicht beachtet, dass IDs wiederverwenet werden
+     * können.
+     */
     private int currentReferencePos = 0;
+
+    /*
+     * Die Abbildung wandelt von Knotenbezeichnern nach Knoten um, sodass man
+     * bestimmte Knotenarten schnell in der Verwaltung finden kann.
+     */
     private final Map<String, ArrayList<treeBucketNode>> nodeNameMap = new HashMap<>();
 
     /**
-     * enthält eine Referenz auf den Knoten
+     * diese Liste von Knotenreferenzen bilden auf die realen Knoten ab
      */
     private final Map<Integer, treeBucketNode> nodeReference = new HashMap<>();
 
     /**
-     * diese Sammlung enthält die Teilgraphen
+     * diese Sammlung enthält die Teilgraphen (also die realen Knoten)
      */
     private Map<Integer, treeBucketNode> nodes = new HashMap<>();
 
@@ -48,7 +61,7 @@ public class treeBucket {
      * initialisiert einen Baumbehälter
      */
     public treeBucket() {
-
+        // Leer
     }
 
     /**
@@ -300,10 +313,10 @@ public class treeBucket {
     private treeBucketNode splitNode(nodeReference node) {
         // der reale Knoten wird nun ermittelt
         treeBucketNode realNode = getInternalNodeByReference(node);
-        
+
         // wenn der referenzierte Knoten alleine in diesem Knoten ist,
         // muss er nicht aufgespalten werden
-        if (realNode.getNodeReferences().size()<=1){
+        if (realNode.getNodeReferences().size() <= 1) {
             return realNode;
         }
 
@@ -313,7 +326,7 @@ public class treeBucket {
         // jetzt muss ein neuer Knoten erzeugt werden
         treeBucketNode splittedNode = realNode.cloneNodeBase();
         splittedNode.addNodeReference(node);
-        
+
         // der neue Knoten soll eindeutig sein, damit er beim Einfügen nicht
         // mit einem anderen vereint wird
         splittedNode = makeNodeUnique(splittedNode);
@@ -321,7 +334,7 @@ public class treeBucket {
 
         // die Knotenreferenz soll nun auf einen neuen realen Knoten zeigen
         nodeReference.replace(node.getId(), splittedNode);
-        
+
         splittedNode.setChilds(realNode.getChilds());
 
         // nun muss der Pfad über die Eltern bis zur Wurzel des Baums
@@ -644,6 +657,10 @@ public class treeBucket {
         removeNode(node);
     }
 
+    /**
+     *
+     * @param tree
+     */
     public void removeTree(tree tree) {
         nodeReference root = tree.getRoot();
         if (root != null) {

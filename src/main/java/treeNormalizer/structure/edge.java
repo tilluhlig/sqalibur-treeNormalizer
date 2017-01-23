@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2017 Till Uhlig <till.uhlig@student.uni-halle.de>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,6 +17,11 @@
 package treeNormalizer.structure;
 
 /**
+ * Diese Klasse stellt Kanten zwischen Knotenreferenzen dar. Dabei enthalten
+ * Knotenreferenzen bereits implizite Kanten durch die Verwaltung von Kindern,
+ * für Knotenreferenzen.
+ *
+ * Damit ist die Klasse ein Hilfskonstrukt.
  *
  * @author Till
  */

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2017 Till Uhlig <till.uhlig@student.uni-halle.de>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -21,6 +21,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Diese Klasse stellt die real existierenden Knoten einer treeBucket dar. Dabei
+ * können diese Kinder besitzen und mehrere Eltern haben, sodass diese Knoten
+ * selbst keine Bäume darstellen sondern erst durch Interpretation der
+ * nodeReferences zu Bäumen werden.
  *
  * @author Till
  */
@@ -38,7 +42,7 @@ public class treeBucketNode {
     private ArrayList<treeBucketNode> childs = new ArrayList<>();
 
     /**
-     * der Hashwert
+     * der Hashwert (wird durch rehash berechnet)
      */
     private int hash = 0; // Default to 0
 
@@ -74,7 +78,7 @@ public class treeBucketNode {
      * erzeugt einen neuen Knoten
      */
     public treeBucketNode() {
-
+        // Leer
     }
 
     /**
@@ -257,9 +261,15 @@ public class treeBucketNode {
 
     /**
      * verringert die uniqueId um 1
+     *
+     * @return die neue uniqueId
      */
-    public void decreaseUniqueId() {
+    public int decreaseUniqueId() {
+        if (uniqueId == 0) {
+            // TODO: was nun?
+        }
         uniqueId--;
+        return uniqueId;
     }
 
     /**
@@ -473,7 +483,7 @@ public class treeBucketNode {
     /**
      * gibt die Anzahl der eingehenden Kanten des Knotens
      *
-     * @return
+     * @return die Anzahl der eingehenden Kanten
      */
     public int inDegree() {
         // obwohl es hier irgendwie um Bäume geht, kann der Eingangsgrad > 1
@@ -484,9 +494,15 @@ public class treeBucketNode {
 
     /**
      * erhöht den Wert der uniqueID um 1
+     *
+     * @return die neue uniqueId
      */
-    public void increaseUniqueId() {
+    public int increaseUniqueId() {
         uniqueId++;
+        if (uniqueId < 0) {
+            // TODO: und nun?
+        }
+        return uniqueId;
     }
 
     /**
@@ -721,8 +737,8 @@ public class treeBucketNode {
      */
     public void removeNodeReference(nodeReference nodeReference) {
         int id = nodeReferences.indexOf(nodeReference);
-        if (id >= 0){
-            nodeReferences.remove(id);        
+        if (id >= 0) {
+            nodeReferences.remove(id);
         }
     }
 

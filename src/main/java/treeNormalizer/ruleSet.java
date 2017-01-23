@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2017 Till Uhlig <till.uhlig@student.uni-halle.de>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -93,7 +93,7 @@ public class ruleSet {
     /**
      * führt die Regeln des Regelsatztes aus
      *
-     * @param bucket der Baumbehälter
+     * @param transform
      */
     public void perform(transformation transform) {
         for (rule rule : rules) {

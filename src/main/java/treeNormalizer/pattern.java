@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2017 Till Uhlig <till.uhlig@student.uni-halle.de>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -39,10 +39,19 @@ public class pattern {
 
     private Map<String, tree> vars = new HashMap<>();
 
+    /**
+     *
+     * @return
+     */
     public Set<String> getVarNames() {
         return vars.keySet();
     }
 
+    /**
+     *
+     * @param varName
+     * @return
+     */
     public tree getVar(String varName) {
         if (vars.containsKey(varName)) {
             return vars.get(varName);
@@ -50,16 +59,26 @@ public class pattern {
         return null;
     }
 
+    /**
+     *
+     * @return
+     */
     public Map<String, tree> getVars() {
         return vars;
     }
 
+    /**
+     *
+     */
     public void resetRule() {
         for (Map.Entry<String, tree> entry : vars.entrySet()) {
             entry.setValue(null);
         }
     }
 
+    /**
+     *
+     */
     public void updateTemplate() {
         extractVarNames();
     }
@@ -69,11 +88,19 @@ public class pattern {
         vars.clear();
     }
 
+    /**
+     *
+     * @param template
+     */
     public void setTemplate(tree template) {
         updateTemplate();
         this.template = template;
     }
 
+    /**
+     *
+     * @return
+     */
     public tree getTemplate() {
         return template;
     }

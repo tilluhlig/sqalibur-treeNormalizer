@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2017 Till Uhlig <till.uhlig@student.uni-halle.de>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -29,7 +29,8 @@ public class segment {
      */
     private String name;
 
-    /** */
+    /**
+     *      */
     private ruleSet ruleSet;
 
     /**
@@ -66,7 +67,7 @@ public class segment {
 
     /**
      *
-     * @param bucket
+     * @param transform
      */
     public void performRules(transformation transform) {
         ruleSet.perform(transform);
@@ -74,9 +75,10 @@ public class segment {
 
     /**
      *
-     * @param bucket
+     * @param transform
      */
     public void perform(transformation transform) {
         performRules(transform);
     }
+
 }

@@ -45,16 +45,16 @@ import javax.script.*;
 public class JavaApplication3 {
 
     /**
+     * Die Main
+     * 
      * @param args the command line arguments
-     * @throws java.io.IOException
+     * @throws java.io.IOException a
      * @throws javax.xml.parsers.ParserConfigurationException
-     * @throws org.xml.sax.SAXException
-     * @throws org.jdom2.JDOMException
      * @throws javax.xml.transform.TransformerConfigurationException
      * @throws javax.xml.transform.TransformerException
      * @throws javax.script.ScriptException
      */
-    public static void main(String[] args) throws IOException, ParserConfigurationException, SAXException, TransformerConfigurationException, TransformerException, ScriptException {
+    public static void main(String[] args) throws IOException, ParserConfigurationException, TransformerConfigurationException, TransformerException, ScriptException {
         File res = new File("res");
         File[] files = res.listFiles();
         if (files != null) {

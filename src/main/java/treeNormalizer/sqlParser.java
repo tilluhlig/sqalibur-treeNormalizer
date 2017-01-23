@@ -29,7 +29,7 @@ import org.xml.sax.SAXException;
 
 /**
  *
- * @author Till Uhlig <till.uhlig@student.uni-halle.de>
+ * @author Till
  */
 public class sqlParser {
 

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2017 Till Uhlig <till.uhlig@student.uni-halle.de>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,10 +17,13 @@
 package treeNormalizer.structure;
 
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.Objects;
 
 /**
+ * Diese Klasse stellt einen Baum dar, dabei ist sie im Wesentlichen ein Zeiger
+ * in Form einer nodeReference auf die Wurzel des Baums enthält.
+ * 
+ * Damit ist tree eine Hilfskonstrukt.
  *
  * @author Till
  */
@@ -126,15 +129,20 @@ public class tree {
         root.setTree(this);
     }
 
+    /**
+     * ob die Wurzel gesetzt ist
+     *
+     * @return ob die Wurzel gesetzt ist (true = ja, false = sonst)
+     */
+    public boolean hasRoot() {
+        return getRoot() != null;
+    }
+
     @Override
     public int hashCode() {
         int hash = 3;
         hash = 71 * hash + Objects.hashCode(this.name);
         return hash;
-    }
-
-    public boolean hasRoot() {
-        return getRoot() != null;
     }
 
     /**
