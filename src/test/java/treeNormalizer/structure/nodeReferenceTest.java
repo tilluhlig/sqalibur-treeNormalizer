@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2017 Till Uhlig <till.uhlig@student.uni-halle.de>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -23,28 +23,29 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import static treeNormalizer.structure.edgeTest.testTree;
 
 /**
  *
  * @author Till Uhlig <till.uhlig@student.uni-halle.de>
  */
 public class nodeReferenceTest {
-    
+
     public nodeReferenceTest() {
     }
-    
+
     @BeforeClass
     public static void setUpClass() {
     }
-    
+
     @AfterClass
     public static void tearDownClass() {
     }
-    
+
     @Before
     public void setUp() {
     }
-    
+
     @After
     public void tearDown() {
     }
@@ -55,11 +56,28 @@ public class nodeReferenceTest {
     @Test
     public void testAddChild() {
         System.out.println("addChild");
-        nodeReference child = null;
-        nodeReference instance = null;
+        tree a = new tree("test");
+        nodeReference child = new nodeReference(a, 100);
+        nodeReference instance = new nodeReference(a, 200);
+
+        ArrayList<nodeReference> testChildList = new ArrayList<>();
+        testChildList.add(child);
+
+        assertEquals(instance.hasChilds(), false);
+        assertEquals(instance.getLeftChild(), null);
+        assertEquals(instance.getRightChild(), null);
+        assertEquals(instance.getChilds(), new ArrayList<>());
+        assertEquals(instance.getExistingChilds(), new ArrayList<>());
+
         instance.addChild(child);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+
+        assertEquals(instance.getParent(), null);
+        assertEquals(instance.hasParent(), false);
+        assertEquals(instance.getChilds(), testChildList);
+        assertEquals(instance.getExistingChilds(), testChildList);
+        assertEquals(instance.getLeftChild(), child);
+        assertEquals(instance.getRightChild(), null);
+        assertEquals(instance.hasChilds(), true);
     }
 
     /**
@@ -68,13 +86,23 @@ public class nodeReferenceTest {
     @Test
     public void testChildExists() {
         System.out.println("childExists");
-        nodeReference child = null;
-        nodeReference instance = null;
-        boolean expResult = false;
-        boolean result = instance.childExists(child);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        tree a = new tree("test");
+        nodeReference child = new nodeReference(a, 100);
+        nodeReference child2 = new nodeReference(a, 300);
+        nodeReference instance = new nodeReference(a, 200);
+        
+        assertEquals(false, instance.childExists(child));
+        assertEquals(instance.hasChilds(), false);
+        
+        instance.addChild(child);
+        
+        assertEquals(instance.hasChilds(), true);
+        assertEquals(true, instance.childExists(child));
+        
+        instance.addChild(child2);
+        
+        assertEquals(true, instance.childExists(child));
+        assertEquals(true, instance.childExists(child2));
     }
 
     /**
@@ -339,14 +367,14 @@ public class nodeReferenceTest {
     }
 
     /**
-     * Test of inDegree method, of class nodeReference.
+     * Test of getInDegree method, of class nodeReference.
      */
     @Test
     public void testInDegree() {
         System.out.println("inDegree");
         nodeReference instance = null;
         int expResult = 0;
-        int result = instance.inDegree();
+        int result = instance.getInDegree();
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
@@ -439,14 +467,14 @@ public class nodeReferenceTest {
     }
 
     /**
-     * Test of outDegree method, of class nodeReference.
+     * Test of getOutDegree method, of class nodeReference.
      */
     @Test
     public void testOutDegree() {
         System.out.println("outDegree");
         nodeReference instance = null;
         int expResult = 0;
-        int result = instance.outDegree();
+        int result = instance.getOutDegree();
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
@@ -543,5 +571,5 @@ public class nodeReferenceTest {
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
-    
+
 }

@@ -65,10 +65,12 @@ public class treeBucket {
     }
 
     /**
+     * fügt einen Knoten der Verwaltung hinzu
      *
-     * @param tree
-     * @param node
-     * @return
+     * @param tree der Zielbaum
+     * @param node der Knoten
+     * @return die eindeutige Knotenreferenz auf diesen Knoten bzw. den Inhalt
+     *         den er darstellt
      */
     private nodeReference addNode(tree tree, treeBucketNode node) {
         node = addNodeSimple(node);
@@ -76,9 +78,11 @@ public class treeBucket {
     }
 
     /**
+     * fügt einen Knoten in die Verwaltung ein, wenn der Knoten so schon
+     * existiert, dann wird der bestehende Knoten mit diesem verschmolzen
      *
-     * @param node
-     * @return
+     * @param node der einzufügende Knoten
+     * @return der übergebene Knoten oder ein bereits vorhandener Knoten
      */
     private treeBucketNode addNodeSimple(treeBucketNode node) {
         if (nodes.containsKey(node.hashCode())) {
@@ -207,9 +211,10 @@ public class treeBucket {
     }
 
     /**
+     * prüft, ob ein Knoten in dieser Form bereits existiert
      *
-     * @param node
-     * @return
+     * @param node der zu prüfende Knoten
+     * @return true = Knoten existiert bereits, false = sonst
      */
     private boolean nodeExists(treeBucketNode node) {
         return nodes.containsKey(node.hashCode());
@@ -467,7 +472,7 @@ public class treeBucket {
 
     /**
      * liefert zu der Referenz einen Knoten, welcher für eine Änderung
-     * vorbereitet wurd
+     * vorbereitet wurde
      *
      * @param node der Knoten
      * @return der änderbare Knoten
@@ -658,8 +663,9 @@ public class treeBucket {
     }
 
     /**
+     * entfernt einen kompletten Baum aus der Verwaltung
      *
-     * @param tree
+     * @param tree der zu entfernende Baum
      */
     public void removeTree(tree tree) {
         nodeReference root = tree.getRoot();

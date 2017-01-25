@@ -79,15 +79,19 @@ public class edgeTest {
      */
     @Test
     public void testSetSource() {
+        nodeReference oldSource = testEdge.getSource();
+        
         testEdge.setSource(nodeC);
         nodeReference result = testEdge.getSource();
         assertEquals(nodeC, result);
         assertEquals(300, result.getId());
         assertEquals(testTree, result.getTree());
         assertEquals("test", result.getTree().getName());
-        testEdge.setSource(nodeA);
-        assertEquals(nodeA, result);
-        assertEquals(100, result.getId());
+        
+        testEdge.setSource(oldSource);
+        result = testEdge.getSource();
+        assertEquals(oldSource, result);
+        assertEquals(oldSource.getId(), result.getId());
     }
 
     /**
@@ -107,13 +111,19 @@ public class edgeTest {
      */
     @Test
     public void testSetTarget() {
+        nodeReference oldTarget = testEdge.getTarget();
+        
         testEdge.setTarget(nodeC);
         nodeReference result = testEdge.getTarget();
         assertEquals(nodeC, result);
         assertEquals(300, result.getId());
         assertEquals(testTree, result.getTree());
         assertEquals("test", result.getTree().getName());
-        testEdge.setTarget(nodeB);
+        
+        testEdge.setTarget(oldTarget);
+        result = testEdge.getTarget();
+        assertEquals(oldTarget, result);
+        assertEquals(oldTarget.getId(), result.getId());
     }
 
     /**

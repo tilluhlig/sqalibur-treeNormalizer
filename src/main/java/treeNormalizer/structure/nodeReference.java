@@ -61,13 +61,13 @@ public class nodeReference extends Object {
     }
 
     /**
-     * fügt ein Kind ein
+     * fügt ein Kind ein Wenn das Kind bereits existiert, wird es ignoriert
      *
      * @param child das Kind
      */
     public void addChild(nodeReference child) {
         // prüfe, dass das Kind nicht doppelt existiert
-        if (childs.contains(child)) {
+        if (childExists(child)) {
             //throw new IllegalArgumentException("das Kind existiert bereits");
             return;
         }
@@ -75,17 +75,19 @@ public class nodeReference extends Object {
     }
 
     /**
-     * prüft, ob das Kind im Kinderfeld existiert
+     * prüft, ob das Kind im Kinderfeld existiert (der Vergleich erfolgt anhand
+     * der ID der Referenz)
      *
      * @param child das Kind
      * @return true = Kind gefunden, false = Kind existiert nicht
      */
     public boolean childExists(nodeReference child) {
-        return childs.indexOf(child) >= 0;
+        return childs.contains(child);
     }
 
     /**
-     * entfernt alle Verbindungen dieser Referenz zu anderen Referenzen
+     * entfernt alle Verbindungen dieser Referenz zu anderen Referenzen Es wird
+     * also die Kanten zu Vaterknoten und alle Kanten zu den Kindern entfernt.
      */
     public void disconnect() {
         // entfernt die Kante zum Elternknoten
@@ -186,15 +188,36 @@ public class nodeReference extends Object {
     }
 
     /**
+     * liefert den Eingangsgrad eines Knotens (ob der Vater gesetzt ist oder
+     * nicht)
+     *
+     * @return der Eingangsgrad (Anzahl der Eltern, also 1 oder 0)
+     */
+    public int getInDegree() {
+        // es ist ein Baum
+        return hasParent() ? 1 : 0;
+    }
+
+    /**
      * ermittelt das linke Kind
      *
-     * @return null = das Kind existiert nicht , sonst = das Kind
+     * @return null = das Kind existiert nicht, sonst = das Kind
      */
     public nodeReference getLeftChild() {
         if (!isChildIndexPossible(0)) {
             return null;
         }
         return childs.get(0);
+    }
+
+    /**
+     * liefert den Ausgangsgrad eines Knotens (auch leere ausgehende Kanten sind
+     * enthalten)
+     *
+     * @return der Ausgangsgrad (Anzahl der Kindknoten)
+     */
+    public int getOutDegree() {
+        return getChilds().size();
     }
 
     /**
@@ -231,6 +254,16 @@ public class nodeReference extends Object {
     }
 
     /**
+     * liefert den Ausgangsgrad eines Knotens (wobei leere Kinder ignoriert
+     * werden)
+     *
+     * @return der Ausgangsgrad (Anzahl der gesetzten Kindknoten)
+     */
+    public int getRealOutDegree() {
+        return getExistingChilds().size();
+    }
+
+    /**
      * ermittelt das letzte/ rechte Kind
      *
      * @return null = das Kind existiert nicht , sonst = das Kind
@@ -263,7 +296,7 @@ public class nodeReference extends Object {
     /**
      * liefert den Wurzelknoten eines Baums
      *
-     * @return die Wurzel des Baums
+     * @return die Wurzel des Baums und null wenn kein Baum gesetzt ist
      */
     public nodeReference getTreeRoot() {
         if (tree == null) {
@@ -279,19 +312,18 @@ public class nodeReference extends Object {
      */
     public boolean hasChilds() {
         // die Kinder könnten leer sein
-        int anz = 0;
         for (nodeReference child : childs) {
             if (child != null) {
-                anz++;
+                return true;
             }
         }
-        return anz > 0;
+        return false;
     }
 
     /**
-     * prüft, ob ein Knoten Eltern besitzt
+     * prüft, ob ein Knoten einen Vater/Mutter besitzt
      *
-     * @return true = hat Eltern, false = hat keine Eltern
+     * @return true = hat einen Vater, false = hat keinen Vater
      */
     public boolean hasParent() {
         return parent != null;
@@ -300,24 +332,11 @@ public class nodeReference extends Object {
     /**
      * Returns a hash code for this node.
      *
-     * @return a hash code value for this object.
+     * @return a hash code value for this object. (die id ist der Hash)
      */
     @Override
     public int hashCode() {
         return this.id;
-    }
-
-    /**
-     * liefert den Eingangsgrad eines Knotens
-     *
-     * @return der Eingangsgrad (Anzahl der Eltern)
-     */
-    public int inDegree() {
-        // es ist ein Baum
-        if (hasParent()) {
-            return 1;
-        }
-        return 0;
     }
 
     /**
@@ -375,21 +394,12 @@ public class nodeReference extends Object {
     }
 
     /**
-     * prüft, ob der Knoten die Wurzel ist
+     * prüft, ob der Knoten die Wurzel ist (also kein Vater gesetzt ist)
      *
      * @return true = ist Wurzel, false = ist nicht die Wurzel
      */
     public boolean isRoot() {
         return !hasParent();
-    }
-
-    /**
-     * liefert den Ausgangsgrad eines Knotens
-     *
-     * @return der Ausgangsgrad (Anzahl der Kindknoten)
-     */
-    public int outDegree() {
-        return getChilds().size();
     }
 
     /**
@@ -406,14 +416,25 @@ public class nodeReference extends Object {
     }
 
     /**
-     * entfernt ein Kind (setzt die Kante auf null)
+     * entfernt ein Kind aus der Liste und löscht den Kindereintrag
      *
      * @param child das Kind
      */
     public void removeChild(nodeReference child) {
         int i = childs.indexOf(child);
         if (i >= 0) {
-            setChild(i, null);
+            childs.remove(i);
+        }
+    }
+
+    /**
+     * entfernt ein Kind aus der Liste und löscht den Kindereintrag
+     *
+     * @param childPos die Position in der Kinderliste
+     */
+    public void removeChild(int childPos) {
+        if (isChildIndexPossible(childPos)) {
+            childs.remove(childPos);
         }
     }
 
@@ -423,11 +444,7 @@ public class nodeReference extends Object {
      * @param index der Index (also das Kind)
      */
     public void removeEdge(int index) {
-        if (!isChildIndexPossible(index)) {
-            throw new IllegalArgumentException("die Kante existiert nicht");
-        }
-
-        setChild(index, null);
+        unsetChild(index);
     }
 
     /**
@@ -454,7 +471,8 @@ public class nodeReference extends Object {
     }
 
     /**
-     * entfernt den Elternknoten aus der Referenz
+     * entfernt den Elternknoten aus der Referenz (setzt also den Vater auf
+     * null)
      */
     public void removeParent() {
         parent = null;
@@ -471,6 +489,59 @@ public class nodeReference extends Object {
             throw new ArrayIndexOutOfBoundsException("das Kind existiert nicht");
         }
         childs.set(index, child);
+    }
+
+    /**
+     * entfernt ein Kind (setzt die Kante auf null)
+     *
+     * @param child die Referenz des Kindes
+     */
+    public void unsetChild(nodeReference child) {
+        int i = childs.indexOf(child);
+        if (i >= 0) {
+            setChild(i, null);
+        }
+    }
+
+    /**
+     * entfernt ein Kind (setzt die Kante auf null)
+     *
+     * @param childPos die Position in der Kinderliste
+     */
+    public void unsetChild(int childPos) {
+        if (isChildIndexPossible(childPos)) {
+            setChild(childPos, null);
+        }
+    }
+
+    /**
+     * setzt einen Kindeintrag von "source" auf null
+     *
+     * @param source der Quellknoten
+     */
+    public void unsetEdgeFrom(nodeReference source) {
+        source.unsetEdgeTo(this);
+    }
+
+    /**
+     * setzt einen Kindeintrag zum Knoten "target" auf null
+     *
+     * @param target der Zielknoten der Kante
+     */
+    public void unsetEdgeTo(nodeReference target) {
+        if (!childExists(target)) {
+            throw new IllegalArgumentException("die Kante existiert nicht");
+        }
+
+        unsetChild(target);
+        target.unsetParent();
+    }
+
+    /**
+     * setzt den Vater des Knotens auf null (ist aber wie removeParent)
+     */
+    public void unsetParent() {
+        removeParent();
     }
 
 }
