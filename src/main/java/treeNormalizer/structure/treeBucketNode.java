@@ -32,7 +32,7 @@ public class treeBucketNode {
 
     /**
      * die Attributliste (falls zusätzliche Eigenschaften an den Knoten gebunden
-     * werden sollen)
+     * werden sollen) Damit kann auch der Kontext gespeichert werden.
      */
     private Map<String, String> attributes = new HashMap<>();
 
@@ -47,7 +47,8 @@ public class treeBucketNode {
     private int hash = 0; // Default to 0
 
     /**
-     * der Name des Knotens (beispielsweise sowas wie "1" oder "+")
+     * der Name des Knotens/Bezeichner (beispielsweise sowas wie "1" oder "+").
+     * Man könnte das Feld auch content nennen.
      */
     private String name = "";
 
@@ -142,22 +143,19 @@ public class treeBucketNode {
      * fügt eine Kante, von einem Quellknoten zu diesem Knoten, ein
      *
      * @param sourceNode der Quellknoten
-     * @return true = erfolgreich, false nicht erfolgreich
      */
-    public boolean addEdgeFrom(treeBucketNode sourceNode) {
-        return sourceNode.addEdgeTo(this);
+    public void addEdgeFrom(treeBucketNode sourceNode) {
+        sourceNode.addEdgeTo(this);
     }
 
     /**
      * fügt eine Kante zu dem Zielknoten ein
      *
      * @param targetNode der Zielknoten
-     * @return true = erfolgreich, false = nicht erfolgreich
      */
-    public boolean addEdgeTo(treeBucketNode targetNode) {
+    public void addEdgeTo(treeBucketNode targetNode) {
         targetNode.addParent(this);
         addChild(targetNode);
-        return true;
     }
 
     /**
@@ -299,10 +297,23 @@ public class treeBucketNode {
      * liefert den Wert eines Attributs
      *
      * @param name der Name
-     * @return der Wert
+     * @return der Wert (wenn es nicht existiert kommt null)
      */
     public String getAttribute(String name) {
-        return attributes.get(name);
+        if (attributeExists(name)) {
+            return attributes.get(name);
+        }
+        return null;
+    }
+
+    /**
+     * prüft, ob ein Attribut existiert
+     *
+     * @param name der Name
+     * @return true = existiert, false = existiert nicht
+     */
+    public boolean attributeExists(String name) {
+        return attributes.containsKey(name);
     }
 
     /**
@@ -783,7 +794,7 @@ public class treeBucketNode {
      * @param value der neue Wert
      */
     public void setAttribute(String name, String value) {
-        if (attributes.containsKey(name)) {
+        if (attributeExists(name)) {
             attributes.replace(name, value);
         } else {
             attributes.put(name, value);

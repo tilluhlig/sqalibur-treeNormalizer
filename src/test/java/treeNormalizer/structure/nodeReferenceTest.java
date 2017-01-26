@@ -367,20 +367,6 @@ public class nodeReferenceTest {
     }
 
     /**
-     * Test of getInDegree method, of class nodeReference.
-     */
-    @Test
-    public void testInDegree() {
-        System.out.println("inDegree");
-        nodeReference instance = null;
-        int expResult = 0;
-        int result = instance.getInDegree();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
      * Test of isChild method, of class nodeReference.
      */
     @Test
@@ -461,20 +447,6 @@ public class nodeReferenceTest {
         nodeReference instance = null;
         boolean expResult = false;
         boolean result = instance.isRoot();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of getOutDegree method, of class nodeReference.
-     */
-    @Test
-    public void testOutDegree() {
-        System.out.println("outDegree");
-        nodeReference instance = null;
-        int expResult = 0;
-        int result = instance.getOutDegree();
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
@@ -568,6 +540,138 @@ public class nodeReferenceTest {
         nodeReference child = null;
         nodeReference instance = null;
         instance.setChild(index, child);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of getInDegree method, of class nodeReference.
+     */
+    @Test
+    public void testGetInDegree() {
+        System.out.println("getInDegree");
+        nodeReference instance = null;
+        int expResult = 0;
+        int result = instance.getInDegree();
+        assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of getOutDegree method, of class nodeReference.
+     */
+    @Test
+    public void testGetOutDegree() {
+        System.out.println("getOutDegree");
+        nodeReference instance = null;
+        int expResult = 0;
+        int result = instance.getOutDegree();
+        assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of getRealOutDegree method, of class nodeReference.
+     */
+    @Test
+    public void testGetRealOutDegree() {
+        System.out.println("getRealOutDegree");
+        nodeReference instance = null;
+        int expResult = 0;
+        int result = instance.getRealOutDegree();
+        assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of removeChild method, of class nodeReference.
+     */
+    @Test
+    public void testRemoveChild_nodeReference() {
+        System.out.println("removeChild");
+        nodeReference child = null;
+        nodeReference instance = null;
+        instance.removeChild(child);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of removeChild method, of class nodeReference.
+     */
+    @Test
+    public void testRemoveChild_int() {
+        System.out.println("removeChild");
+        int childPos = 0;
+        nodeReference instance = null;
+        instance.removeChild(childPos);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of unsetChild method, of class nodeReference.
+     */
+    @Test
+    public void testUnsetChild_nodeReference() {
+        System.out.println("unsetChild");
+        nodeReference child = null;
+        nodeReference instance = null;
+        instance.unsetChild(child);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of unsetChild method, of class nodeReference.
+     */
+    @Test
+    public void testUnsetChild_int() {
+        System.out.println("unsetChild");
+        int childPos = 0;
+        nodeReference instance = null;
+        instance.unsetChild(childPos);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of unsetEdgeFrom method, of class nodeReference.
+     */
+    @Test
+    public void testUnsetEdgeFrom() {
+        System.out.println("unsetEdgeFrom");
+        nodeReference source = null;
+        nodeReference instance = null;
+        instance.unsetEdgeFrom(source);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of unsetEdgeTo method, of class nodeReference.
+     */
+    @Test
+    public void testUnsetEdgeTo() {
+        System.out.println("unsetEdgeTo");
+        nodeReference target = null;
+        nodeReference instance = null;
+        instance.unsetEdgeTo(target);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of unsetParent method, of class nodeReference.
+     */
+    @Test
+    public void testUnsetParent() {
+        System.out.println("unsetParent");
+        nodeReference instance = null;
+        instance.unsetParent();
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
