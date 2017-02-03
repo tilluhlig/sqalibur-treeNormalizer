@@ -25,15 +25,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import javax.xml.parsers.*;
 import java.nio.file.Path;
-import javax.xml.transform.Source;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.stream.StreamSource;
-import org.xml.sax.SAXException;
 import treeNormalizer.transformation;
 
 import javax.script.*;
@@ -49,12 +41,9 @@ public class JavaApplication3 {
      * 
      * @param args the command line arguments
      * @throws java.io.IOException a
-     * @throws javax.xml.parsers.ParserConfigurationException
-     * @throws javax.xml.transform.TransformerConfigurationException
-     * @throws javax.xml.transform.TransformerException
      * @throws javax.script.ScriptException
      */
-    public static void main(String[] args) throws IOException, ParserConfigurationException, TransformerConfigurationException, TransformerException, ScriptException {
+    public static void main(String[] args) throws IOException, ScriptException {
         File res = new File("res");
         File[] files = res.listFiles();
         if (files != null) {

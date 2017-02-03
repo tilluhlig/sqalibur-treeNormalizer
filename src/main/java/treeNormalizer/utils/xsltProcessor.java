@@ -13,6 +13,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.util.List;
 import java.util.stream.Stream;
 import javax.xml.parsers.*;
 import javax.xml.transform.Source;
@@ -20,6 +21,7 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamSource;
 
 import org.xml.sax.SAXException;
@@ -27,6 +29,7 @@ import org.xml.sax.*;
 
 import org.jdom.input.SAXBuilder;
 import org.jdom.Document;
+import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
@@ -47,9 +50,29 @@ public class xsltProcessor {
 
     /**
      * wandelt die source mittels des xslScript um
+     *
+     * @throws javax.xml.transform.TransformerConfigurationException
+     * @throws javax.xml.transform.TransformerException
+     * @throws org.jdom.JDOMException
+     * @throws java.io.IOException
      */
-    public void transform() {
+    public void transform() throws TransformerConfigurationException, TransformerException, JDOMException, IOException {
         String template = templateHead + xslScript + templateBottom;
+
+        InputStream stream = new ByteArrayInputStream(template.getBytes(StandardCharsets.UTF_8));
+        Document document = new SAXBuilder().build(stream);
+        Source xslt = new JDOMSource(document);
+        
+
+        JDOMResult result = new JDOMResult();
+        Transformer transformer
+                = TransformerFactory.newInstance().newTransformer(xslt);
+        transformer.transform(source, result);
+
+        XMLOutputter out = new XMLOutputter(Format.getPrettyFormat());
+        //out.output(result, System.out);
+        
+        //out.output(result.getDocument(), System.out);
     }
 
     /**
@@ -105,15 +128,11 @@ public class xsltProcessor {
         //System.out.println(content.getRootElement().getChildren().size());
         //System.out.println(document.getRootElement().getText());
         source = new JDOMSource(content);
-
-        JDOMResult result = new JDOMResult();
-        Transformer transformer
-                = TransformerFactory.newInstance().newTransformer(new StreamSource("Messung.xsl"));
-        transformer.transform(source, result);
-
-        //XMLOutputter out = new XMLOutputter(Format.getPrettyFormat());
-        //out.output(content, System.out);
-        //out.output(result.getDocument(), System.out);
+        
+        // wir müssen zwischen XML und dem Rest hin und her umformen
+      ////////////////JDOMSource q = (JDOMSource) source;
+     /////////////////// Document p = q.getDocument();
+      //////////////////////////////  List a = q.getNodes();
     }
 
     /**
