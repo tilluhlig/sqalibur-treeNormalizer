@@ -18,7 +18,6 @@ package treeNormalizer;
 
 import treeNormalizer.structure.tree;
 import treeNormalizer.structure.treeBucket;
-import treeNormalizer.utils.search;
 
 /**
  *
@@ -30,15 +29,6 @@ public class rule {
      * der optionale Regelname
      */
     private String name;
-
-    /**
-     * das Quellmuster
-     */
-    private pattern sourcePattern = null;
-    /**
-     * das Zielmuster
-     */
-    private pattern targetPattern = null;
 
     /**
      * erzeugt eine neue leere Regel
@@ -54,19 +44,6 @@ public class rule {
      */
     public rule(String name) {
         this.name = name;
-    }
-
-    /**
-     * erzeugt eine neue Regel
-     *
-     * @param name          der Name
-     * @param sourcePattern das Quellmuster
-     * @param targetPattern das Zielmuster
-     */
-    public rule(String name, pattern sourcePattern, pattern targetPattern) {
-        this.name = name;
-        this.targetPattern = targetPattern;
-        this.sourcePattern = sourcePattern;
     }
 
     /**
@@ -88,62 +65,12 @@ public class rule {
     }
 
     /**
-     * liefert das Quellmuster
-     *
-     * @return das Quellmuster
-     */
-    public pattern getSourcePattern() {
-        return sourcePattern;
-    }
-
-    /**
-     * setzt das Quell
-     *
-     * @param sourcePattern das Quellmuster
-     */
-    public void setSourcePattern(pattern sourcePattern) {
-        this.sourcePattern = sourcePattern;
-    }
-
-    /**
-     * liefert das Zielmuster
-     *
-     * @return das Zielmuster
-     */
-    public pattern getTargetPattern() {
-        return targetPattern;
-    }
-
-    /**
-     * setzt das Zielmuster
-     *
-     * @param targetPattern das Zielmuster
-     */
-    public void setTargetPattern(pattern targetPattern) {
-        this.targetPattern = targetPattern;
-    }
-
-    /**
      * führt die Regel aus
      *
      * @param transform die Transformationsdaten
      */
     public void perform(transformation transform) {
-        if (targetPattern == null || sourcePattern == null) {
-            // eines der beiden Muster fehlt
-            return;
-        }
-
-        // führe nun die Regel aus
-        search search = transform.getSearch();
-        pattern result = search.fillPattern(sourcePattern, transform);
-
-        if (result == null) {
-            // das Muster konnte nicht befüllt werden, damit ist diese Regel
-            // nicht anwendbar
-            return;
-        }
-
+        
         // nun soll das Muster angwendet werden
     }
 

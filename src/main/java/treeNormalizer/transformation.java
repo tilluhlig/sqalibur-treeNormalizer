@@ -17,11 +17,9 @@
 package treeNormalizer;
 
 import treeNormalizer.structure.treeBucket;
-import treeNormalizer.utils.search;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import treeNormalizer.utils.naiveSearch;
 
 /**
  *
@@ -35,11 +33,6 @@ public class transformation {
      * Behältern äquivalent gemacht werden.
      */
     private Map<String, treeBucket> buckets = new HashMap<>();
-
-    /**
-     * Das Suchobjekt wird verwendet, um Muster zu finden und zu befüllen.
-     */
-    private search search = new naiveSearch();
 
     /**
      * fügt einen Behälter hinzu
@@ -66,22 +59,6 @@ public class transformation {
      */
     public Map<String, treeBucket> getBuckets() {
         return buckets;
-    }
-
-    /**
-     *
-     * @param search
-     */
-    public void setSearch(search search) {
-        this.search = search;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public search getSearch() {
-        return search;
     }
 
     /**
