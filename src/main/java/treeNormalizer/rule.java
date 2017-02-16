@@ -67,11 +67,11 @@ public class rule {
     /**
      * führt die Regel aus
      *
-     * @param transform die Transformationsdaten
+     * @param context die Transformationsdaten
+     * @return true = Regel wurde angewendet, false = Regel wurde nicht angewendet
      */
-    public void perform(transformation transform) {
-        
-        // nun soll das Muster angwendet werden
+    public boolean perform(transformation context) {
+        return false;
     }
 
 }

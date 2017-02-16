@@ -80,8 +80,6 @@ public class JavaApplication3 {
         q.addEdge(plus2, zwei2);
         writeNodeSetToFile(q);
 
-        transformation transformation = new transformation();
-
         /*
          * String filename = "Messung.xml"; Document document = new
          * SAXBuilder().build(filename);

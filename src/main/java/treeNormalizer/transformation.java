@@ -20,47 +20,24 @@ import treeNormalizer.structure.treeBucket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import org.jdom.Document;
 
 /**
  *
  * @author Till
  */
 public class transformation {
-
-    /**
-     * Enthält die verschiedenen Behälter, welche in den Regeln angesprochen und
-     * transformiert werden können/sollen. Dabei sollen jeweils die Bäume in den
-     * Behältern äquivalent gemacht werden.
-     */
-    private Map<String, treeBucket> buckets = new HashMap<>();
-
-    /**
-     * fügt einen Behälter hinzu
-     *
-     * @param name   der Name (wird für die Regeln benötigt)
-     * @param bucket der Behälter
-     */
-    public void addBucket(String name, treeBucket bucket) {
-        buckets.put(name, bucket);
+    
+    private Document tree;
+    
+    public transformation(Document tree){
+        this.tree = tree;
     }
-
-    /**
-     * setzt alle Behälter
-     *
-     * @param bucket die Behälter
-     */
-    public void setBuckets(Map<String, treeBucket> bucket) {
-        this.buckets = bucket;
+    
+    public transformation(){
+        // kein Inhalt
     }
-
-    /**
-     *
-     * @return
-     */
-    public Map<String, treeBucket> getBuckets() {
-        return buckets;
-    }
-
+    
     /**
      *
      * @return
@@ -68,6 +45,20 @@ public class transformation {
     public String prettyPrint() {
 
         return "";
+    }
+
+    /**
+     * @return the tree
+     */
+    public Document getTree() {
+        return tree;
+    }
+
+    /**
+     * @param tree the tree to set
+     */
+    public void setTree(Document tree) {
+        this.tree = tree;
     }
 
 }

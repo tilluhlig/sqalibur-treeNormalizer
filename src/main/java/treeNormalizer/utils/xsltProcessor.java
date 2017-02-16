@@ -6,7 +6,9 @@
 package treeNormalizer.utils;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -14,6 +16,8 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Stream;
 import javax.xml.parsers.*;
 import javax.xml.transform.Source;
@@ -35,6 +39,7 @@ import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 import org.jdom.transform.JDOMResult;
 import org.jdom.transform.JDOMSource;
+import treeNormalizer.structure.tree;
 
 /**
  *
@@ -51,47 +56,77 @@ public class xsltProcessor {
     /**
      * wandelt die source mittels des xslScript um
      *
-     * @throws javax.xml.transform.TransformerConfigurationException
-     * @throws javax.xml.transform.TransformerException
-     * @throws org.jdom.JDOMException
-     * @throws java.io.IOException
+     * @return das transformierte Dokument
      */
-    public void transform() throws TransformerConfigurationException, TransformerException, JDOMException, IOException {
-        String template = templateHead + xslScript + templateBottom;
-
-        InputStream stream = new ByteArrayInputStream(template.getBytes(StandardCharsets.UTF_8));
-        Document document = new SAXBuilder().build(stream);
-        Source xslt = new JDOMSource(document);
+    public Document transform() {
+        try {
+            String template = templateHead + xslScript + templateBottom;
         
+            InputStream stream = new ByteArrayInputStream(template.getBytes(StandardCharsets.UTF_8));
+            Document document = new SAXBuilder().build(stream);
+            Source xslt = new JDOMSource(document);
 
-        JDOMResult result = new JDOMResult();
-        Transformer transformer
-                = TransformerFactory.newInstance().newTransformer(xslt);
-        transformer.transform(source, result);
+            JDOMResult result = new JDOMResult();
+            Transformer transformer = null;
+            try {
+                transformer = TransformerFactory.newInstance().newTransformer(xslt);
+            } catch (TransformerConfigurationException ex) {
+                Logger.getLogger(xsltProcessor.class.getName()).log(Level.SEVERE, null, ex);
+            }
 
-        XMLOutputter out = new XMLOutputter(Format.getPrettyFormat());
-        //out.output(result, System.out);
-        
-        //out.output(result.getDocument(), System.out);
+            if (transformer != null) {
+                try {
+                    transformer.transform(source, result);
+                } catch (TransformerException ex) {
+                    Logger.getLogger(xsltProcessor.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+            XMLOutputter out = new XMLOutputter(Format.getPrettyFormat());
+            //out.output(result, System.out);
+
+            out.output(result.getDocument(), System.out);
+            return result.getDocument();
+        } catch (JDOMException | IOException ex) {
+            Logger.getLogger(xsltProcessor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
     /**
      * fügt Text zum xsl-Skript hinzu (anhand einer Ressource)
      *
      * @param path der Ressourcenpfad
-     * @throws IOException
      */
-    public void addResource(String path) throws IOException {
-        URL url = getClass().getClassLoader().getResource(path);
-        BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
-
-        String res = "";
-        String inputLine;
-        while ((inputLine = in.readLine()) != null) {
-            res += inputLine;
+    public void addResourceToScript(String path) {
+        BufferedReader in = null;
+        try {
+            URL url = getClass().getClassLoader().getResource(path);
+            in = new BufferedReader(new InputStreamReader(url.openStream()));
+            String res = "";
+            String inputLine;
+            while ((inputLine = in.readLine()) != null) {
+                res += inputLine;
+            }
+            in.close();
+            addTextToScript(res);
+        } catch (IOException ex) {
+            Logger.getLogger(xsltProcessor.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                in.close();
+            } catch (IOException ex) {
+                Logger.getLogger(xsltProcessor.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
-        in.close();
-        addText(res);
+    }
+    
+    /**
+     *
+     * @param path
+     */
+    public void includeResourceToScript(String path) {
+        addTextToScript("<xsl:include href=\"loader/"+path+"\"/>");
     }
 
     /**
@@ -99,12 +134,12 @@ public class xsltProcessor {
      *
      * @param content mehrere einzufügende Texte
      */
-    public void addText(String[] content) {
+    public void addTextToScript(String[] content) {
         String res = "";
         for (String element : content) {
-            res = res + "<xsl:include href=\"rules/wurzel.xsl\"/>";
+            res = res + element;
         }
-        addText(res);
+        addTextToScript(res);
     }
 
     /**
@@ -112,7 +147,7 @@ public class xsltProcessor {
      *
      * @param content der Text
      */
-    public void addText(String content) {
+    public void addTextToScript(String content) {
         setXslScript(getXslScript() + content);
     }
 
@@ -120,43 +155,38 @@ public class xsltProcessor {
      * setzt die XML-Quelle mittels eines Document
      *
      * @param content das Document
-     * @throws TransformerConfigurationException
-     * @throws TransformerException
-     * @throws IOException
      */
-    public void setSource(Document content) throws TransformerConfigurationException, TransformerException, IOException {
+    public void setSource(Document content) {
         //System.out.println(content.getRootElement().getChildren().size());
         //System.out.println(document.getRootElement().getText());
         source = new JDOMSource(content);
-        
+
         // wir müssen zwischen XML und dem Rest hin und her umformen
-      ////////////////JDOMSource q = (JDOMSource) source;
-     /////////////////// Document p = q.getDocument();
-      //////////////////////////////  List a = q.getNodes();
+        ////////////////JDOMSource q = (JDOMSource) source;
+        /////////////////// Document p = q.getDocument();
+        //////////////////////////////  List a = q.getNodes();
     }
 
     /**
      * setzt die XML-Quelle mittels eines InputStream
      *
      * @param content der InputStream
-     * @throws JDOMException
-     * @throws IOException
-     * @throws TransformerException
      */
-    public void setSource(InputStream content) throws JDOMException, IOException, TransformerException {
-        Document document = new SAXBuilder().build(content);
-        setSource(document);
+    public void setSource(InputStream content) {
+        try {
+            Document document = new SAXBuilder().build(content);
+            setSource(document);
+        } catch (JDOMException | IOException ex) {
+            Logger.getLogger(xsltProcessor.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
      * setzt die XML-Quelle mittels eines Textes
      *
      * @param content der Text
-     * @throws JDOMException
-     * @throws IOException
-     * @throws TransformerException
      */
-    public void setSource(String content) throws JDOMException, IOException, TransformerException {
+    public void setSource(String content) {
         InputStream stream = new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8));
         setSource(stream);
     }
@@ -165,14 +195,35 @@ public class xsltProcessor {
      * setzt die XML-Quelle anhand einer Datei
      *
      * @param fileName die Datei
-     * @throws JDOMException
-     * @throws IOException
-     * @throws TransformerConfigurationException
-     * @throws TransformerException
      */
-    public void setSourceFile(String fileName) throws JDOMException, IOException, TransformerConfigurationException, TransformerException {
-        Document document = new SAXBuilder().build(fileName);
-        setSource(document);
+    public void setSourceByFile(String fileName) {
+        try {
+            Document document = new SAXBuilder().build(fileName);
+            setSource(document);
+        } catch (JDOMException | IOException ex) {
+            Logger.getLogger(xsltProcessor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    /**
+     *
+     * @param path
+     */
+    public void setSourceByResource(String path) {
+        try {
+            BufferedReader in;
+            URL url = getClass().getClassLoader().getResource(path);
+            in = new BufferedReader(new InputStreamReader(url.openStream()));
+            String res = "";
+            String inputLine;
+            while ((inputLine = in.readLine()) != null) {
+                res += inputLine;
+            }
+            in.close();
+            setSource(res);
+        } catch (IOException ex) {
+            Logger.getLogger(xsltProcessor.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
