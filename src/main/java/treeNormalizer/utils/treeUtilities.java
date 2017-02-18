@@ -24,11 +24,18 @@ import org.jdom.Document;
 import org.jdom.Element;
 
 /**
+ * diese Klasse stellt Hilfsfunktionen zum Umgang mit Bäumen bereit
  *
  * @author Till
  */
-public class treeUsage {
+public class treeUtilities {
 
+    /**
+     * Liefert die Blätter eines Baums
+     *
+     * @param tree
+     * @return
+     */
     public static List<Element> getLeafs(Document tree) {
         if (!tree.hasRootElement()) {
             return new LinkedList<>();
@@ -46,18 +53,41 @@ public class treeUsage {
         return leafs;
     }
 
+    /**
+     * liefert den Hash eines Baums
+     *
+     * @param tree der Baum
+     * @return der numerische Hash
+     */
     public static int getDocumentHash(Document tree) {
         return getDocumentHash(tree, false);
     }
 
+    /**
+     *
+     * @param tree
+     * @param useSignature
+     * @return
+     */
     public static int getDocumentHash(Document tree, boolean useSignature) {
         return getDocumentHashAsString(tree, useSignature).hashCode();
     }
 
+    /**
+     *
+     * @param tree
+     * @return
+     */
     public static String getDocumentHashAsString(Document tree) {
         return getDocumentHashAsString(tree, false);
     }
 
+    /**
+     *
+     * @param tree
+     * @param useSignature
+     * @return
+     */
     public static String getDocumentHashAsString(Document tree, boolean useSignature) {
         if (!tree.hasRootElement()) {
             return "";
@@ -65,54 +95,85 @@ public class treeUsage {
         return getElementHashAsString(tree.getRootElement(), useSignature);
     }
 
-    public static int getElementHash(Element e) {
-        return getElementHash(e, false);
+    /**
+     *
+     * @param element
+     * @return
+     */
+    public static int getElementHash(Element element) {
+        return getElementHash(element, false);
     }
 
-    public static int getElementHash(Element e, boolean useSignature) {
-        return getElementHashAsString(e, useSignature).hashCode();
+    /**
+     *
+     * @param element
+     * @param useSignature
+     * @return
+     */
+    public static int getElementHash(Element element, boolean useSignature) {
+        return getElementHashAsString(element, useSignature).hashCode();
     }
 
-    public static String getElementHashAsString(Element e) {
-        return getElementHashAsString(e, false);
+    /**
+     *
+     * @param element
+     * @return
+     */
+    public static String getElementHashAsString(Element element) {
+        return getElementHashAsString(element, false);
     }
 
-    public static String getElementHashAsString(Element e, boolean useSignature) {
+    /**
+     *
+     * @param element
+     * @param useSignature
+     * @return
+     */
+    public static String getElementHashAsString(Element element, boolean useSignature) {
         String signature = null;
         if (useSignature) {
-            signature = e.getAttributeValue("signature");
+            signature = element.getAttributeValue("signature");
             if (signature != null) {
                 return signature;
             }
         }
 
-        List<Element> childs = e.getChildren();
+        List<Element> childs = element.getChildren();
 
-        String label = e.getAttributeValue("label");
+        String label = element.getAttributeValue("label");
         if (label == null) {
             label = "";
+        } else {
+            label = "_" + label;
         }
 
-        String classText = e.getAttributeValue("class");
+        String classText = element.getAttributeValue("class");
         if (classText == null) {
             classText = "";
+        } else {
+            classText = "_" + classText;
         }
 
         if (childs != null && childs.size() > 0) {
             String text = "";
             for (Element a : childs) {
-                text += getElementHash(a);
+                text += getElementHashAsString(a);
             }
-            signature = "{" + e.getName() + "_" + label + "_" + classText + "_" + text + "}";
+            signature = "{" + element.getName() + label + classText + "_" + text + "}";
         } else {
-            signature = "{" + e.getName() + "_" + label + "_" + classText + "}";
+            signature = "{" + element.getName() + label + classText + "}";
         }
         if (useSignature) {
-            e.setAttribute("signature", signature);
+            element.setAttribute("signature", signature);
         }
         return signature;
     }
 
+    /**
+     * setzt die Signaturattribute eines Baums zurück
+     *
+     * @param tree der Baum
+     */
     public void resetSignatures(Document tree) {
         if (!tree.hasRootElement()) {
             return;
@@ -120,6 +181,11 @@ public class treeUsage {
         resetSignature(tree.getRootElement());
     }
 
+    /**
+     * setzt die Signaturattribute Unterbaums zurück
+     *
+     * @param element das Startelement
+     */
     public void resetSignature(Element element) {
         element.setAttribute("signature", null);
         List<Element> childs = element.getChildren();
