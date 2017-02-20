@@ -12,6 +12,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -61,7 +63,7 @@ public class xsltProcessor {
     public Document transform() {
         try {
             String template = templateHead + xslScript + templateBottom;
-        
+
             InputStream stream = new ByteArrayInputStream(template.getBytes(StandardCharsets.UTF_8));
             Document document = new SAXBuilder().build(stream);
             Source xslt = new JDOMSource(document);
@@ -93,6 +95,18 @@ public class xsltProcessor {
         return null;
     }
 
+    public static String DocumentToXml(Document document) {
+        XMLOutputter out = new XMLOutputter(Format.getPrettyFormat());
+        Writer writer = new StringWriter();
+        try {
+            out.output(document, writer);
+        } catch (IOException ex) {
+            Logger.getLogger(xsltProcessor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        String data = writer.toString();
+        return data;
+    }
+
     /**
      * fügt Text zum xsl-Skript hinzu (anhand einer Ressource)
      *
@@ -120,13 +134,13 @@ public class xsltProcessor {
             }
         }
     }
-    
+
     /**
      *
      * @param path
      */
     public void includeResourceToScript(String path) {
-        addTextToScript("<xsl:include href=\"loader/"+path+"\"/>");
+        addTextToScript("<xsl:include href=\"loader/" + path + "\"/>");
     }
 
     /**
