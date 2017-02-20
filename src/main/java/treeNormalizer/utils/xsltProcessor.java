@@ -95,6 +95,11 @@ public class xsltProcessor {
         return null;
     }
 
+    /**
+     * wandelt ein Document in eine XML Darstellung um
+     * @param document ein Document
+     * @return das Dokument als XML
+     */
     public static String DocumentToXml(Document document) {
         XMLOutputter out = new XMLOutputter(Format.getPrettyFormat());
         Writer writer = new StringWriter();
