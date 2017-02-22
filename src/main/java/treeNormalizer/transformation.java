@@ -27,17 +27,17 @@ import org.jdom.Document;
  * @author Till
  */
 public class transformation {
-    
+
     private Document tree;
-    
-    public transformation(Document tree){
+
+    public transformation(Document tree) {
         this.tree = tree;
     }
-    
-    public transformation(){
+
+    public transformation() {
         // kein Inhalt
     }
-    
+
     /**
      *
      * @return
