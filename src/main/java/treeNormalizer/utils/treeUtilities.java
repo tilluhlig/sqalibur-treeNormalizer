@@ -174,7 +174,7 @@ public class treeUtilities {
      *
      * @param tree der Baum
      */
-    public void resetSignatures(Document tree) {
+    public static void resetSignatures(Document tree) {
         if (!tree.hasRootElement()) {
             return;
         }
@@ -182,11 +182,11 @@ public class treeUtilities {
     }
 
     /**
-     * setzt die Signaturattribute Unterbaums zurück
+     * setzt die Signaturattribute des Unterbaums zurück
      *
      * @param element das Startelement
      */
-    public void resetSignature(Element element) {
+    public static void resetSignature(Element element) {
         element.setAttribute("signature", null);
         List<Element> childs = element.getChildren();
         if (childs == null || childs.isEmpty()) {
@@ -195,6 +195,18 @@ public class treeUtilities {
         for (Element child : childs) {
             resetSignature(child);
         }
+    }
+    
+    public static String getQueryType(Document tree){
+        if (!tree.hasRootElement()){
+            return null;
+        }
+        Element root = tree.getRootElement();
+        List<Element> childs = root.getChildren();
+        if (childs.size()!=1){
+            return null;
+        }
+        return childs.get(0).getAttributeValue("class");
     }
 
 }

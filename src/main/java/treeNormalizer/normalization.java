@@ -16,17 +16,17 @@ public abstract class normalization {
     /*
      * die Einsendung eines Studenten
      */
-    private transformation submission;
+    protected transformation submission;
 
     /*
      * die Musterlösung
      */
-    private transformation solution;
+    protected transformation solution;
 
     /*
      * der Kontext
      */
-    private Document context;
+    protected Document context;
 
     /**
      * @return the submission
@@ -85,5 +85,7 @@ public abstract class normalization {
     }
 
     public abstract void perform();
+    
+    public abstract boolean equivalent();
 
 }
