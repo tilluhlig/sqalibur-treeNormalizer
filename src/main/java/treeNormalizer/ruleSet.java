@@ -23,12 +23,7 @@ import java.util.ArrayList;
  *
  * @author Till
  */
-public class ruleSet {
-
-    /**
-     * der Name des Regelsatzes
-     */
-    private String name;
+public class ruleSet extends rule {
 
     /**
      * der Regelsatz
@@ -36,39 +31,37 @@ public class ruleSet {
     private ArrayList<rule> rules = new ArrayList<>();
 
     /**
-     * fügt eine weitere Regel hinzu
+     * fügt eine weitere Regel hinzu (Regeln können auch mehrfach aufgenommen
+     * werden)
      *
-     * @param rule
+     * @param rule die einzufügende Regel
      */
     public void addRule(rule rule) {
         rules.add(rule);
     }
 
     /**
-     * gibt den Namen zurück
+     * fügt eine weitere Regel hinzu (doppelte Regeln werden ignoriert)
      *
-     * @return der Name
+     * @param rule die einzufügende Regel
      */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * setzt den Namen
-     *
-     * @param name der Name
-     */
-    public void setName(String name) {
-        this.name = name;
+    public void addRuleDistinct(rule rule) {
+        if (rules.contains(rule)) {
+            return;
+        }
+        addRule(rule);
     }
 
     /**
      * liefert eine Regel
      *
      * @param id die Position in der Regelliste
-     * @return
+     * @return die gewählte Regel oder null
      */
     public rule getRule(int id) {
+        if (id < 0 || id >= rules.size()) {
+            return null;
+        }
         return rules.get(id);
     }
 
@@ -91,14 +84,26 @@ public class ruleSet {
     }
 
     /**
+     * entfernt alle Regeln aus dem Regelsatz
+     */
+    public void resetRules() {
+        this.rules.clear();
+    }
+
+    /**
      * führt die Regeln des Regelsatztes aus
      *
      * @param transform
+     * @return true = eine Regel wurde angewendet, false = keine Regel wurde
+     *         angewendet
      */
-    public void perform(transformation transform) {
+    @Override
+    public boolean perform(transformation transform) {
+        boolean result = false;
         for (rule rule : rules) {
-            rule.perform(transform);
+            result |= rule.perform(transform);
         }
+        return result;
     }
 
     /**

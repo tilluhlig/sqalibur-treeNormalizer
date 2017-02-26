@@ -73,5 +73,9 @@ public class rule {
     public boolean perform(transformation context) {
         return false;
     }
+    
+    public static boolean performRule(transformation context){
+        return false;
+    }
 
 }

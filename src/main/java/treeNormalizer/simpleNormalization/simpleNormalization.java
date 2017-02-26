@@ -10,6 +10,8 @@ import org.jdom.Attribute;
 import org.jdom.Document;
 import org.jdom.Element;
 import treeNormalizer.normalization;
+import treeNormalizer.rule;
+import treeNormalizer.transformation;
 
 /**
  *
@@ -81,7 +83,7 @@ public class simpleNormalization extends normalization {
      */
     @Override
     public void perform() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        // die Regeln anwenden
+     
     }
-
 }
