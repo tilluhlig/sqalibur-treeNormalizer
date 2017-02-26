@@ -18,6 +18,7 @@ package treeNormalizer;
 
 import treeNormalizer.structure.treeBucket;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -28,7 +29,7 @@ public class ruleSet extends rule {
     /**
      * der Regelsatz
      */
-    private ArrayList<rule> rules = new ArrayList<>();
+    protected List<rule> rules = new ArrayList<>();
 
     /**
      * fügt eine weitere Regel hinzu (Regeln können auch mehrfach aufgenommen
@@ -70,7 +71,7 @@ public class ruleSet extends rule {
      *
      * @return die Regeln
      */
-    public ArrayList<rule> getRules() {
+    public List<rule> getRules() {
         return rules;
     }
 
@@ -79,7 +80,7 @@ public class ruleSet extends rule {
      *
      * @param rules die Regeln
      */
-    public void setRules(ArrayList<rule> rules) {
+    public void setRules(List<rule> rules) {
         this.rules = rules;
     }
 

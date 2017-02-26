@@ -87,7 +87,7 @@ public class xsltProcessor {
             XMLOutputter out = new XMLOutputter(Format.getPrettyFormat());
             //out.output(result, System.out);
 
-            out.output(result.getDocument(), System.out);
+            //out.output(result.getDocument(), System.out);
             return result.getDocument();
         } catch (JDOMException | IOException ex) {
             Logger.getLogger(xsltProcessor.class.getName()).log(Level.SEVERE, null, ex);

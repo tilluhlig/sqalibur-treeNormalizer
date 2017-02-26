@@ -169,6 +169,10 @@ public class treeUtilities {
         return signature;
     }
 
+    public static String printDocument(Document tree){
+        return xsltProcessor.DocumentToXml(tree);
+    }
+    
     /**
      * setzt die Signaturattribute eines Baums zurück
      *

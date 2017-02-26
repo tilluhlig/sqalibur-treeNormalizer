@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import org.jdom.Document;
+import treeNormalizer.utils.treeUtilities;
 
 /**
  *
@@ -29,6 +30,8 @@ import org.jdom.Document;
 public class transformation {
 
     private Document tree;
+
+    private Document context;
 
     public transformation(Document tree) {
         this.tree = tree;
@@ -39,12 +42,12 @@ public class transformation {
     }
 
     /**
+     * liefert eine Textdarstellung dieses Objects
      *
-     * @return
+     * @return String die Textdarstellung
      */
     public String prettyPrint() {
-
-        return "";
+        return "tree:\n" + treeUtilities.printDocument(tree) + "\n\ncontext:\n" + treeUtilities.printDocument(context);
     }
 
     /**
@@ -59,6 +62,20 @@ public class transformation {
      */
     public void setTree(Document tree) {
         this.tree = tree;
+    }
+
+    /**
+     * @return the context
+     */
+    public Document getContext() {
+        return context;
+    }
+
+    /**
+     * @param context the context to set
+     */
+    public void setContext(Document context) {
+        this.context = context;
     }
 
 }

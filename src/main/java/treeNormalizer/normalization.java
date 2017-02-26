@@ -5,6 +5,8 @@
  */
 package treeNormalizer;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.jdom.Document;
 
 /**
@@ -13,79 +15,72 @@ import org.jdom.Document;
  */
 public abstract class normalization {
 
-    /*
-     * die Einsendung eines Studenten
-     */
-    protected transformation submission;
-
-    /*
-     * die Musterlösung
-     */
-    protected transformation solution;
-
-    /*
-     * der Kontext
-     */
-    protected Document context;
+    protected List<rule> rules = new ArrayList<rule>();
 
     /**
      * @return the submission
      */
-    public transformation getSubmission() {
-        return submission;
-    }
+    public abstract transformation getSubmission();
 
     /**
      * @param submission the submission to set
      */
-    public void setSubmission(transformation submission) {
-        this.submission = submission;
-    }
+    public abstract void setSubmission(transformation submission);
 
     /**
      * @param submission the submission to set
      */
-    public void setSubmission(Document submission) {
-        this.submission = new transformation(submission);
-    }
+    public abstract void setSubmission(Document submission);
 
     /**
      * @return the solution
      */
-    public transformation getSolution() {
-        return solution;
-    }
+    public abstract transformation getSolution();
 
     /**
      * @param solution the solution to set
      */
-    public void setSolution(transformation solution) {
-        this.solution = solution;
-    }
+    public abstract void setSolution(transformation solution);
 
     /**
      * @param solution the solution to set
      */
-    public void setSolution(Document solution) {
-        this.solution = new transformation(solution);
-    }
+    public abstract void setSolution(Document solution);
 
     /**
      * @return the context
      */
-    public Document getContext() {
-        return context;
-    }
+    public abstract Document getContext();
 
     /**
      * @param context the context to set
      */
-    public void setContext(Document context) {
-        this.context = context;
-    }
+    public abstract void setContext(Document context);
 
     public abstract void perform();
-    
+
     public abstract boolean equivalent();
+
+    /**
+     * @return the rules
+     */
+    public List<rule> getRules() {
+        return rules;
+    }
+
+    /**
+     * @param rules the rules to set
+     */
+    public void setRules(List<rule> rules) {
+        this.rules = rules;
+    }
+
+    public void addRule(rule newRule) {
+        this.rules.add(newRule);
+    }
+
+    public void resetRules() {
+        this.rules.clear();
+    }
 
 }

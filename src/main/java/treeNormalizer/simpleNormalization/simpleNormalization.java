@@ -19,6 +19,21 @@ import treeNormalizer.transformation;
  */
 public class simpleNormalization extends normalization {
 
+    /*
+     * die Einsendung eines Studenten
+     */
+    private transformation submission;
+
+    /*
+     * die Musterlösung
+     */
+    private transformation solution;
+
+    /*
+     * der Kontext
+     */
+    private Document context;
+
     /**
      * prüft die Äquivalenz von Einsendung und Musterlösung
      *
@@ -26,8 +41,8 @@ public class simpleNormalization extends normalization {
      */
     @Override
     public boolean equivalent() {
-        Document solutionDocument = solution.getTree();
-        Document submissionDocument = submission.getTree();
+        Document solutionDocument = getSolution().getTree();
+        Document submissionDocument = getSubmission().getTree();
         if (solutionDocument == null && submissionDocument == null) {
             return true;
         }
@@ -78,12 +93,71 @@ public class simpleNormalization extends normalization {
         return true;
     }
 
+    @Override
+    public Document getContext() {
+        return this.context;
+    }
+
+    @Override
+    public void setContext(Document context) {
+        this.context = context;
+    }
+
+    @Override
+    public transformation getSolution() {
+        return solution;
+    }
+
+    @Override
+    public void setSolution(Document solution) {
+        this.solution = new transformation(solution);
+    }
+
+    @Override
+    public void setSolution(transformation solution) {
+        this.solution = solution;
+    }
+
+    @Override
+    public transformation getSubmission() {
+        return this.submission;
+    }
+
+    @Override
+    public void setSubmission(Document submission) {
+        this.submission = new transformation(submission);
+    }
+
+    @Override
+    public void setSubmission(transformation submission) {
+        this.submission = submission;
+    }
+
     /**
      * führt die Normalisierung der Einsendung und der Musterlösung durch
      */
     @Override
     public void perform() {
-        // die Regeln anwenden
-     
+        // setzt den Kontext für die Musterlösung und die Einsendung
+        submission.setContext(context);
+        solution.setContext(context);
+
+        // jetzt werden alle Regeln nacheinander angewendet
+        for (rule r : this.rules) {
+            boolean a = r.perform(solution);
+            boolean a2 = r.perform(submission);
+
+            // nur wenn eine der beiden Regeln ihr Dokument verändert hat,
+            // dann denken wir weiter darüber nach
+            if (a || a2) {
+
+                // wenn nach dieser Regelanwendung bereits beide äquivalent
+                // sind, dann können wir den Vorgang beenden
+                if (this.equivalent()) {
+                    return;
+                }
+            }
+        }
     }
+
 }

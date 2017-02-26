@@ -28,7 +28,7 @@ public class rule {
     /**
      * der optionale Regelname
      */
-    private String name;
+    protected String name;
 
     /**
      * erzeugt eine neue leere Regel
