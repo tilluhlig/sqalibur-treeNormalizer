@@ -72,8 +72,11 @@ public class simpleNormalization extends normalization {
             return false;
         }
 
+        List<Element> childsA = A.getChildren();
+        List<Element> childsB = B.getChildren();
+
         // sie müssen die gleiche Anzahl an Kindern besitzen
-        if (A.getChildren().size() != B.getChildren().size()) {
+        if (childsA.size() != childsB.size()) {
             return false;
         }
         // der Knotenbezeichner muss gleich sein
@@ -86,6 +89,13 @@ public class simpleNormalization extends normalization {
         }
         if (A.getAttributeValue("class") != B.getAttributeValue("class")) {
             return false;
+        }
+
+        // jetzt werden die Kinder rekursiv gegeneinander geprüft
+        for (int i = 0; i < childsA.size(); i++) {
+            if (!elementEquivalence(childsA.get(i), childsB.get(i))) {
+                return false;
+            }
         }
 
         // wenn die Normalisierung noch weitere Attribute setzt, dann
