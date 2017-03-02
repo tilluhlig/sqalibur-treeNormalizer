@@ -12,6 +12,7 @@ import org.jdom.Element;
 import treeNormalizer.normalization;
 import treeNormalizer.rule;
 import treeNormalizer.transformation;
+import treeNormalizer.utils.treeUtilities;
 
 /**
  *
@@ -168,6 +169,9 @@ public class simpleNormalization extends normalization {
                 }
             }
         }
+        
+        treeUtilities.resetSignatures(submission.getTree());
+        treeUtilities.resetSignatures(solution.getTree());
     }
 
 }

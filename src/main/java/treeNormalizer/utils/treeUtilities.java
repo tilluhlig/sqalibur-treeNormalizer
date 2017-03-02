@@ -186,12 +186,14 @@ public class treeUtilities {
     }
 
     /**
-     * setzt die Signaturattribute des Unterbaums zurück
+     * setzt die Signaturattribute des Unterbaums zurück (löscht also 
+     * das Attribut "signature")
      *
      * @param element das Startelement
      */
     public static void resetSignature(Element element) {
-        element.setAttribute("signature", null);
+       // element.setAttribute("signature", null);
+        element.removeAttribute("signature");
         List<Element> childs = element.getChildren();
         if (childs == null || childs.isEmpty()) {
             return;
