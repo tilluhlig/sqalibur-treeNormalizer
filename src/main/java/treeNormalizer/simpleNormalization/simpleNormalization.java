@@ -6,7 +6,6 @@
 package treeNormalizer.simpleNormalization;
 
 import java.util.List;
-import org.jdom.Attribute;
 import org.jdom.Document;
 import org.jdom.Element;
 import treeNormalizer.normalization;
@@ -15,6 +14,9 @@ import treeNormalizer.transformation;
 import treeNormalizer.utils.treeUtilities;
 
 /**
+ * bietet eine einfache Handhabung der Normalisierung an, dabei wird Document
+ * als Datengrundlage genutzt und keine zusätzliche Entscheidung für die Auswahl
+ * der Regeln getroffen (also Simpel)
  *
  * @author Till Uhlig <till.uhlig@student.uni-halle.de>
  */
@@ -169,7 +171,7 @@ public class simpleNormalization extends normalization {
                 }
             }
         }
-        
+
         treeUtilities.resetSignatures(submission.getTree());
         treeUtilities.resetSignatures(solution.getTree());
     }

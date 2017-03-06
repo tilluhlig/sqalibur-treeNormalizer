@@ -15,31 +15,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package treeNormalizer;
-
-
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.geom.Point2D;
-import java.util.Collection;
-
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import javax.swing.BorderFactory;
-import javax.swing.RepaintManager;
-import javax.swing.border.BevelBorder;
-import javax.swing.border.LineBorder;
-
-import org.w3c.dom.DOMImplementation;
-import org.w3c.dom.Document;
-
-//import org.w3c.dom.ElementTraversal;
 /**
  * Diese Klasse enthält eine Vergleichsquelle, welche aus mehreren Segmenten besteht
  * @author Till

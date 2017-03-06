@@ -16,10 +16,8 @@
  */
 package treeNormalizer.utils;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.ListIterator;
 import org.jdom.Document;
 import org.jdom.Element;
 
@@ -33,8 +31,8 @@ public class treeUtilities {
     /**
      * Liefert die Blätter eines Baums
      *
-     * @param tree
-     * @return
+     * @param tree ein Baum als Document
+     * @return eine Liste der Blätter
      */
     public static List<Element> getLeafs(Document tree) {
         if (!tree.hasRootElement()) {
@@ -64,29 +62,34 @@ public class treeUtilities {
     }
 
     /**
+     * liefert den Hash eines Baums
      *
-     * @param tree
-     * @param useSignature
-     * @return
+     * @param tree         der Baum
+     * @param useSignature wenn das Attribut signature bereits gesetzt ist, dann
+     *                     führt er keine Neuberechnung aus
+     * @return der numerische Hash
      */
     public static int getDocumentHash(Document tree, boolean useSignature) {
         return getDocumentHashAsString(tree, useSignature).hashCode();
     }
 
     /**
+     * liefert den Hash eines Baums
      *
-     * @param tree
-     * @return
+     * @param tree der Baum
+     * @return der Hash als Text
      */
     public static String getDocumentHashAsString(Document tree) {
         return getDocumentHashAsString(tree, false);
     }
 
     /**
+     * liefert den Hash eines Baums
      *
-     * @param tree
-     * @param useSignature
-     * @return
+     * @param tree         der Baum
+     * @param useSignature wenn das Attribut signature bereits gesetzt ist, dann
+     *                     führt er keine Neuberechnung aus
+     * @return der Hash noch als Text
      */
     public static String getDocumentHashAsString(Document tree, boolean useSignature) {
         if (!tree.hasRootElement()) {
@@ -96,38 +99,44 @@ public class treeUtilities {
     }
 
     /**
+     * liefert den Hash eines Elements
      *
-     * @param element
-     * @return
+     * @param element das Element
+     * @return der numerische Hash
      */
     public static int getElementHash(Element element) {
         return getElementHash(element, false);
     }
 
     /**
+     * liefert den Hash eines Elements
      *
-     * @param element
-     * @param useSignature
-     * @return
+     * @param element      das Element
+     * @param useSignature wenn das Attribut signature bereits gesetzt ist, dann
+     *                     führt er keine Neuberechnung aus
+     * @return der eineutige Hash als Text
      */
     public static int getElementHash(Element element, boolean useSignature) {
         return getElementHashAsString(element, useSignature).hashCode();
     }
 
     /**
+     * liefert den Hash eines Elements
      *
-     * @param element
-     * @return
+     * @param element das Element
+     * @return der eineutige Hash als Text
      */
     public static String getElementHashAsString(Element element) {
         return getElementHashAsString(element, false);
     }
 
     /**
+     * liefert den Hash eines Elements
      *
-     * @param element
-     * @param useSignature
-     * @return
+     * @param element      das Element
+     * @param useSignature wenn das Attribut signature bereits gesetzt ist, dann
+     *                     führt er keine Neuberechnung aus
+     * @return der eineutige Hash als Text
      */
     public static String getElementHashAsString(Element element, boolean useSignature) {
         String signature = null;
@@ -169,10 +178,16 @@ public class treeUtilities {
         return signature;
     }
 
-    public static String printDocument(Document tree){
+    /**
+     * wandelt einen Baum in Textdarstellung um (also XML)
+     *
+     * @param tree der Baum
+     * @return die Textdarstellung
+     */
+    public static String printDocument(Document tree) {
         return xsltProcessor.DocumentToXml(tree);
     }
-    
+
     /**
      * setzt die Signaturattribute eines Baums zurück
      *
@@ -186,13 +201,13 @@ public class treeUtilities {
     }
 
     /**
-     * setzt die Signaturattribute des Unterbaums zurück (löscht also 
-     * das Attribut "signature")
+     * setzt die Signaturattribute des Unterbaums zurück (löscht also das
+     * Attribut "signature")
      *
      * @param element das Startelement
      */
     public static void resetSignature(Element element) {
-       // element.setAttribute("signature", null);
+        // element.setAttribute("signature", null);
         element.removeAttribute("signature");
         List<Element> childs = element.getChildren();
         if (childs == null || childs.isEmpty()) {
@@ -202,14 +217,22 @@ public class treeUtilities {
             resetSignature(child);
         }
     }
-    
-    public static String getQueryType(Document tree){
-        if (!tree.hasRootElement()){
+
+    /**
+     * das class-Attribut des ersten Kindes unterhalb von root liefert den Typ
+     * (wenn dieser Baum anders strukturiert ist, kann es natürlich sein, dass
+     * sich dort kein Statement befindet)
+     *
+     * @param tree der Baum
+     * @return der Anfragetyp
+     */
+    public static String getQueryType(Document tree) {
+        if (!tree.hasRootElement()) {
             return null;
         }
         Element root = tree.getRootElement();
         List<Element> childs = root.getChildren();
-        if (childs.size()!=1){
+        if (childs.size() != 1) {
             return null;
         }
         return childs.get(0).getAttributeValue("class");

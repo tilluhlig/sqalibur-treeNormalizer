@@ -10,11 +10,16 @@ import java.util.List;
 import org.jdom.Document;
 
 /**
+ * Diese Klasse stellt die Struktur einer allgemeinen Normalisierungsumgebung
+ * dar
  *
  * @author Till Uhlig <till.uhlig@student.uni-halle.de>
  */
 public abstract class normalization {
 
+    /**
+     * die Regelliste
+     */
     protected List<rule> rules = new ArrayList<rule>();
 
     /**
@@ -57,8 +62,16 @@ public abstract class normalization {
      */
     public abstract void setContext(Document context);
 
+    /**
+     * führt die Normalisierung aus
+     */
     public abstract void perform();
 
+    /**
+     * prüft die Äquivalenz von Einsendung und Musterlösung
+     *
+     * @return
+     */
     public abstract boolean equivalent();
 
     /**
@@ -75,10 +88,29 @@ public abstract class normalization {
         this.rules = rules;
     }
 
+    /**
+     * fügt eine Regel ein
+     *
+     * @param newRule die neue Regel (kann schon existieren)
+     */
     public void addRule(rule newRule) {
         this.rules.add(newRule);
     }
 
+    /**
+     * fügt eine Regel ein (wenn sich nicht schon existiert)
+     *
+     * @param newRule die neue Regel
+     */
+    public void addDistinctRule(rule newRule) {
+        if (!this.rules.contains(newRule)) {
+            addRule(newRule);
+        }
+    }
+
+    /**
+     * entfernt alle Regeln
+     */
     public void resetRules() {
         this.rules.clear();
     }

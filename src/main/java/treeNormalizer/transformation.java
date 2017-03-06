@@ -16,27 +16,40 @@
  */
 package treeNormalizer;
 
-import treeNormalizer.structure.treeBucket;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import org.jdom.Document;
 import treeNormalizer.utils.treeUtilities;
 
 /**
+ * Stellt die Struktur für ein Dokument tree dar, welches transformiert werden
+ * soll. Dabei enthält context eventuelle Zusatzinfos für den Kontext
+ * (beispielsweise als createTabel Statement) bereit.
  *
  * @author Till
  */
 public class transformation {
 
+    /*
+     * der Baum der möglicherweise bearbeitet wird
+     */
     private Document tree;
 
+    /*
+     * ein Baum, welcher den Kontext von tree beschreibt
+     */
     private Document context;
 
+    /**
+     * initialisiert die Transformation anhand eines Baums
+     *
+     * @param tree der Baum
+     */
     public transformation(Document tree) {
         this.tree = tree;
     }
 
+    /**
+     * der Standardkonstruktor
+     */
     public transformation() {
         // kein Inhalt
     }

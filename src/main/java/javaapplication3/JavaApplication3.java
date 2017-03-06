@@ -16,17 +16,13 @@
  */
 package javaapplication3;
 
-import treeNormalizer.structure.treeBucketNode;
 import treeNormalizer.structure.nodeReference;
 import treeNormalizer.structure.tree;
 import treeNormalizer.structure.treeBucket;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Path;
-import treeNormalizer.transformation;
 
 import javax.script.*;
 

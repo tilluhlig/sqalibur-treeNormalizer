@@ -16,10 +16,9 @@
  */
 package treeNormalizer;
 
-import treeNormalizer.structure.tree;
-import treeNormalizer.structure.treeBucket;
-
 /**
+ * diese Klasse stellt den Aufbau einer Regel dar (die Klasse wurde nicht als
+ * abstract implementiert, weil static nicht mit abstract zusammen arbeitet)
  *
  * @author Till
  */
@@ -34,7 +33,7 @@ public class rule {
      * erzeugt eine neue leere Regel
      */
     public rule() {
-
+        // kein Inhalt
     }
 
     /**
@@ -67,14 +66,22 @@ public class rule {
     /**
      * führt die Regel aus
      *
-     * @param context die Transformationsdaten
-     * @return true = Regel wurde angewendet, false = Regel wurde nicht angewendet
+     * @param context
+     * @return true = Regel wurde angewendet, false = Regel wurde nicht
+     *         angewendet
      */
     public boolean perform(transformation context) {
-        return false;
+        return rule.performRule(context);
     }
-    
-    public static boolean performRule(transformation context){
+
+    /**
+     * führt die Regel aus
+     *
+     * @param context die Transformationsdaten
+     * @return true = Regel wurde angewendet, false = Regel wurde nicht
+     *         angewendet
+     */
+    public static boolean performRule(transformation context) {
         return false;
     }
 

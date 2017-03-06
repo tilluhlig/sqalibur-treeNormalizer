@@ -6,9 +6,7 @@
 package treeNormalizer.utils;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -16,43 +14,46 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Stream;
-import javax.xml.parsers.*;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.sax.SAXSource;
-import javax.xml.transform.stream.StreamSource;
-
-import org.xml.sax.SAXException;
-import org.xml.sax.*;
-
 import org.jdom.input.SAXBuilder;
 import org.jdom.Document;
-import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 import org.jdom.transform.JDOMResult;
 import org.jdom.transform.JDOMSource;
-import treeNormalizer.structure.tree;
 
 /**
+ * diese Klasse bietet einen XSLT Prozessor an
  *
  * @author Till Uhlig <till.uhlig@student.uni-halle.de>
  */
 public class xsltProcessor {
-    // private static 
 
+    /*
+     * das Ausgangsmaterial
+     */
     private Source source = null;
+
+    /*
+     * der Inhalt des Skriptes (muss ein gültiges XSLT-Skript sein)
+     */
     private String xslScript = "";
+
+    /*
+     * diese Konstante schließt unser Skript später ab
+     */
     private final String templateBottom = "</xsl:stylesheet>";
+
+    /*
+     * das ist eine Konstante für den Anfang des Skriptes
+     */
     private final String templateHead = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:ext=\"http://exslt.org/common\" exclude-result-prefixes=\"ext\" version=\"1.0\"><xsl:output method=\"xml\"/><xsl:strip-space elements=\"*\"/>";
 
     /**
@@ -97,6 +98,7 @@ public class xsltProcessor {
 
     /**
      * wandelt ein Document in eine XML Darstellung um
+     *
      * @param document ein Document
      * @return das Dokument als XML
      */
@@ -141,8 +143,9 @@ public class xsltProcessor {
     }
 
     /**
+     * fügt dem XSL Skript eine Resource per include hinzu
      *
-     * @param path
+     * @param path der Pfad zur ressource
      */
     public void includeResourceToScript(String path) {
         addTextToScript("<xsl:include href=\"loader/" + path + "\"/>");
@@ -225,8 +228,9 @@ public class xsltProcessor {
     }
 
     /**
+     * setzt die Quelle der Umwandlung anhand einer Ressource
      *
-     * @param path
+     * @param path der Pfad dieser Ressource
      */
     public void setSourceByResource(String path) {
         try {

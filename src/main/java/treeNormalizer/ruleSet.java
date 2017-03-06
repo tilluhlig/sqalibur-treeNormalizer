@@ -16,11 +16,11 @@
  */
 package treeNormalizer;
 
-import treeNormalizer.structure.treeBucket;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * ein Menge von Regeln
  *
  * @author Till
  */
