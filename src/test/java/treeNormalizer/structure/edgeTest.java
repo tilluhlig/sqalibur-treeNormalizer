@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2017 Till Uhlig <till.uhlig@student.uni-halle.de>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -16,26 +16,49 @@
  */
 package treeNormalizer.structure;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
+ * diese Klasse testet die edge-Klasse
  *
  * @author Till
  */
 public class edgeTest {
 
+    /**
+     * ein Baum
+     */
     public static tree testTree;
+
+    /**
+     * eine Kante
+     */
     public static edge testEdge;
+
+    /**
+     * eine Knotenreferenz
+     */
     public static nodeReference nodeA;
+
+    /**
+     * eine Knotenreferenz
+     */
     public static nodeReference nodeB;
+
+    /**
+     * eine Knotenreferenz
+     */
     public static nodeReference nodeC;
+
+    /**
+     * eine Knotenreferenz (Wurzel)
+     */
     public static nodeReference root;
 
+    /**
+     * initialisiert die Testdaten
+     */
     public edgeTest() {
         testTree = new tree("test");
         nodeA = new nodeReference(testTree, 100);
@@ -44,22 +67,6 @@ public class edgeTest {
         root = new nodeReference(testTree, 400);
         testTree.setRoot(root);
         testEdge = new edge(nodeA, nodeB);
-    }
-
-    @BeforeClass
-    public static void setUpClass() {
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-    }
-
-    @Before
-    public void setUp() {
-    }
-
-    @After
-    public void tearDown() {
     }
 
     /**
@@ -80,14 +87,14 @@ public class edgeTest {
     @Test
     public void testSetSource() {
         nodeReference oldSource = testEdge.getSource();
-        
+
         testEdge.setSource(nodeC);
         nodeReference result = testEdge.getSource();
         assertEquals(nodeC, result);
         assertEquals(300, result.getId());
         assertEquals(testTree, result.getTree());
         assertEquals("test", result.getTree().getName());
-        
+
         testEdge.setSource(oldSource);
         result = testEdge.getSource();
         assertEquals(oldSource, result);
@@ -112,14 +119,14 @@ public class edgeTest {
     @Test
     public void testSetTarget() {
         nodeReference oldTarget = testEdge.getTarget();
-        
+
         testEdge.setTarget(nodeC);
         nodeReference result = testEdge.getTarget();
         assertEquals(nodeC, result);
         assertEquals(300, result.getId());
         assertEquals(testTree, result.getTree());
         assertEquals("test", result.getTree().getName());
-        
+
         testEdge.setTarget(oldTarget);
         result = testEdge.getTarget();
         assertEquals(oldTarget, result);

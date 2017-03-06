@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2017 Till Uhlig <till.uhlig@student.uni-halle.de>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -22,7 +22,7 @@ import java.util.Objects;
 /**
  * Diese Klasse stellt einen Baum dar, dabei ist sie im Wesentlichen ein Zeiger
  * in Form einer nodeReference auf die Wurzel des Baums enthält.
- * 
+ *
  * Damit ist tree eine Hilfskonstrukt.
  *
  * @author Till

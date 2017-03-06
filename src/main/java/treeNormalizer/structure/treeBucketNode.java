@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2017 Till Uhlig <till.uhlig@student.uni-halle.de>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -26,7 +26,7 @@ import java.util.Map;
  * selbst keine Bäume darstellen sondern erst durch Interpretation der
  * nodeReferences zu Bäumen werden.
  *
- * @author Till
+ * @author Till Uhlig <till.uhlig@student.uni-halle.de>
  */
 public class treeBucketNode {
 

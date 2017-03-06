@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2017 Till Uhlig <till.uhlig@student.uni-halle.de>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -23,7 +23,7 @@ import java.util.Map;
 /**
  * Diese Klasse verwaltet eine Menge von Bäumen, möglichst kompakt.
  *
- * @author Till
+ * @author Till Uhlig <till.uhlig@student.uni-halle.de>
  */
 public class treeBucket {
 
@@ -35,12 +35,6 @@ public class treeBucket {
      * können.
      */
     private int currentReferencePos = 0;
-
-    /*
-     * Die Abbildung wandelt von Knotenbezeichnern nach Knoten um, sodass man
-     * bestimmte Knotenarten schnell in der Verwaltung finden kann.
-     */
-    private final Map<String, ArrayList<treeBucketNode>> nodeNameMap = new HashMap<>();
 
     /**
      * diese Liste von Knotenreferenzen bilden auf die realen Knoten ab
@@ -98,27 +92,7 @@ public class treeBucket {
             // der Knoten existiert so noch nicht
             nodes.put(node.hashCode(), node);
         }
-        addNodeToNameMap(node);
         return node;
-    }
-
-    /**
-     * fügt einen Knoten in die Tokenmap ein (Token -> KnotenA, KnotenB)
-     *
-     * @param node der Knoten
-     */
-    private void addNodeToNameMap(treeBucketNode node) {
-        String name = node.getName();
-        if (nodeNameMap.containsKey(name)) {
-            ArrayList<treeBucketNode> tmp = nodeNameMap.get(name);
-            if (!tmp.contains(node)) {
-                nodeNameMap.get(name).add(node);
-            }
-        } else {
-            ArrayList<treeBucketNode> tmp = new ArrayList<>();
-            nodeNameMap.put(name, tmp);
-            tmp.add(node);
-        }
     }
 
     /**
@@ -190,9 +164,6 @@ public class treeBucket {
             nodeReference.replace(ref.getId(), targetNode);
         });
 
-        // enfernt den alten Knoten aus der Tokenliste
-        removeNodeFromNameMap(sourceNode);
-
         if (targetNode.hasChilds()) {
             // der Graph ist noch nicht unten angekommen
             ArrayList<treeBucketNode> targetChilds = targetNode.getChilds();
@@ -235,7 +206,6 @@ public class treeBucket {
         // wenn sich der Hash geändert hat, müssen wir handeln
         if (oldHash != node.hashCode()) {
             // entferne den Knoten aus der Verwaltung
-            removeNodeFromNameMap(node);
             nodes.remove(oldHash);
 
             // nun den Knoten wieder neu einfügen, wobei der Knoten eventuell
@@ -278,22 +248,7 @@ public class treeBucket {
             propagadeNode(parent);
         }
 
-        removeNodeFromNameMap(node);
         nodes.remove(node.hashCode());
-    }
-
-    /**
-     * entfernt einen Knoten aus der Tokenliste (Token -> KnotenA, KnotenB)
-     *
-     * @param node der Knoten, der entfernt werden soll
-     */
-    private void removeNodeFromNameMap(treeBucketNode node) {
-        String name = node.getName();
-        if (nodeNameMap.containsKey(name)) {
-            nodeNameMap.get(name).remove(node);
-        } else {
-            throw new IllegalArgumentException("der Bezeichner existiert nicht in der NameMap");
-        }
     }
 
     /**
@@ -695,9 +650,7 @@ public class treeBucket {
 
         treeBucketNode preparedNode = getPreparedNode(node);
 
-        removeNodeFromNameMap(preparedNode);
         preparedNode.setName(name);
-        addNodeToNameMap(preparedNode);
         propagadeNode(preparedNode);
     }
 

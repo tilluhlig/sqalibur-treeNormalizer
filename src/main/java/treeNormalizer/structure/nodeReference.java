@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2017 Till Uhlig <till.uhlig@student.uni-halle.de>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -32,7 +32,7 @@ public class nodeReference extends Object {
     private ArrayList<nodeReference> childs = new ArrayList<>();
 
     /**
-     * eine ID des Zielknotens, diese ID wird durch durch eine übergeordnete
+     * eine ID des Zielknotens, diese ID wird durch eine übergeordnete
      * Verwaltung (in einer HashMap) behandelt und soll zu der ID einen
      * entsprechenden Knoten liefern (diese id ist also global eindeutig)
      */
