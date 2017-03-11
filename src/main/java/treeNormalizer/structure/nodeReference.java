@@ -209,6 +209,13 @@ public class nodeReference extends Object {
         }
         return childs.get(0);
     }
+    
+    public nodeReference getChild(int id) {
+        if (!isChildIndexPossible(id)) {
+            return null;
+        }
+        return childs.get(id);
+    }
 
     /**
      * liefert den Ausgangsgrad eines Knotens (auch leere ausgehende Kanten sind
