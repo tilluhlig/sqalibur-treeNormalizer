@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2017 Till Uhlig <till.uhlig@student.uni-halle.de>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -73,17 +73,17 @@ public class nodeReferenceTest {
         nodeReference child = new nodeReference(a, 100);
         nodeReference child2 = new nodeReference(a, 300);
         nodeReference instance = new nodeReference(a, 200);
-        
+
         assertEquals(false, instance.childExists(child));
         assertEquals(instance.hasChilds(), false);
-        
+
         instance.addChild(child);
-        
+
         assertEquals(instance.hasChilds(), true);
         assertEquals(true, instance.childExists(child));
-        
+
         instance.addChild(child2);
-        
+
         assertEquals(true, instance.childExists(child));
         assertEquals(true, instance.childExists(child2));
     }

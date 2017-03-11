@@ -643,14 +643,14 @@ public class treeBucket {
         // der Untergraph muss eventuell aufgespalten werden
         treeBucketNode tmp = getInternalNodeByReference(node);
 
-        if (name.equals(tmp.getName())) {
+        if (name.equals(tmp.getLabel())) {
             // der Name hat sich nicht geändert
             return;
         }
 
         treeBucketNode preparedNode = getPreparedNode(node);
 
-        preparedNode.setName(name);
+        preparedNode.setLabel(name);
         propagadeNode(preparedNode);
     }
 

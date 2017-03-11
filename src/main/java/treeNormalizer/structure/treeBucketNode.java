@@ -26,6 +26,8 @@ import java.util.Map;
  * selbst keine Bäume darstellen sondern erst durch Interpretation der
  * nodeReferences zu Bäumen werden.
  *
+ * Jeder Knoten kann mehrere Kinder und mehrere Eltern besitzen.
+ *
  * @author Till Uhlig <till.uhlig@student.uni-halle.de>
  */
 public class treeBucketNode {
@@ -50,11 +52,11 @@ public class treeBucketNode {
      * der Name des Knotens/Bezeichner (beispielsweise sowas wie "1" oder "+").
      * Man könnte das Feld auch content nennen.
      */
-    private String name = "";
+    private String label = "";
 
     /**
-     * Diese List enthält die Knotenreferenzen, welche auf diesen Knoten zeigen.
-     * denn ein Knoten kann von mehreren Pfaden genutzt werden
+     * Diese Liste enthält die Knotenreferenzen, welche auf diesen Knoten
+     * zeigen. denn ein Knoten kann von mehreren Pfaden genutzt werden
      */
     private ArrayList<nodeReference> nodeReferences = new ArrayList<>();
 
@@ -64,7 +66,8 @@ public class treeBucketNode {
     private ArrayList<treeBucketNode> parents = new ArrayList<>();
 
     /**
-     * die klassifizierung des Knotens (sowas wie binOperator oder const)
+     * die klassifizierung des Knotens (sowas wie binOperator, const oder
+     * select)
      */
     private String type = "";
 
@@ -88,7 +91,7 @@ public class treeBucketNode {
      * @param name der Name
      */
     public treeBucketNode(String name) {
-        this.name = name;
+        this.label = name;
     }
 
     /**
@@ -98,7 +101,7 @@ public class treeBucketNode {
      * @param type der Typ (Klasse)
      */
     public treeBucketNode(String name, String type) {
-        this.name = name;
+        this.label = name;
         this.type = type;
     }
 
@@ -110,7 +113,7 @@ public class treeBucketNode {
      * @param attributes die Attribute
      */
     public treeBucketNode(String name, String type, Map<String, String> attributes) {
-        this.name = name;
+        this.label = name;
         this.type = type;
         this.attributes = attributes;
     }
@@ -131,16 +134,12 @@ public class treeBucketNode {
      * @param child das neue Kind
      */
     public void addChild(treeBucketNode child) {
-        // ein Kind soll nicht mehrfach existieren
-        if (childs.contains(child)) {
-            //throw new IllegalArgumentException("das Kind existiert bereits");
-            return;
-        }
-        childs.add(child);
+        getChilds().add(child);
     }
 
     /**
-     * fügt eine Kante, von einem Quellknoten zu diesem Knoten, ein
+     * fügt einen Knoten als Kind ein und eine Kante, von einem Quellknoten zu
+     * diesem Knoten, ein
      *
      * @param sourceNode der Quellknoten
      */
@@ -149,7 +148,7 @@ public class treeBucketNode {
     }
 
     /**
-     * fügt eine Kante zu dem Zielknoten ein
+     * fügt einen Knoten als Kind ein und eine Kante zu dem Zielknoten ein
      *
      * @param targetNode der Zielknoten
      */
@@ -165,7 +164,7 @@ public class treeBucketNode {
      */
     public void addNodeReference(nodeReference nodeReference) {
         if (!nodeReferences.contains(nodeReference)) {
-            nodeReferences.add(nodeReference);
+            getNodeReferences().add(nodeReference);
         }
     }
 
@@ -181,17 +180,13 @@ public class treeBucketNode {
     }
 
     /**
-     * fügt einen Elternknoten hinzu
+     * fügt einen Elternknoten hinzu (ein Elternknoten kann auch mehrfach
+     * existieren)
      *
      * @param parent der neue Elternteil
      */
     public void addParent(treeBucketNode parent) {
-        // ein Vaterknoten soll nicht mehrfach existieren
-        if (parents.contains(parent)) {
-            //throw new IllegalArgumentException("das Kind existiert bereits");
-            return;
-        }
-        parents.add(parent);
+        getParents().add(parent);
     }
 
     /**
@@ -220,22 +215,22 @@ public class treeBucketNode {
     public void cleanParents() {
         // TODO: die Umsetzung ist noch sehr ineffizient
         ArrayList<treeBucketNode> newParents = new ArrayList<>();
-        for (treeBucketNode parent : parents) {
+        for (treeBucketNode parent : getParents()) {
             if (!newParents.contains(parent)) {
                 newParents.add(parent);
             }
         }
-        parents = newParents;
+        setParents(newParents);
     }
 
     /**
-     * Erzeugt eine Kopie des Knotens (nur die Grunddaten) also: name, type,
+     * Erzeugt eine Kopie des Knotens (nur die Grunddaten) also: label, type,
      * attributes
      *
      * @return der neue Knoten
      */
     public treeBucketNode cloneNodeBase() {
-        treeBucketNode tmp = new treeBucketNode(name, type, attributes);
+        treeBucketNode tmp = new treeBucketNode(getLabel(), getType(), getAttributes());
         return tmp;
     }
 
@@ -246,7 +241,7 @@ public class treeBucketNode {
      * @return ob der Baum in der Liste auftaucht
      */
     public boolean containsReferencedTree(tree tree) {
-        for (nodeReference tmp : nodeReferences) {
+        for (nodeReference tmp : getNodeReferences()) {
             if (!tmp.getTree().equals(tree)) {
                 // es ist ein anderer Baum
             } else {
@@ -260,14 +255,15 @@ public class treeBucketNode {
     /**
      * verringert die uniqueId um 1
      *
-     * @return die neue uniqueId
+     * @return die neue uniqueId (maximal auf 0)
      */
     public int decreaseUniqueId() {
-        if (uniqueId == 0) {
+        if (getUniqueId() == 0) {
             // TODO: was nun?
+            return getUniqueId();
         }
-        uniqueId--;
-        return uniqueId;
+        setUniqueId(getUniqueId() - 1);
+        return getUniqueId();
     }
 
     /**
@@ -290,7 +286,7 @@ public class treeBucketNode {
             return false;
         }
         final treeBucketNode other = (treeBucketNode) obj;
-        return this.hash == other.hash;
+        return this.getHash() == other.getHash();
     }
 
     /**
@@ -301,7 +297,7 @@ public class treeBucketNode {
      */
     public String getAttribute(String name) {
         if (attributeExists(name)) {
-            return attributes.get(name);
+            return getAttributes().get(name);
         }
         return null;
     }
@@ -313,7 +309,7 @@ public class treeBucketNode {
      * @return true = existiert, false = existiert nicht
      */
     public boolean attributeExists(String name) {
-        return attributes.containsKey(name);
+        return getAttributes().containsKey(name);
     }
 
     /**
@@ -359,7 +355,7 @@ public class treeBucketNode {
      */
     public treeBucketNode getFirstParent() {
         if (hasParents()) {
-            return parents.get(0);
+            return getParents().get(0);
         }
         return null;
     }
@@ -369,17 +365,17 @@ public class treeBucketNode {
      *
      * @return der Name
      */
-    public String getName() {
-        return name;
+    public String getLabel() {
+        return label;
     }
 
     /**
      * setzt den Namen des Knotens
      *
-     * @param name der neue Name
+     * @param label der neue Name
      */
-    public void setName(String name) {
-        this.name = name;
+    public void setLabel(String label) {
+        this.label = label;
     }
 
     /**
@@ -425,7 +421,7 @@ public class treeBucketNode {
      */
     public ArrayList<tree> getReferencedTrees() {
         ArrayList<tree> tmp = new ArrayList<tree>();
-        for (nodeReference ref : nodeReferences) {
+        for (nodeReference ref : getNodeReferences()) {
             if (!tmp.contains(ref.getTree())) {
                 tmp.add(ref.getTree());
             }
@@ -485,10 +481,10 @@ public class treeBucketNode {
      */
     @Override
     public int hashCode() {
-        if (hash == 0) {
+        if (getHash() == 0) {
             rehash();
         }
-        return hash;
+        return getHash();
     }
 
     /**
@@ -509,11 +505,11 @@ public class treeBucketNode {
      * @return die neue uniqueId
      */
     public int increaseUniqueId() {
-        uniqueId++;
-        if (uniqueId < 0) {
-            // TODO: und nun?
+        setUniqueId(getUniqueId() + 1);
+        if (getUniqueId() < 0) {
+            return 0;
         }
-        return uniqueId;
+        return getUniqueId();
     }
 
     /**
@@ -540,7 +536,7 @@ public class treeBucketNode {
      * @return true = ist ein Blatt, false = kein Blatt
      */
     public boolean isLeaf() {
-        return childs.isEmpty();
+        return getChilds().isEmpty();
     }
 
     /**
@@ -577,7 +573,7 @@ public class treeBucketNode {
      * @return die Anzahl der Knotenreferenzen
      */
     public int numberOfNodeReferences() {
-        return nodeReferences.size();
+        return getNodeReferences().size();
     }
 
     /**
@@ -586,7 +582,7 @@ public class treeBucketNode {
      * @return die Anzahl der Eltern
      */
     public int numberOfParents() {
-        return parents.size();
+        return getParents().size();
     }
 
     /**
@@ -613,13 +609,13 @@ public class treeBucketNode {
      * @return die Textdarstellung
      */
     public String print() {
-        String tmp = getName() + "[" + getType() + "] #" + hashCode() + "\n";
+        String tmp = getLabel() + "[" + getType() + "] #" + hashCode() + "\n";
 
         if (hasParents()) {
             tmp += "parents: ";
             ArrayList<String> par = new ArrayList<>();
             getParents().forEach((parent) -> {
-                par.add(parent.getName() + " #" + parent.hashCode());
+                par.add(parent.getLabel() + " #" + parent.hashCode());
             });
             tmp += String.join(", ", par);
             tmp += "\n";
@@ -629,7 +625,7 @@ public class treeBucketNode {
             tmp += "childs: ";
             ArrayList<String> par = new ArrayList<>();
             getChilds().forEach((child) -> {
-                par.add(child.getName() + " #" + child.hashCode());
+                par.add(child.getLabel() + " #" + child.hashCode());
             });
             tmp += String.join(", ", par);
             tmp += "\n";
@@ -652,29 +648,33 @@ public class treeBucketNode {
      * aktualisiert den Hashwert des Objekts
      */
     public void rehash() {
-        // name, type, children, attributes
-        String tmpHash = getName() + "_" + uniqueId + "_" + getType();
+        // label, type, children, attributes
+        String tmpHash = getLabel() + "_" + getUniqueId() + "_" + getType();
         for (treeBucketNode child : getChilds()) {
-            tmpHash += "_" + child.hashCode();
+            if (child == null) {
+                tmpHash += "_null";
+            } else {
+                tmpHash += "_" + child.hashCode();
+            }
         }
         for (Map.Entry<String, String> attribute : getAttributes().entrySet()) {
             tmpHash += "." + attribute.getKey() + "=" + attribute.getValue();
         }
-        hash = tmpHash.hashCode();
+        setHash(tmpHash.hashCode());
     }
 
     /**
      * entfernt alle Attribute
      */
     public void removeAllAttributes() {
-        attributes.clear();
+        getAttributes().clear();
     }
 
     /**
      * entfernt alle Knotenreferenzen
      */
     public void removeAllNodeReferences() {
-        nodeReferences.clear();
+        getNodeReferences().clear();
     }
 
     /**
@@ -683,7 +683,7 @@ public class treeBucketNode {
      * @param name der Name
      */
     public void removeAttribute(String name) {
-        attributes.remove(name);
+        getAttributes().remove(name);
     }
 
     /**
@@ -692,7 +692,7 @@ public class treeBucketNode {
      * @param id die Position im Kind-Array
      */
     public void removeChild(int id) {
-        childs.remove(id);
+        getChilds().remove(id);
     }
 
     /**
@@ -701,14 +701,14 @@ public class treeBucketNode {
      * @param object das Kind
      */
     public void removeChild(treeBucketNode object) {
-        childs.remove(object);
+        getChilds().remove(object);
     }
 
     /**
      * entfernt alle Verbindungen zu den Kindern dieses Knotens
      */
     public void removeChildEdges() {
-        for (treeBucketNode child : childs) {
+        for (treeBucketNode child : getChilds()) {
             removeEdgeTo(child);
         }
     }
@@ -733,12 +733,43 @@ public class treeBucketNode {
     }
 
     /**
+     * setzt eine Kante zu einem Kind auf null und entfernt diesen Knoten dort
+     * als Vater
+     *
+     * @param targetNode
+     */
+    public void unsetEdgeTo(treeBucketNode targetNode) {
+        targetNode.removeParent(this);
+        unsetChild(targetNode);
+    }
+
+    /**
+     * setzt ein Kind auf null
+     *
+     * @param targetNode das betroffene Kind
+     */
+    public void unsetChild(treeBucketNode targetNode) {
+        if (childs.indexOf(targetNode) >= 0) {
+            unsetChild(childs.indexOf(targetNode));
+        }
+    }
+
+    /**
+     * setzt ein Kind auf null
+     *
+     * @param targetNode das betroffene Kind
+     */
+    public void unsetChild(int targetNode) {
+        childs.set(targetNode, null);
+    }
+
+    /**
      * enfernt eine Referenz
      *
      * @param id die Referenz-ID der Referenz
      */
     public void removeNodeReference(int id) {
-        nodeReferences.remove(id);
+        getNodeReferences().remove(id);
     }
 
     /**
@@ -747,9 +778,9 @@ public class treeBucketNode {
      * @param nodeReference die Referenz
      */
     public void removeNodeReference(nodeReference nodeReference) {
-        int id = nodeReferences.indexOf(nodeReference);
+        int id = getNodeReferences().indexOf(nodeReference);
         if (id >= 0) {
-            nodeReferences.remove(id);
+            getNodeReferences().remove(id);
         }
     }
 
@@ -759,7 +790,7 @@ public class treeBucketNode {
      * @param parent der Vater
      */
     public void removeParent(treeBucketNode parent) {
-        parents.remove(parent);
+        getParents().remove(parent);
     }
 
     /**
@@ -768,14 +799,14 @@ public class treeBucketNode {
      * @param id die Position im Parent-Array
      */
     public void removeParent(int id) {
-        parents.remove(id);
+        getParents().remove(id);
     }
 
     /**
      * entfernt alle Verbindungen zu den Eltern dieses Knotens
      */
     public void removeParentEdges() {
-        for (treeBucketNode parent : parents) {
+        for (treeBucketNode parent : getParents()) {
             removeEdgeFrom(parent);
         }
     }
@@ -784,21 +815,42 @@ public class treeBucketNode {
      * setzt die eindeutige ID zurück auf 0 (der Standardwert)
      */
     public void resetUniqueId() {
-        uniqueId = 0;
+        setUniqueId(0);
     }
 
     /**
-     * setzt das Attribut name auf value
+     * setzt das Attribut label auf value
      *
      * @param name  der Name des Attributs
      * @param value der neue Wert
      */
     public void setAttribute(String name, String value) {
         if (attributeExists(name)) {
-            attributes.replace(name, value);
+            getAttributes().replace(name, value);
         } else {
-            attributes.put(name, value);
+            getAttributes().put(name, value);
         }
+    }
+
+    /**
+     * @return the hash
+     */
+    public int getHash() {
+        return hash;
+    }
+
+    /**
+     * @param hash the hash to set
+     */
+    public void setHash(int hash) {
+        this.hash = hash;
+    }
+
+    /**
+     * @param uniqueId the uniqueId to set
+     */
+    public void setUniqueId(int uniqueId) {
+        this.uniqueId = uniqueId;
     }
 
 }
