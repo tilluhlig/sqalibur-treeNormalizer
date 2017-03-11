@@ -126,7 +126,9 @@ public class tree {
 
         // es sollte eigentlich nicht nötig sein, den Baum hier extra nochmal
         // zu setzen, aber sicher ist sicher
-        root.setTree(this);
+        if (this.root != null) {
+            root.setTree(this);
+        }
     }
 
     /**

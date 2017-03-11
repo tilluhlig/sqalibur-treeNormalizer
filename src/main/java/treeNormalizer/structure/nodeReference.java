@@ -209,7 +209,7 @@ public class nodeReference extends Object {
         }
         return childs.get(0);
     }
-    
+
     public nodeReference getChild(int id) {
         if (!isChildIndexPossible(id)) {
             return null;
@@ -469,10 +469,6 @@ public class nodeReference extends Object {
      * @param target der Zielknoten der Kante
      */
     public void removeEdgeTo(nodeReference target) {
-        if (!childExists(target)) {
-            throw new IllegalArgumentException("die Kante existiert nicht");
-        }
-
         removeChild(target);
         target.removeParent();
     }

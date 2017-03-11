@@ -17,6 +17,7 @@
 package treeNormalizer.structure;
 
 import java.util.ArrayList;
+import java.util.List;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -59,7 +60,7 @@ public class nodeReferenceTest {
         assertEquals(instance.getChilds(), testChildList);
         assertEquals(instance.getExistingChilds(), testChildList);
         assertEquals(instance.getLeftChild(), child);
-        assertEquals(instance.getRightChild(), null);
+        assertEquals(instance.getRightChild(), child);
         assertEquals(instance.hasChilds(), true);
     }
 
@@ -94,7 +95,20 @@ public class nodeReferenceTest {
     @Test
     public void testDisconnect() {
         System.out.println("disconnect");
-        System.out.println("The test case is a prototype.");
+        nodeReference instance = new nodeReference(null, 31);
+        nodeReference instance2 = new nodeReference(null, 1);
+        nodeReference instance3 = new nodeReference(null, 2);
+        nodeReference instance4 = new nodeReference(null, 3);
+        instance.disconnect();
+        assertEquals(false, instance.hasParent());
+        assertEquals(false, instance.hasChilds());
+
+        instance.setParent(instance2);
+        instance.addChild(instance3);
+        instance.addChild(instance4);
+        instance.disconnect();
+        assertEquals(false, instance.hasParent());
+        assertEquals(false, instance.hasChilds());
     }
 
     /**
@@ -103,7 +117,11 @@ public class nodeReferenceTest {
     @Test
     public void testEquals() {
         System.out.println("equals");
-        System.out.println("The test case is a prototype.");
+        nodeReference instance = new nodeReference(null, 31);
+        nodeReference instance2 = new nodeReference(null, 15);
+        nodeReference instance3 = new nodeReference(null, 15);
+        assertEquals(false, instance.equals(instance2));
+        assertEquals(true, instance2.equals(instance3));
     }
 
     /**
@@ -112,7 +130,16 @@ public class nodeReferenceTest {
     @Test
     public void testGetChilds() {
         System.out.println("getChilds");
-        System.out.println("The test case is a prototype.");
+        nodeReference instance = new nodeReference(null, 31);
+        nodeReference instance2 = new nodeReference(null, 1);
+        nodeReference instance3 = new nodeReference(null, 2);
+        assertEquals(0, instance.getChilds().size());
+        instance.addChild(instance2);
+        assertArrayEquals(new nodeReference[]{instance2}, instance.getChilds().toArray(new nodeReference[0]));
+        instance.addChild(instance3);
+        assertArrayEquals(new nodeReference[]{instance2, instance3}, instance.getChilds().toArray(new nodeReference[0]));
+        instance.removeChild(instance2);
+        assertArrayEquals(new nodeReference[]{instance3}, instance.getChilds().toArray(new nodeReference[0]));
     }
 
     /**
@@ -121,7 +148,18 @@ public class nodeReferenceTest {
     @Test
     public void testSetChilds() {
         System.out.println("setChilds");
-        System.out.println("The test case is a prototype.");
+        nodeReference instance = new nodeReference(null, 31);
+        nodeReference instance2 = new nodeReference(null, 1);
+        nodeReference instance3 = new nodeReference(null, 2);
+
+        instance.setChilds(null);
+        assertEquals(null, instance.getChilds());
+
+        ArrayList<nodeReference> childs = new ArrayList<>();
+        childs.add(instance2);
+        childs.add(instance3);
+        instance.setChilds(childs);
+        assertArrayEquals(new nodeReference[]{instance2, instance3}, instance.getChilds().toArray(new nodeReference[0]));
     }
 
     /**
@@ -130,7 +168,23 @@ public class nodeReferenceTest {
     @Test
     public void testGetExistingChilds() {
         System.out.println("getExistingChilds");
-        System.out.println("The test case is a prototype.");
+        nodeReference instance = new nodeReference(null, 31);
+        nodeReference instance2 = new nodeReference(null, 1);
+        nodeReference instance3 = new nodeReference(null, 2);
+        assertEquals(0, instance.getExistingChilds().size());
+
+        // jetzt werden Kinder eingefügt
+        instance.addChild(instance2);
+        assertEquals(1, instance.getExistingChilds().size());
+        assertArrayEquals(new nodeReference[]{instance2}, instance.getExistingChilds().toArray(new nodeReference[0]));
+        instance.addChild(instance3);
+        assertEquals(2, instance.getExistingChilds().size());
+        assertArrayEquals(new nodeReference[]{instance2, instance3}, instance.getExistingChilds().toArray(new nodeReference[0]));
+
+        // jetzt werden Kinder entfernt
+        instance.unsetChild(0);
+        assertEquals(1, instance.getExistingChilds().size());
+        assertArrayEquals(new nodeReference[]{instance3}, instance.getExistingChilds().toArray(new nodeReference[0]));
     }
 
     /**
@@ -139,7 +193,33 @@ public class nodeReferenceTest {
     @Test
     public void testGetExistingOutgoingEdges() {
         System.out.println("getExistingOutgoingEdges");
-        System.out.println("The test case is a prototype.");
+        nodeReference instance = new nodeReference(null, 31);
+        assertArrayEquals(new edge[]{}, instance.getExistingOutgoingEdges());
+        instance.addChild(new nodeReference(null, 15));
+        edge[] result = instance.getExistingOutgoingEdges();
+        assertEquals(1, result.length);
+
+        // wenn wir das Kind nochmal einfügen, dann sollte es keine Veränderung geben
+        instance.addChild(new nodeReference(null, 15));
+        assertEquals(1, instance.getExistingOutgoingEdges().length);
+
+        // das Ziel muss passen
+        nodeReference a = result[0].getTarget();
+        assertNotEquals(null, a);
+        assertEquals(15, a.getId());
+
+        // die Quelle muss passen
+        nodeReference b = result[0].getSource();
+        assertNotEquals(null, b);
+        assertEquals(31, b.getId());
+
+        // wir wollen noch ein weiteres Kind einfügen
+        instance.addChild(new nodeReference(null, 17));
+        assertEquals(2, instance.getExistingOutgoingEdges().length);
+        instance.unsetChild(0);
+        assertEquals(1, instance.getExistingOutgoingEdges().length);
+        instance.unsetChild(1);
+        assertEquals(0, instance.getExistingOutgoingEdges().length);
     }
 
     /**
@@ -161,7 +241,7 @@ public class nodeReferenceTest {
     public void testSetId() {
         System.out.println("setId");
         nodeReference instance = new nodeReference(null, 1);
-        assertEquals(null, instance.getId());
+        assertEquals(1, instance.getId());
         instance.setId(5);
         assertEquals(5, instance.getId());
     }
@@ -210,18 +290,15 @@ public class nodeReferenceTest {
     public void testGetParent() {
         System.out.println("getParent");
         nodeReference instance = new nodeReference(null, 31);
+        nodeReference instance2 = new nodeReference(null, 25);
 
         // instance dürfte jetzt keinen Vater haben
         assertEquals(null, instance.getParent());
-        instance.addChild(new nodeReference(null, 15));
 
-        // instance dürfte trotzdem noch keinen Vater haben
-        assertEquals(null, instance.getParent());
-        nodeReference a = instance.getChild(0);
-        assertNotEquals(null, a);
-        nodeReference aParent = a.getParent();
+        instance2.setParent(instance);
 
         // aber das Kind sollte nun einen Vater haben
+        nodeReference aParent = instance2.getParent();
         assertNotEquals(null, aParent);
         assertEquals(31, aParent.getId());
     }
@@ -258,7 +335,20 @@ public class nodeReferenceTest {
     @Test
     public void testGetRightChild() {
         System.out.println("getRightChild");
-        System.out.println("The test case is a prototype.");
+        nodeReference instance = new nodeReference(null, 0);
+
+        // er hat noch kein Kind
+        assertEquals(null, instance.getRightChild());
+        instance.addChild(new nodeReference(null, 1));
+
+        nodeReference a = instance.getRightChild();
+        assertNotEquals(null, a);
+        assertEquals(1, a.getId());
+
+        instance.addChild(new nodeReference(null, 2));
+        nodeReference b = instance.getRightChild();
+        assertNotEquals(null, b);
+        assertEquals(2, b.getId());
     }
 
     /**
@@ -267,7 +357,13 @@ public class nodeReferenceTest {
     @Test
     public void testGetTree() {
         System.out.println("getTree");
-        System.out.println("The test case is a prototype.");
+        nodeReference instance = new nodeReference(null, 0);
+        assertEquals(null, instance.getTree());
+        instance.setTree(new tree("test"));
+
+        tree a = instance.getTree();
+        assertNotEquals(null, a);
+        assertEquals("test", a.getName());
     }
 
     /**
@@ -276,7 +372,20 @@ public class nodeReferenceTest {
     @Test
     public void testSetTree() {
         System.out.println("setTree");
-        System.out.println("The test case is a prototype.");
+        nodeReference instance = new nodeReference(null, 0);
+        assertEquals(null, instance.getTree());
+
+        instance.setTree(new tree("test"));
+
+        tree a = instance.getTree();
+        assertNotEquals(null, a);
+        assertEquals("test", a.getName());
+
+        instance.setTree(new tree("test2"));
+
+        tree b = instance.getTree();
+        assertNotEquals(null, b);
+        assertEquals("test2", b.getName());
     }
 
     /**
@@ -285,7 +394,22 @@ public class nodeReferenceTest {
     @Test
     public void testGetTreeRoot() {
         System.out.println("getTreeRoot");
-        System.out.println("The test case is a prototype.");
+        nodeReference instance2 = new nodeReference(null, 15);
+
+        nodeReference instance = new nodeReference(null, 0);
+        assertEquals(null, instance.getTree());
+
+        instance.setTree(new tree("test"));
+
+        tree a = instance.getTree();
+        assertNotEquals(null, a);
+        assertEquals("test", a.getName());
+        assertEquals(null, a.getRoot());
+
+        a.setRoot(instance2);
+        nodeReference aRoot = a.getRoot();
+        assertNotEquals(null, aRoot);
+        assertEquals(15, aRoot.getId());
     }
 
     /**
@@ -294,7 +418,14 @@ public class nodeReferenceTest {
     @Test
     public void testHasChilds() {
         System.out.println("hasChilds");
-        System.out.println("The test case is a prototype.");
+        nodeReference instance = new nodeReference(null, 0);
+        assertEquals(false, instance.hasChilds());
+        instance.addChild(new nodeReference(null, 1));
+        assertEquals(true, instance.hasChilds());
+        instance.addChild(new nodeReference(null, 2));
+        assertEquals(true, instance.hasChilds());
+        instance.removeChild(0);
+        assertEquals(true, instance.hasChilds());
     }
 
     /**
@@ -303,16 +434,17 @@ public class nodeReferenceTest {
     @Test
     public void testHasParent() {
         System.out.println("hasParent");
-        System.out.println("The test case is a prototype.");
-    }
+        nodeReference instance = new nodeReference(null, 31);
 
-    /**
-     * Test of hashCode method, of class nodeReference.
-     */
-    @Test
-    public void testHashCode() {
-        System.out.println("hashCode");
-        System.out.println("The test case is a prototype.");
+        // instance dürfte jetzt keinen Vater haben
+        assertEquals(false, instance.hasParent());
+        instance.addChild(new nodeReference(null, 15));
+
+        // instance dürfte trotzdem noch keinen Vater haben
+        assertEquals(false, instance.hasParent());
+        nodeReference a = instance.getChild(0);
+        assertNotEquals(null, a);
+        assertNotEquals(true, a.hasParent());
     }
 
     /**
@@ -321,7 +453,12 @@ public class nodeReferenceTest {
     @Test
     public void testIsChild() {
         System.out.println("isChild");
-        System.out.println("The test case is a prototype.");
+        nodeReference instance = new nodeReference(null, 31);
+        nodeReference instance2 = new nodeReference(null, 15);
+        assertEquals(false, instance.isChild());
+        instance2.setParent(instance);
+        assertEquals(false, instance.isChild());
+        assertEquals(true, instance2.isChild());
     }
 
     /**
@@ -330,7 +467,20 @@ public class nodeReferenceTest {
     @Test
     public void testIsChildIndexPossible() {
         System.out.println("isChildIndexPossible");
-        System.out.println("The test case is a prototype.");
+        nodeReference instance = new nodeReference(null, 31);
+        nodeReference instance2 = new nodeReference(null, 15);
+        nodeReference instance3 = new nodeReference(null, 16);
+        assertEquals(false, instance.isChildIndexPossible(0));
+        instance.addChild(instance2);
+        assertEquals(true, instance.isChildIndexPossible(0));
+        assertEquals(false, instance.isChildIndexPossible(1));
+        instance.addChild(instance3);
+        assertEquals(true, instance.isChildIndexPossible(0));
+        assertEquals(true, instance.isChildIndexPossible(1));
+        instance.removeChild(0);
+        assertEquals(true, instance.isChildIndexPossible(0));
+        instance.removeChild(0);
+        assertEquals(false, instance.isChildIndexPossible(0));
     }
 
     /**
@@ -339,7 +489,14 @@ public class nodeReferenceTest {
     @Test
     public void testIsChildPresent() {
         System.out.println("isChildPresent");
-        System.out.println("The test case is a prototype.");
+        nodeReference instance = new nodeReference(null, 31);
+        nodeReference instance2 = new nodeReference(null, 15);
+        assertEquals(false, instance.isChildPresent(0));
+        instance.addChild(instance2);
+        assertEquals(true, instance.isChildPresent(0));
+        assertEquals(false, instance.isChildPresent(1));
+        instance.unsetChild(0);
+        assertEquals(false, instance.isChildPresent(0));
     }
 
     /**
@@ -348,7 +505,13 @@ public class nodeReferenceTest {
     @Test
     public void testIsLeaf() {
         System.out.println("isLeaf");
-        System.out.println("The test case is a prototype.");
+        nodeReference instance = new nodeReference(null, 31);
+        nodeReference instance2 = new nodeReference(null, 15);
+        assertEquals(true, instance.isLeaf());
+        instance.addChild(instance2);
+        instance2.setParent(instance);
+        assertEquals(false, instance.isLeaf());
+        assertEquals(true, instance2.isLeaf());
     }
 
     /**
@@ -357,7 +520,13 @@ public class nodeReferenceTest {
     @Test
     public void testIsOrphan() {
         System.out.println("isOrphan");
-        System.out.println("The test case is a prototype.");
+        nodeReference instance = new nodeReference(null, 31);
+        nodeReference instance2 = new nodeReference(null, 15);
+        assertEquals(true, instance.isOrphan());
+        instance.addChild(instance2);
+        instance2.setParent(instance);
+        assertEquals(true, instance.isOrphan());
+        assertEquals(false, instance2.isOrphan());
     }
 
     /**
@@ -366,7 +535,14 @@ public class nodeReferenceTest {
     @Test
     public void testIsRoot() {
         System.out.println("isRoot");
-        System.out.println("The test case is a prototype.");
+        nodeReference instance = new nodeReference(null, 31);
+        nodeReference instance2 = new nodeReference(null, 15);
+        assertEquals(true, instance.isRoot());
+
+        instance.addChild(instance2);
+        instance2.setParent(instance);
+        assertEquals(true, instance.isRoot());
+        assertEquals(false, instance2.isRoot());
     }
 
     /**
@@ -375,7 +551,7 @@ public class nodeReferenceTest {
     @Test
     public void testPrint() {
         System.out.println("print");
-        System.out.println("The test case is a prototype.");
+        // das gedruckte wird nicht getestet
     }
 
     /**
@@ -384,7 +560,12 @@ public class nodeReferenceTest {
     @Test
     public void testRemoveChild() {
         System.out.println("removeChild");
-        System.out.println("The test case is a prototype.");
+        nodeReference instance = new nodeReference(null, 31);
+        nodeReference instance2 = new nodeReference(null, 15);
+        instance.addChild(instance2);
+        assertEquals(true, instance.hasChilds());
+        instance.removeChild(0);
+        assertEquals(false, instance.hasChilds());
     }
 
     /**
@@ -420,7 +601,12 @@ public class nodeReferenceTest {
     @Test
     public void testRemoveParent() {
         System.out.println("removeParent");
-        System.out.println("The test case is a prototype.");
+        nodeReference instance = new nodeReference(null, 31);
+        nodeReference instance2 = new nodeReference(null, 15);
+        instance.setParent(instance2);
+        assertEquals(true, instance.hasParent());
+        instance.removeParent();
+        assertEquals(false, instance.hasParent());
     }
 
     /**
@@ -429,7 +615,13 @@ public class nodeReferenceTest {
     @Test
     public void testSetChild() {
         System.out.println("setChild");
-        System.out.println("The test case is a prototype.");
+        nodeReference instance = new nodeReference(null, 31);
+        nodeReference instance2 = new nodeReference(null, 15);
+        nodeReference instance3 = new nodeReference(null, 14);
+        instance.addChild(instance2);
+        assertEquals(15, instance.getChild(0).getId());
+        instance.setChild(0,instance3);
+        assertEquals(14, instance.getChild(0).getId());
     }
 
     /**
@@ -438,7 +630,11 @@ public class nodeReferenceTest {
     @Test
     public void testGetInDegree() {
         System.out.println("getInDegree");
-        System.out.println("The test case is a prototype.");
+        nodeReference instance = new nodeReference(null, 31);
+        nodeReference instance2 = new nodeReference(null, 15);
+        assertEquals(0, instance.getInDegree());
+        instance.setParent(instance2);
+        assertEquals(1, instance.getInDegree());
     }
 
     /**
@@ -447,7 +643,11 @@ public class nodeReferenceTest {
     @Test
     public void testGetOutDegree() {
         System.out.println("getOutDegree");
-        System.out.println("The test case is a prototype.");
+        nodeReference instance = new nodeReference(null, 31);
+        nodeReference instance2 = new nodeReference(null, 15);
+        assertEquals(0, instance.getOutDegree());
+        instance.addChild(instance2);
+        assertEquals(1, instance.getOutDegree());
     }
 
     /**
@@ -456,7 +656,13 @@ public class nodeReferenceTest {
     @Test
     public void testGetRealOutDegree() {
         System.out.println("getRealOutDegree");
-        System.out.println("The test case is a prototype.");
+        nodeReference instance = new nodeReference(null, 31);
+        nodeReference instance2 = new nodeReference(null, 15);
+        assertEquals(0, instance.getRealOutDegree());
+        instance.addChild(instance2);
+        assertEquals(1, instance.getRealOutDegree());
+        instance.unsetChild(0);
+        assertEquals(0, instance.getRealOutDegree());
     }
 
     /**
@@ -465,7 +671,12 @@ public class nodeReferenceTest {
     @Test
     public void testRemoveChild_nodeReference() {
         System.out.println("removeChild");
-        System.out.println("The test case is a prototype.");
+        nodeReference instance = new nodeReference(null, 31);
+        nodeReference instance2 = new nodeReference(null, 15);
+        instance.addChild(instance2);
+        assertEquals(true, instance.hasChilds());
+        instance.removeChild(instance2);
+        assertEquals(false, instance.hasChilds());
     }
 
     /**
@@ -474,7 +685,12 @@ public class nodeReferenceTest {
     @Test
     public void testRemoveChild_int() {
         System.out.println("removeChild");
-        System.out.println("The test case is a prototype.");
+        nodeReference instance = new nodeReference(null, 31);
+        nodeReference instance2 = new nodeReference(null, 15);
+        instance.addChild(instance2);
+        assertEquals(true, instance.hasChilds());
+        instance.removeChild(0);
+        assertEquals(false, instance.hasChilds());
     }
 
     /**
@@ -483,7 +699,18 @@ public class nodeReferenceTest {
     @Test
     public void testUnsetChild_nodeReference() {
         System.out.println("unsetChild");
-        System.out.println("The test case is a prototype.");
+        nodeReference instance = new nodeReference(null, 31);
+        nodeReference instance2 = new nodeReference(null, 15);
+        instance.addChild(instance2);
+        assertNotEquals(null, instance.getChild(0));
+        instance.unsetChild(instance2);
+        assertEquals(null, instance.getChild(0));
+        assertEquals(0, instance.getExistingChilds().size());
+        assertEquals(1, instance.getChilds().size());
+        instance.unsetChild(instance2);
+        assertEquals(null, instance.getChild(0));
+        assertEquals(0, instance.getExistingChilds().size());
+        assertEquals(1, instance.getChilds().size());
     }
 
     /**
@@ -492,7 +719,19 @@ public class nodeReferenceTest {
     @Test
     public void testUnsetChild_int() {
         System.out.println("unsetChild");
-        System.out.println("The test case is a prototype.");
+        System.out.println("unsetChild");
+        nodeReference instance = new nodeReference(null, 31);
+        nodeReference instance2 = new nodeReference(null, 15);
+        instance.addChild(instance2);
+        assertNotEquals(null, instance.getChild(0));
+        instance.unsetChild(0);
+        assertEquals(null, instance.getChild(0));
+        assertEquals(0, instance.getExistingChilds().size());
+        assertEquals(1, instance.getChilds().size());
+        instance.unsetChild(0);
+        assertEquals(null, instance.getChild(0));
+        assertEquals(0, instance.getExistingChilds().size());
+        assertEquals(1, instance.getChilds().size());
     }
 
     /**
@@ -519,7 +758,14 @@ public class nodeReferenceTest {
     @Test
     public void testUnsetParent() {
         System.out.println("unsetParent");
-        System.out.println("The test case is a prototype.");
+        nodeReference instance = new nodeReference(null, 31);
+        nodeReference instance2 = new nodeReference(null, 15);
+        assertEquals(false, instance.hasParent());
+        instance.setParent(instance2);
+        assertEquals(true, instance.hasParent());
+        instance.unsetParent();
+        assertEquals(false, instance.hasParent());
+        assertEquals(null, instance.getParent());
     }
 
 }
