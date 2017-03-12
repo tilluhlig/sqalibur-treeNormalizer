@@ -36,7 +36,19 @@ public class treeBucketNodeTest {
     @Test
     public void testAddAttribute() {
         System.out.println("addAttribute");
-        System.out.println("The test case is a prototype.");
+        treeBucketNode instance = new treeBucketNode();
+        assertFalse(instance.attributeExists("test"));
+        instance.addAttribute("test", "2");
+        assertTrue(instance.attributeExists("test"));
+        assertEquals("2", instance.getAttribute("test"));
+
+        instance.addAttribute("test2", null);
+        assertTrue(instance.attributeExists("test2"));
+        assertEquals(null, instance.getAttribute("test2"));
+
+        instance.addAttribute("test", "qq");
+        assertTrue(instance.attributeExists("test"));
+        assertEquals("qq", instance.getAttribute("test"));
     }
 
     /**
@@ -90,7 +102,13 @@ public class treeBucketNodeTest {
     @Test
     public void testAddParent() {
         System.out.println("addParent");
-        System.out.println("The test case is a prototype.");
+        treeBucketNode instance = new treeBucketNode("A");
+        treeBucketNode instance2 = new treeBucketNode("B");
+        instance.addParent(instance2);
+        assertTrue(instance.hasParents());
+        assertFalse(instance.isRoot());
+        assertEquals(1, instance.getParents().size());
+        assertEquals("B", instance.getFirstParent().getLabel());
     }
 
     /**
@@ -99,7 +117,23 @@ public class treeBucketNodeTest {
     @Test
     public void testAddParents() {
         System.out.println("addParents");
-        System.out.println("The test case is a prototype.");
+        treeBucketNode instance = new treeBucketNode("A");
+        ArrayList<treeBucketNode> parents = new ArrayList<>();
+        parents.add(new treeBucketNode("B"));
+        parents.add(new treeBucketNode("C"));
+
+        instance.addParents(parents);
+        assertTrue(instance.hasParents());
+        assertFalse(instance.isRoot());
+        assertEquals(2, instance.getParents().size());
+        assertEquals("B", instance.getFirstParent().getLabel());
+        assertEquals("C", instance.getParent(1).getLabel());
+
+        ArrayList<treeBucketNode> parents2 = new ArrayList<>();
+        parents2.add(new treeBucketNode("D"));
+        instance.addParents(parents2);
+        assertEquals(3, instance.getParents().size());
+        assertEquals("D", instance.getParent(2).getLabel());
     }
 
     /**
@@ -108,7 +142,11 @@ public class treeBucketNodeTest {
     @Test
     public void testAdoptChild() {
         System.out.println("adoptChild");
-        System.out.println("The test case is a prototype.");
+        treeBucketNode instance = new treeBucketNode("A");
+        instance.adoptChild(new treeBucketNode("B"));
+        assertTrue(instance.hasChilds());
+        assertFalse(instance.isChild());
+        assertEquals("B", instance.getChild(0).getLabel());
     }
 
     /**
@@ -117,7 +155,7 @@ public class treeBucketNodeTest {
     @Test
     public void testCleanParents() {
         System.out.println("cleanParents");
-        System.out.println("The test case is a prototype.");
+        // kein Test, die Methode soll doppelte Elternknoten entfernen
     }
 
     /**
@@ -144,7 +182,14 @@ public class treeBucketNodeTest {
     @Test
     public void testDecreaseUniqueId() {
         System.out.println("decreaseUniqueId");
-        System.out.println("The test case is a prototype.");
+        treeBucketNode instance = new treeBucketNode("A");
+        instance.decreaseUniqueId();
+        assertEquals(0,instance.getUniqueId());
+        instance.setUniqueId(2);
+        instance.decreaseUniqueId();
+        assertEquals(1,instance.getUniqueId());
+        instance.decreaseUniqueId();
+        assertEquals(0,instance.getUniqueId());
     }
 
     /**

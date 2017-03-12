@@ -88,32 +88,32 @@ public class treeBucketNode {
     /**
      * erzeugt einen neuen Knoten
      *
-     * @param name der Name
+     * @param label der Name
      */
-    public treeBucketNode(String name) {
-        this.label = name;
+    public treeBucketNode(String label) {
+        this.label = label;
     }
 
     /**
      * erzeugt einen neuen Knoten
      *
-     * @param name der Name
-     * @param type der Typ (Klasse)
+     * @param label das Label
+     * @param type  der Typ (Klasse)
      */
-    public treeBucketNode(String name, String type) {
-        this.label = name;
+    public treeBucketNode(String label, String type) {
+        this.label = label;
         this.type = type;
     }
 
     /**
      * erzeugt einen neuen Knoten
      *
-     * @param name       der Name
+     * @param label      das Label
      * @param type       der Typ (Klasse)
      * @param attributes die Attribute
      */
-    public treeBucketNode(String name, String type, Map<String, String> attributes) {
-        this.label = name;
+    public treeBucketNode(String label, String type, Map<String, String> attributes) {
+        this.label = label;
         this.type = type;
         this.attributes = attributes;
     }
@@ -338,6 +338,13 @@ public class treeBucketNode {
     public ArrayList<treeBucketNode> getChilds() {
         return childs;
     }
+    
+    public treeBucketNode getChild(int pos) {
+        if (pos>=0 && pos<childs.size()){
+            return childs.get(pos);
+        }
+        return null;
+    }
 
     /**
      * setzt die Kinderliste
@@ -356,6 +363,13 @@ public class treeBucketNode {
     public treeBucketNode getFirstParent() {
         if (hasParents()) {
             return getParents().get(0);
+        }
+        return null;
+    }
+
+    public treeBucketNode getParent(int pos) {
+        if (pos >= 0 && pos<getParents().size()) {
+            return getParents().get(pos);
         }
         return null;
     }

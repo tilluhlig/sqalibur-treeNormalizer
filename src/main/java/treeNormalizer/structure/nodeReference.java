@@ -446,15 +446,6 @@ public class nodeReference extends Object {
     }
 
     /**
-     * entfernt eine bestimmte Kante
-     *
-     * @param index der Index (also das Kind)
-     */
-    public void removeEdge(int index) {
-        unsetChild(index);
-    }
-
-    /**
      * entfernt eine Kante vom Knoten "source"
      *
      * @param source der Quellknoten
