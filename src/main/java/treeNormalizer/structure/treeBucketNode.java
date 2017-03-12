@@ -158,7 +158,7 @@ public class treeBucketNode {
     }
 
     /**
-     * fügt eine Knotenreferenz hinzu
+     * fügt eine Knotenreferenz hinzu (darf noch nicht existieren)
      *
      * @param nodeReference die neue Referenz
      */
@@ -242,6 +242,9 @@ public class treeBucketNode {
      */
     public boolean containsReferencedTree(tree tree) {
         for (nodeReference tmp : getNodeReferences()) {
+            if (tmp == null) {
+                continue;
+            }
             if (!tmp.getTree().equals(tree)) {
                 // es ist ein anderer Baum
             } else {
@@ -286,7 +289,7 @@ public class treeBucketNode {
             return false;
         }
         final treeBucketNode other = (treeBucketNode) obj;
-        return this.getHash() == other.getHash();
+        return this.hashCode() == other.hashCode();
     }
 
     /**
@@ -338,9 +341,9 @@ public class treeBucketNode {
     public ArrayList<treeBucketNode> getChilds() {
         return childs;
     }
-    
+
     public treeBucketNode getChild(int pos) {
-        if (pos>=0 && pos<childs.size()){
+        if (pos >= 0 && pos < childs.size()) {
             return childs.get(pos);
         }
         return null;
@@ -352,6 +355,9 @@ public class treeBucketNode {
      * @param childs die neuen Kinder
      */
     public void setChilds(ArrayList<treeBucketNode> childs) {
+        if (childs == null) {
+            childs = new ArrayList<>();
+        }
         this.childs = childs;
     }
 
@@ -368,7 +374,7 @@ public class treeBucketNode {
     }
 
     public treeBucketNode getParent(int pos) {
-        if (pos >= 0 && pos<getParents().size()) {
+        if (pos >= 0 && pos < getParents().size()) {
             return getParents().get(pos);
         }
         return null;
@@ -764,6 +770,7 @@ public class treeBucketNode {
      */
     public void unsetChild(treeBucketNode targetNode) {
         if (childs.indexOf(targetNode) >= 0) {
+            int a = childs.indexOf(targetNode);
             unsetChild(childs.indexOf(targetNode));
         }
     }
@@ -783,6 +790,9 @@ public class treeBucketNode {
      * @param id die Referenz-ID der Referenz
      */
     public void removeNodeReference(int id) {
+        if (id < 0 || id >= getNodeReferences().size()) {
+            return;
+        }
         getNodeReferences().remove(id);
     }
 
@@ -847,14 +857,16 @@ public class treeBucketNode {
     }
 
     /**
-     * @return the hash
+     * hashCode() verwenden! (diese Methode führt kein rehash aus)
+     *
+     * @return the hash (sollte nicht verwendet werden)
      */
     public int getHash() {
         return hash;
     }
 
     /**
-     * @param hash the hash to set
+     * @param hash the hash to set (sollte nicht verwendet werden)
      */
     public void setHash(int hash) {
         this.hash = hash;
@@ -864,6 +876,9 @@ public class treeBucketNode {
      * @param uniqueId the uniqueId to set
      */
     public void setUniqueId(int uniqueId) {
+        if (uniqueId < 0) {
+            uniqueId = 0;
+        }
         this.uniqueId = uniqueId;
     }
 
