@@ -143,7 +143,7 @@ public class treeBucketTest {
     @Test
     public void testPrint() {
         System.out.println("print");
-        System.out.println("The test case is a prototype.");
+        System.out.println("The test case is a prototype.");        
     }
 
     /**

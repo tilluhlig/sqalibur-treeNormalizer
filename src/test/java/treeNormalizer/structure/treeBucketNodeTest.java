@@ -724,7 +724,8 @@ public class treeBucketNodeTest {
     @Test
     public void testPrint() {
         System.out.println("print");
-        // hier gibt es keinen Test, was dabei rauskommt, ist mir egal
+        treeBucketNode instance = new treeBucketNode("A");
+        assertNotNull(instance.print());
     }
 
     /**

@@ -551,7 +551,8 @@ public class nodeReferenceTest {
     @Test
     public void testPrint() {
         System.out.println("print");
-        // das gedruckte wird nicht getestet
+        nodeReference instance = new nodeReference(null, 31);
+        assertNotNull(instance.print());
     }
 
     /**
