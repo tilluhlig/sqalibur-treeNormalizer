@@ -435,7 +435,10 @@ public class treeBucketNodeTest {
     @Test
     public void testGetOutgoingEdges() {
         System.out.println("getOutgoingEdges");
-        System.out.println("The test case is a prototype.");
+        treeBucketNode instance = new treeBucketNode("A");
+        instance.addChild(new treeBucketNode("B"));
+        instance.addChild(new treeBucketNode("C"));
+        assertArrayEquals(new treeBucketNode[]{new treeBucketNode("B"), new treeBucketNode("C")}, instance.getOutgoingEdges().toArray(new treeBucketNode[0]));
     }
 
     /**
@@ -444,7 +447,14 @@ public class treeBucketNodeTest {
     @Test
     public void testGetParents() {
         System.out.println("getParents");
-        System.out.println("The test case is a prototype.");
+        treeBucketNode instance = new treeBucketNode("A");
+        assertEquals(0, instance.getParents().size());
+        ArrayList<treeBucketNode> list = new ArrayList<>();
+        list.add(new treeBucketNode("B"));
+        list.add(new treeBucketNode("C"));
+        instance.addParents(list);
+        assertEquals(2, instance.getParents().size());
+        assertArrayEquals(new treeBucketNode[]{new treeBucketNode("B"), new treeBucketNode("C")}, instance.getParents().toArray(new treeBucketNode[0]));
     }
 
     /**
@@ -453,7 +463,19 @@ public class treeBucketNodeTest {
     @Test
     public void testSetParents() {
         System.out.println("setParents");
-        System.out.println("The test case is a prototype.");
+        treeBucketNode instance = new treeBucketNode("A");
+        assertEquals(0, instance.getParents().size());
+        instance.setParents(new ArrayList<>());
+        assertEquals(0, instance.getParents().size());
+        instance.setParents(null);
+        assertEquals(0, instance.getParents().size());
+
+        ArrayList<treeBucketNode> list = new ArrayList<>();
+        list.add(new treeBucketNode("B"));
+        list.add(new treeBucketNode("C"));
+        instance.setParents(list);
+        assertEquals(2, instance.getParents().size());
+        assertArrayEquals(new treeBucketNode[]{new treeBucketNode("B"), new treeBucketNode("C")}, instance.getParents().toArray(new treeBucketNode[0]));
     }
 
     /**
@@ -462,8 +484,12 @@ public class treeBucketNodeTest {
     @Test
     public void testGetReferencedTrees() {
         System.out.println("getReferencedTrees");
-        System.out.println("The test case is a prototype.");
         treeBucketNode instance = new treeBucketNode("A");
+        assertEquals(0, instance.getReferencedTrees().size());
+        instance.addNodeReference(new nodeReference(new tree("A"), 1));
+        instance.addNodeReference(new nodeReference(new tree("B"), 2));
+        assertEquals(2, instance.getReferencedTrees().size());
+        assertArrayEquals(new tree[]{new tree("A"), new tree("B")}, instance.getReferencedTrees().toArray(new tree[0]));
     }
 
     /**
@@ -535,7 +561,9 @@ public class treeBucketNodeTest {
     @Test
     public void testHashCode() {
         System.out.println("hashCode");
-        System.out.println("The test case is a prototype.");
+        treeBucketNode instance = new treeBucketNode("A");
+        assertEquals(0, instance.getHash());
+        assertNotEquals(0, instance.hashCode()); // sehr wahrscheinlich
     }
 
     /**
@@ -805,7 +833,15 @@ public class treeBucketNodeTest {
     @Test
     public void testRemoveChildEdges() {
         System.out.println("removeChildEdges");
-        System.out.println("The test case is a prototype.");
+        treeBucketNode instance = new treeBucketNode("A");
+        treeBucketNode instance2 = new treeBucketNode("B");
+        instance.removeChildEdges(); // ruhig mal so ausführen
+        instance.addChild(instance2);
+        instance2.addParent(instance);
+        instance.removeChildEdges(); // jetzt sollten wir ein Kind entfernen können
+        assertFalse(instance.hasChilds());
+        assertFalse(instance2.hasParents());
+        instance2.removeChildEdges(); // sollte trotzdem noch gehen
     }
 
     /**
@@ -814,7 +850,15 @@ public class treeBucketNodeTest {
     @Test
     public void testRemoveEdgeFrom() {
         System.out.println("removeEdgeFrom");
-        System.out.println("The test case is a prototype.");
+        treeBucketNode instance = new treeBucketNode("A");
+        treeBucketNode instance2 = new treeBucketNode("B");
+        instance2.removeEdgeFrom(instance); // ruhig mal so ausführen
+        instance.addChild(instance2);
+        instance2.addParent(instance);
+        instance2.removeEdgeFrom(instance); // jetzt sollten wir ein Kind entfernen können
+        assertFalse(instance.hasChilds());
+        assertFalse(instance2.hasParents());
+        instance2.removeEdgeFrom(instance); // sollte trotzdem noch gehen
     }
 
     /**
@@ -823,7 +867,15 @@ public class treeBucketNodeTest {
     @Test
     public void testRemoveEdgeTo() {
         System.out.println("removeEdgeTo");
-        System.out.println("The test case is a prototype.");
+        treeBucketNode instance = new treeBucketNode("A");
+        treeBucketNode instance2 = new treeBucketNode("B");
+        instance.removeEdgeTo(instance2); // ruhig mal so ausführen
+        instance.addChild(instance2);
+        instance2.addParent(instance);
+        instance.removeEdgeTo(instance2); // jetzt sollten wir ein Kind entfernen können
+        assertFalse(instance.hasChilds());
+        assertFalse(instance2.hasParents());
+        instance2.removeEdgeTo(instance2); // sollte trotzdem noch gehen
     }
 
     /**
@@ -1011,6 +1063,45 @@ public class treeBucketNodeTest {
         assertEquals(15, instance.getUniqueId());
         instance.setUniqueId(Integer.MAX_VALUE + 1);
         assertEquals(0, instance.getUniqueId());
+    }
+
+    /**
+     * Test of getChild method, of class treeBucketNode.
+     */
+    @Test
+    public void testGetChild() {
+        System.out.println("getChild");
+        treeBucketNode instance = new treeBucketNode("A");
+        treeBucketNode instance2 = new treeBucketNode("B");
+        treeBucketNode instance3 = new treeBucketNode("C");
+        assertNull(instance.getChild(0));
+        instance.addChild(instance2);
+        instance.addChild(instance3);
+        assertEquals(instance3, instance.getChild(1));
+    }
+
+    /**
+     * Test of setChild method, of class treeBucketNode.
+     */
+    @Test
+    public void testSetChild() {
+        System.out.println("setChild");
+        treeBucketNode instance = new treeBucketNode("A");
+        treeBucketNode instance2 = new treeBucketNode("B");
+        treeBucketNode instance3 = new treeBucketNode("C");
+        instance.addChild(instance2);
+        assertEquals(instance2, instance.getChild(0));
+        instance.setChild(0, instance3);
+        assertEquals(instance3, instance.getChild(0));
+    }
+
+    /**
+     * Test of getParent method, of class treeBucketNode.
+     */
+    @Test
+    public void testGetParent() {
+        System.out.println("getParent");
+        System.out.println("The test case is a prototype.");
     }
 
 }

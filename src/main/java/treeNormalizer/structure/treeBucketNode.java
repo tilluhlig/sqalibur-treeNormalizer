@@ -342,6 +342,12 @@ public class treeBucketNode {
         return childs;
     }
 
+    /**
+     * liefert das Kind an der Position pos
+     *
+     * @param pos die Position
+     * @return das Kind oder null
+     */
     public treeBucketNode getChild(int pos) {
         if (pos >= 0 && pos < childs.size()) {
             return childs.get(pos);
@@ -362,6 +368,23 @@ public class treeBucketNode {
     }
 
     /**
+     * setzt ein Kind an der Position i
+     *
+     * @param i        die existierende Kind-Position
+     * @param newChild das neue Kind
+     */
+    public void setChild(int i, treeBucketNode newChild) {
+        if (i < 0 || i >= this.childs.size()) {
+            return;
+        }
+
+        if (newChild == null) {
+            newChild = new treeBucketNode();
+        }
+        this.childs.set(i, newChild);
+    }
+
+    /**
      * liefert den ersten Elternknoten
      *
      * @return der erste Elternknoten
@@ -373,6 +396,12 @@ public class treeBucketNode {
         return null;
     }
 
+    /**
+     * liefert den Vater an der Position pos
+     *
+     * @param pos die Position
+     * @return der Vater oder null
+     */
     public treeBucketNode getParent(int pos) {
         if (pos >= 0 && pos < getParents().size()) {
             return getParents().get(pos);
@@ -431,6 +460,9 @@ public class treeBucketNode {
      * @param parents die neuen Eltern
      */
     public void setParents(ArrayList<treeBucketNode> parents) {
+        if (parents == null) {
+            parents = new ArrayList<>();
+        }
         this.parents = parents;
     }
 
@@ -728,7 +760,9 @@ public class treeBucketNode {
      * entfernt alle Verbindungen zu den Kindern dieses Knotens
      */
     public void removeChildEdges() {
-        for (treeBucketNode child : getChilds()) {
+        ArrayList<treeBucketNode> list = getChilds();
+        for (int i = 0; i < list.size(); i++) {
+            treeBucketNode child = list.get(i);
             removeEdgeTo(child);
         }
     }
@@ -857,7 +891,7 @@ public class treeBucketNode {
     }
 
     /**
-     * hashCode() verwenden! (diese Methode führt kein rehash aus)
+     * hashCode() verwenden! (diese Methode führt kein initiales rehash aus)
      *
      * @return the hash (sollte nicht verwendet werden)
      */
