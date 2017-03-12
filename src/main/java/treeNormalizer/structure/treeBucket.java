@@ -339,8 +339,8 @@ public class treeBucket {
      * @param nodeB der Zielknoten
      */
     public void addEdge(nodeReference nodeA, nodeReference nodeB) {
-        treeBucketNode nA = splitNode(nodeA);
-        treeBucketNode nB = getInternalNodeByReference(nodeB);
+        treeBucketNode nA = getInternalNodeByReference(nodeA);
+        treeBucketNode nB = splitNode(nodeB);
 
         if (nA == null) {
             throw new NullPointerException("der Knoten A existiert nicht");
@@ -674,21 +674,26 @@ public class treeBucket {
      * @param tree der Baum
      * @param name der neue Name
      */
-    public void renameTree(tree tree, String name) {
+    public boolean renameTree(tree tree, String name) {
+        if (name == null) {
+            return false;
+        }
+
         if (tree.getName() == name) {
-            return;
+            return false;
         }
 
         if (tree.getName() == null ? name == null : tree.getName().equals(name)) {
-            return;
+            return false;
         }
 
         // der Name eines Baums soll eindeutig sein
-        if (getTreeByName(tree.getName()) != null) {
-            return;
+        if (getTreeByName(name) != null) {
+            return false;
         }
 
         tree.setName(name);
+        return true;
     }
 
     /**
@@ -697,8 +702,8 @@ public class treeBucket {
      * @param node ein Knoten, welcher zum Baum gehört
      * @param name der neue Name
      */
-    public void renameTree(nodeReference node, String name) {
-        renameTree(node.getTree(), name);
+    public boolean renameTree(nodeReference node, String name) {
+        return renameTree(node.getTree(), name);
     }
 
     /**
@@ -707,13 +712,13 @@ public class treeBucket {
      * @param edge eine Kante des Baums
      * @param name der neue Name
      */
-    public void renameTree(edge edge, String name) {
+    public boolean renameTree(edge edge, String name) {
         nodeReference tmp = edge.getSource();
         if (tmp == null) {
             throw new IllegalArgumentException("die Kante besitzt keine Quelle");
         }
 
-        renameTree(tmp.getTree(), name);
+        return renameTree(tmp.getTree(), name);
     }
 
     /**

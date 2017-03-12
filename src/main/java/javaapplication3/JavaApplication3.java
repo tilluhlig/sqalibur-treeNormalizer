@@ -75,30 +75,6 @@ public class JavaApplication3 {
         q.addEdge(plus2, eins2);
         q.addEdge(plus2, zwei2);
         writeNodeSetToFile(q);
-
-        /*
-         * String filename = "Messung.xml"; Document document = new
-         * SAXBuilder().build(filename);
-         * System.out.println(document.getRootElement().getChildren().size());
-         * System.out.println(document.getRootElement().getText()); Source
-         * xmlFile = new JDOMSource(document);
-         *
-         * JDOMResult htmlResult = new JDOMResult(); Transformer transformer =
-         * TransformerFactory.newInstance().newTransformer( new
-         * StreamSource("Messung.xsl")); transformer.transform(xmlFile,
-         * htmlResult);
-         *
-         * XMLOutputter out = new XMLOutputter(Format.getPrettyFormat());
-         * out.output(document, System.out);
-         * out.output(htmlResult.getDocument(), System.out);
-         */
-        // Script Engine Manager
-        // ScriptEngineManager factory = new ScriptEngineManager();
-        // JavaScript Engine Nashorn
-        // ScriptEngine engine = factory.getEngineByName("nashorn");
-        // Evaluate JavaScript code
-        // engine.eval("w = window.open('text.txt');w.print();");
-        // engine.eval(new FileReader("script.js"));
         System.out.println("ENDE");
     }
 

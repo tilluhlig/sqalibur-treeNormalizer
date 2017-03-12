@@ -78,6 +78,19 @@ public class treeBucketNode {
      */
     private int uniqueId = 0;
 
+    /*
+     * dieses Flag gibt an, ob der Knoten verändert wurde und daher der Hash neu
+     * berechnet werden muss
+     */
+    private boolean changedNode = true;
+
+    /**
+     * setzt den Knoten als verändert (also changedNode = true)
+     */
+    public void nodeChanged() {
+        setChangedNode(true);
+    }
+
     /**
      * erzeugt einen neuen Knoten
      */
@@ -135,6 +148,7 @@ public class treeBucketNode {
      */
     public void addChild(treeBucketNode child) {
         getChilds().add(child);
+        nodeChanged();
     }
 
     /**
@@ -155,6 +169,7 @@ public class treeBucketNode {
     public void addEdgeTo(treeBucketNode targetNode) {
         targetNode.addParent(this);
         addChild(targetNode);
+        nodeChanged();
     }
 
     /**
@@ -262,10 +277,11 @@ public class treeBucketNode {
      */
     public int decreaseUniqueId() {
         if (getUniqueId() == 0) {
-            // TODO: was nun?
+            nodeChanged();
             return getUniqueId();
         }
         setUniqueId(getUniqueId() - 1);
+        nodeChanged();
         return getUniqueId();
     }
 
@@ -331,6 +347,7 @@ public class treeBucketNode {
      */
     public void setAttributes(Map<String, String> attributes) {
         this.attributes = attributes;
+        nodeChanged();
     }
 
     /**
@@ -365,6 +382,7 @@ public class treeBucketNode {
             childs = new ArrayList<>();
         }
         this.childs = childs;
+        nodeChanged();
     }
 
     /**
@@ -382,6 +400,7 @@ public class treeBucketNode {
             newChild = new treeBucketNode();
         }
         this.childs.set(i, newChild);
+        nodeChanged();
     }
 
     /**
@@ -425,6 +444,7 @@ public class treeBucketNode {
      */
     public void setLabel(String label) {
         this.label = label;
+        nodeChanged();
     }
 
     /**
@@ -497,6 +517,7 @@ public class treeBucketNode {
      */
     public void setType(String type) {
         this.type = type;
+        nodeChanged();
     }
 
     /**
@@ -533,7 +554,7 @@ public class treeBucketNode {
      */
     @Override
     public int hashCode() {
-        if (getHash() == 0) {
+        if (isChangedNode()) {
             rehash();
         }
         return getHash();
@@ -559,8 +580,10 @@ public class treeBucketNode {
     public int increaseUniqueId() {
         setUniqueId(getUniqueId() + 1);
         if (getUniqueId() < 0) {
+            nodeChanged();
             return 0;
         }
+        nodeChanged();
         return getUniqueId();
     }
 
@@ -700,6 +723,9 @@ public class treeBucketNode {
      * aktualisiert den Hashwert des Objekts
      */
     public void rehash() {
+        // danach benötigen wir kein rehash mehr
+        setChangedNode(false);
+
         // label, type, children, attributes
         String tmpHash = getLabel() + "_" + getUniqueId() + "_" + getType();
         for (treeBucketNode child : getChilds()) {
@@ -720,6 +746,7 @@ public class treeBucketNode {
      */
     public void removeAllAttributes() {
         getAttributes().clear();
+        nodeChanged();
     }
 
     /**
@@ -736,6 +763,7 @@ public class treeBucketNode {
      */
     public void removeAttribute(String name) {
         getAttributes().remove(name);
+        nodeChanged();
     }
 
     /**
@@ -745,6 +773,7 @@ public class treeBucketNode {
      */
     public void removeChild(int id) {
         getChilds().remove(id);
+        nodeChanged();
     }
 
     /**
@@ -754,6 +783,7 @@ public class treeBucketNode {
      */
     public void removeChild(treeBucketNode object) {
         getChilds().remove(object);
+        nodeChanged();
     }
 
     /**
@@ -765,6 +795,7 @@ public class treeBucketNode {
             treeBucketNode child = list.get(i);
             removeEdgeTo(child);
         }
+        nodeChanged();
     }
 
     /**
@@ -784,6 +815,7 @@ public class treeBucketNode {
     public void removeEdgeTo(treeBucketNode targetNode) {
         targetNode.removeParent(this);
         removeChild(targetNode);
+        nodeChanged();
     }
 
     /**
@@ -807,6 +839,7 @@ public class treeBucketNode {
             int a = childs.indexOf(targetNode);
             unsetChild(childs.indexOf(targetNode));
         }
+        nodeChanged();
     }
 
     /**
@@ -816,6 +849,7 @@ public class treeBucketNode {
      */
     public void unsetChild(int targetNode) {
         childs.set(targetNode, null);
+        nodeChanged();
     }
 
     /**
@@ -888,6 +922,7 @@ public class treeBucketNode {
         } else {
             getAttributes().put(name, value);
         }
+        nodeChanged();
     }
 
     /**
@@ -914,6 +949,27 @@ public class treeBucketNode {
             uniqueId = 0;
         }
         this.uniqueId = uniqueId;
+        nodeChanged();
+    }
+
+    /**
+     * prüft, ob der Knoten als verändert markiert wurde (er benötigt dann ein
+     * rehash)
+     *
+     * @return the changedNode, true = wurde verändert, false = nicht verändert
+     */
+    public boolean isChangedNode() {
+        return changedNode;
+    }
+
+    /**
+     * setzt, ob der Knoten verändert wurde oder nicht manuell
+     *
+     * @param changedNode the changedNode to set (true = veränderter Knoten,
+     *                    false = unveränder)
+     */
+    public void setChangedNode(boolean changedNode) {
+        this.changedNode = changedNode;
     }
 
 }

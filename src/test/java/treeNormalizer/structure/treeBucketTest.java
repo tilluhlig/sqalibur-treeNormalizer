@@ -17,6 +17,7 @@
 package treeNormalizer.structure;
 
 import java.util.ArrayList;
+import static javaapplication3.JavaApplication3.writeNodeSetToFile;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -143,7 +144,7 @@ public class treeBucketTest {
     @Test
     public void testPrint() {
         System.out.println("print");
-        System.out.println("The test case is a prototype.");        
+        System.out.println("The test case is a prototype.");
     }
 
     /**
@@ -188,7 +189,13 @@ public class treeBucketTest {
     @Test
     public void testRemoveTree() {
         System.out.println("removeTree");
-        System.out.println("The test case is a prototype.");
+        treeBucket instance = new treeBucket();
+        tree treeA = instance.createTree("BaumA");
+        tree treeB = instance.createTree("BaumB");
+        assertEquals(2, instance.getTrees().size());
+        instance.removeTree(treeA);
+        assertEquals(1, instance.getTrees().size());
+        assertArrayEquals(new tree[]{treeB}, instance.getTrees().toArray(new tree[0]));
     }
 
     /**
@@ -215,7 +222,17 @@ public class treeBucketTest {
     @Test
     public void testRenameTree_tree_String() {
         System.out.println("renameTree");
-        System.out.println("The test case is a prototype.");
+        treeBucket instance = initMinimalBucket();
+        tree treeA = instance.getTreeByName("BaumA");
+        assertEquals("BaumA", treeA.getName());
+        boolean result = instance.renameTree(treeA, "BaumARenamed");
+        assertTrue(result);
+        assertEquals("BaumARenamed", treeA.getName());
+
+        // ein Baumname darf nicht doppelt existieren
+        result = instance.renameTree(treeA, "BaumARenamed");
+        assertFalse(result);
+        assertEquals("BaumARenamed", treeA.getName());
     }
 
     /**
@@ -224,7 +241,18 @@ public class treeBucketTest {
     @Test
     public void testRenameTree_nodeReference_String() {
         System.out.println("renameTree");
-        System.out.println("The test case is a prototype.");
+        treeBucket instance = initMinimalBucket();
+        tree treeA = instance.getTreeByName("BaumA");
+        nodeReference nodeA = treeA.getRoot();
+        assertEquals("BaumA", treeA.getName());
+        boolean result = instance.renameTree(nodeA, "BaumARenamed");
+        assertTrue(result);
+        assertEquals("BaumARenamed", treeA.getName());
+
+        // ein Baumname darf nicht doppelt existieren
+        result = instance.renameTree(nodeA, "BaumARenamed");
+        assertFalse(result);
+        assertEquals("BaumARenamed", treeA.getName());
     }
 
     /**
@@ -233,7 +261,20 @@ public class treeBucketTest {
     @Test
     public void testRenameTree_edge_String() {
         System.out.println("renameTree");
-        System.out.println("The test case is a prototype.");
+        treeBucket instance = initMinimalBucket();
+        tree treeA = instance.getTreeByName("BaumA");
+        nodeReference nodeA = treeA.getRoot();
+        edge edgeA = new edge(nodeA, nodeA);
+
+        assertEquals("BaumA", treeA.getName());
+        boolean result = instance.renameTree(edgeA, "BaumARenamed");
+        assertTrue(result);
+        assertEquals("BaumARenamed", treeA.getName());
+
+        // ein Baumname darf nicht doppelt existieren
+        result = instance.renameTree(edgeA, "BaumARenamed");
+        assertFalse(result);
+        assertEquals("BaumARenamed", treeA.getName());
     }
 
     /**
@@ -242,7 +283,30 @@ public class treeBucketTest {
     @Test
     public void testSetTreeRoot_tree_nodeReference() {
         System.out.println("setTreeRoot");
-        System.out.println("The test case is a prototype.");
+        treeBucket instance = initMinimalBucket();
+        tree treeA = instance.getTreeByName("BaumA");
+        nodeReference nodeA = instance.createNode(treeA, "", "sub");
+        instance.setTreeRoot(treeA, nodeA);
+        assertEquals(nodeA, treeA.getRoot());
+    }
+
+    private treeBucket initMinimalBucket() {
+        treeBucket instance = new treeBucket();
+        tree treeA = instance.createTree("BaumA");
+        nodeReference plus = instance.createNode(treeA, "", "addition");
+        instance.setTreeRoot(treeA, plus);
+
+        nodeReference plus2 = instance.createNode(treeA, "", "addition");
+        nodeReference plus3 = instance.createNode(treeA, "", "addition");
+        instance.addEdge(plus, plus2);
+        instance.addEdge(plus, plus3);
+
+        nodeReference eins = instance.createNode(treeA, "1", "const");
+        nodeReference zwei = instance.createNode(treeA, "2", "const");
+        instance.addEdge(plus2, eins);
+        instance.addEdge(plus3, zwei);
+
+        return instance;
     }
 
 }
