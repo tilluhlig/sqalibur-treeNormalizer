@@ -792,4 +792,22 @@ public class nodeReferenceTest {
         assertNull(instance.getParent());
     }
 
+    /**
+     * Test of getChild method, of class nodeReference.
+     */
+    @Test
+    public void testGetChild() {
+        System.out.println("getChild");
+        System.out.println("The test case is a prototype.");
+    }
+
+    /**
+     * Test of hashCode method, of class nodeReference.
+     */
+    @Test
+    public void testHashCode() {
+        System.out.println("hashCode");
+        System.out.println("The test case is a prototype.");
+    }
+
 }

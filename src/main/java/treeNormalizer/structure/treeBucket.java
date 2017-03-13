@@ -41,7 +41,8 @@ public class treeBucket {
     private final Map<Integer, treeBucketNode> nodeReference = new HashMap<>();
 
     /**
-     * diese Sammlung enthält die Teilgraphen (also die realen Knoten)
+     * diese Sammlung enthält die Teilgraphen (also die realen Knoten anhand
+     * deren Hash)
      */
     private Map<Integer, treeBucketNode> nodes = new HashMap<>();
 
@@ -81,7 +82,6 @@ public class treeBucket {
         if (nodes.containsKey(node.hashCode())) {
             // der Knoten existiert bereits
             treeBucketNode localNode = nodes.get(node.hashCode());
-            localNode.addParents(node.getParents());
             mergeNode(localNode, node);
 
             // nun müssen noch die Kinder verschmolzen werden, wobei
@@ -120,18 +120,28 @@ public class treeBucket {
      * @return die neue Referenz
      */
     private nodeReference createNodeReference(tree tree, treeBucketNode node) {
+        int newId = getNextReferenceId();
+        nodeReference tmp = new nodeReference(tree, newId);
+        nodeReference.put(newId, node);
+        node.addNodeReference(tmp);
+        return tmp;
+    }
+
+    private int getNextReferenceId() {
         if (nodeReference.containsKey(possibleNextReferenceId)) {
-            possibleNextReferenceId = random.nextPositive();
-            while (nodeReference.containsKey(possibleNextReferenceId)) {
-                possibleNextReferenceId++; // kann endlos laufen
+            possibleNextReferenceId = random.nextNotZero();
+            while (nodeReference.containsKey(increaseToNextPossibleReferenceId())) {
+                // kann endlos laufen
             }
         }
+        increaseToNextPossibleReferenceId();
+        return possibleNextReferenceId;
+    }
 
-        nodeReference tmp = new nodeReference(tree, possibleNextReferenceId);
-        nodeReference.put(possibleNextReferenceId, node);
-        node.addNodeReference(tmp);
-        possibleNextReferenceId++;
-        return tmp;
+    private int getNextNodeId() {
+        int newId = random.nextNotZero();
+        // das mit der ID muss noch besser gelöst werden
+        return newId;
     }
 
     /**
@@ -165,17 +175,30 @@ public class treeBucket {
      * vereint zwei Graphen miteinander, wobei targetNode den Graphen sourceNode
      * aufnimmt
      *
-     * @param targetNode der Zielgraph
-     * @param sourceNode der Quellgraph
+     * @param targetNode der Zielknoten
+     * @param sourceNode der Quellknoten
      */
     private void mergeNode(treeBucketNode targetNode, treeBucketNode sourceNode) {
+        // der Zielknoten erhält nun die Eltern vom Quellknoten
+        targetNode.addParents(sourceNode.getParents());
+        targetNode.cleanParents(); // doppelte Eltern werden entfernt
+
+        // die bisherigen Eltern des Quellknoten erhalten nun den Zielknoten
+        // als Kind
+        for (treeBucketNode parent : sourceNode.getParents()) {
+            int sourceid = parent.findChild(sourceNode);
+            parent.setChild(sourceid, targetNode);
+        }
+
+        // der Zielknoten nimmt nun die Referenzen des Quellknoten auf
         targetNode.addNodeReferences(sourceNode.getNodeReferences());
 
-        // setzt alle alten Referenzen auf den neuen Knoten
+        // setzt alle alten Referenzen auf den neuen Knoten (in der Verwaltung)
         sourceNode.getNodeReferences().forEach((ref) -> {
             nodeReference.replace(ref.getId(), targetNode);
         });
 
+        // die Kinder der beiden müssen auch verschmolzen werden
         if (targetNode.hasChilds()) {
             // der Graph ist noch nicht unten angekommen
             ArrayList<treeBucketNode> targetChilds = targetNode.getChilds();
@@ -191,6 +214,7 @@ public class treeBucket {
                 }
             }
         }
+        // source node muss noch entfernt werden
     }
 
     /**
@@ -310,7 +334,7 @@ public class treeBucket {
 
         // jetzt muss ein neuer Knoten erzeugt werden (eine Kopie)
         // (aber ohne Kinder und Eltern)
-        treeBucketNode splittedNode = realNode.cloneNodeBase();
+        treeBucketNode splittedNode = realNode.cloneNodeBase(getNextNodeId());
         splittedNode.addNodeReference(node);
 
         // der neue Knoten soll eindeutig sein, damit er beim Einfügen nicht
@@ -435,7 +459,7 @@ public class treeBucket {
      * @return die Referenz auf den Knoten
      */
     public nodeReference createNode(tree tree, String name, String type) {
-        treeBucketNode tmp = new treeBucketNode(name, type);
+        treeBucketNode tmp = new treeBucketNode(getNextNodeId(), name, type);
         return addNode(tree, tmp);
     }
 
@@ -790,6 +814,19 @@ public class treeBucket {
     }
 
     /**
+     * setzt den possibleNextReferenceId-Zeiger auf den nächsten möglichen Wert
+     *
+     * @return der nächste Wert
+     */
+    private int increaseToNextPossibleReferenceId() {
+        possibleNextReferenceId++;
+        if (possibleNextReferenceId == 0) {
+            possibleNextReferenceId = 1;
+        }
+        return possibleNextReferenceId;
+    }
+
+    /**
      * bietet Zufallszahlen an
      */
     public static class random {
@@ -806,6 +843,19 @@ public class treeBucket {
                 rnd = new Random();
             }
             return 1 + rnd.nextInt(Integer.SIZE - 2);
+        }
+
+        /**
+         * liefert eine Zahl ungleich 0
+         *
+         * @return die Zufallszahl
+         */
+        public static int nextNotZero() {
+            int r = rnd.nextInt();
+            if (r == 0) {
+                r = 1;
+            }
+            return r;
         }
 
     }

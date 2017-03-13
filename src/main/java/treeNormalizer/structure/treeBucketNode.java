@@ -18,7 +18,9 @@ package treeNormalizer.structure;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import org.apache.commons.lang.ArrayUtils;
 
 /**
  * Diese Klasse stellt die real existierenden Knoten einer treeBucket dar. Dabei
@@ -60,6 +62,15 @@ public class treeBucketNode {
      * Man könnte das Feld auch content nennen.
      */
     private String label = "";
+
+    /**
+     * eine ID des realen Knotens, diese ID wird durch eine übergeordnete
+     * Verwaltung (in einer HashMap) behandelt und soll zu der ID einen
+     * entsprechenden Knoten liefern (diese id ist also global eindeutig)
+     *
+     * 0 = keine korrekte ID
+     */
+    private int id = 0;
 
     /**
      * Diese Liste enthält die Knotenreferenzen, welche auf diesen Knoten
@@ -108,10 +119,34 @@ public class treeBucketNode {
     /**
      * erzeugt einen neuen Knoten
      *
+     * @param id    die ID des Knotens
+     * @param label der Name
+     */
+    public treeBucketNode(int id, String label) {
+        this.label = label;
+        this.id = id;
+    }
+
+    /**
+     * erzeugt einen neuen Knoten
+     *
      * @param label der Name
      */
     public treeBucketNode(String label) {
         this.label = label;
+    }
+
+    /**
+     * erzeugt einen neuen Knoten
+     *
+     * @param id    die ID des Knotens
+     * @param label das Label
+     * @param type  der Typ (Klasse)
+     */
+    public treeBucketNode(int id, String label, String type) {
+        this.label = label;
+        this.type = type;
+        this.id = id;
     }
 
     /**
@@ -123,6 +158,21 @@ public class treeBucketNode {
     public treeBucketNode(String label, String type) {
         this.label = label;
         this.type = type;
+    }
+
+    /**
+     * erzeugt einen neuen Knoten
+     *
+     * @param id         die ID des Knotens
+     * @param label      das Label
+     * @param type       der Typ (Klasse)
+     * @param attributes die Attribute
+     */
+    public treeBucketNode(int id, String label, String type, Map<String, String> attributes) {
+        this.label = label;
+        this.type = type;
+        this.attributes = attributes;
+        this.id = id;
     }
 
     /**
@@ -235,7 +285,6 @@ public class treeBucketNode {
      * entfernt doppelte Elternknoten
      */
     public void cleanParents() {
-        // TODO: die Umsetzung ist noch sehr ineffizient
         ArrayList<treeBucketNode> newParents = new ArrayList<>();
         for (treeBucketNode parent : getParents()) {
             if (!newParents.contains(parent)) {
@@ -251,9 +300,20 @@ public class treeBucketNode {
      *
      * @return der neue Knoten
      */
-    public treeBucketNode cloneNodeBase() {
-        treeBucketNode tmp = new treeBucketNode(getLabel(), getType(), getAttributes());
+    public treeBucketNode cloneNodeBase(int newId) {
+        treeBucketNode tmp = new treeBucketNode(newId, getLabel(), getType(), getAttributes());
         return tmp;
+    }
+
+    /**
+     * Erzeugt eine Kopie des Knotens (nur die Grunddaten) also: label, type,
+     * attributes
+     *
+     * @return der neue Knoten
+     */
+    public treeBucketNode cloneNodeBase() {
+        // 0 wird dabei als ungültige ID angesehen
+        return cloneNodeBase(0);
     }
 
     /**
@@ -391,6 +451,25 @@ public class treeBucketNode {
             return id;
         }
         return -1;
+    }
+
+    /**
+     * ermittelt alle Kinder des Knotens, welche node sind
+     *
+     * @param node der zu suchende Knoten
+     * @return eine Liste der Kinderpositionen
+     */
+    public int[] findChilds(treeBucketNode node) {
+        List<Integer> list = new ArrayList<>();
+        ArrayList<treeBucketNode> list2 = getChilds();
+        for (int i = 0; i < list2.size(); i++) {
+            treeBucketNode child = list2.get(i);
+            if (node.equals(child)) {
+                list.add(i);
+            }
+        }
+
+        return ArrayUtils.toPrimitive(list.toArray(new Integer[list.size()]));
     }
 
     /**
@@ -1027,6 +1106,33 @@ public class treeBucketNode {
      */
     public void updateStoreId() {
         this.storeId = getRawHash();
+    }
+
+    /**
+     * liefert die ID dieses Knotens zurück
+     *
+     * @return the id
+     */
+    public int getId() {
+        return id;
+    }
+
+    /**
+     * setzt die ID des Knotens
+     *
+     * @param id the id to set
+     */
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    /**
+     * prüft, ob die ID gültig ist (also ungleich 0)
+     *
+     * @return true = hat eine gütige ID, false = nicht
+     */
+    public boolean hasValidId() {
+        return this.id != 0;
     }
 
 }

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2017 Till Uhlig <till.uhlig@student.uni-halle.de>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -34,9 +34,9 @@ public class JavaApplication3 {
 
     /**
      * Die Main
-     * 
+     *
      * @param args the command line arguments
-     * @throws java.io.IOException a
+     * @throws java.io.IOException          a
      * @throws javax.script.ScriptException
      */
     public static void main(String[] args) throws IOException, ScriptException {

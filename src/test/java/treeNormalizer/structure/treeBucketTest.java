@@ -315,4 +315,23 @@ public class treeBucketTest {
         return instance;
     }
 
+    /**
+     * Test of referenceExists method, of class treeBucket.
+     */
+    @Test
+    public void testReferenceExists() {
+        System.out.println("referenceExists");
+        System.out.println("The test case is a prototype.");
+    }
+
+    @Test
+    public void testRandom() {
+        System.out.println("random.nextPositive");
+        for (int i = 0; i < 25; i++) {
+            if (treeBucket.random.nextPositive() < 1) {
+                fail("der Zufallswert soll nicht kleiner 1 sein.");
+            }
+        }
+    }
+
 }

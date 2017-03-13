@@ -35,8 +35,10 @@ public class nodeReference extends Object {
      * eine ID des Zielknotens, diese ID wird durch eine übergeordnete
      * Verwaltung (in einer HashMap) behandelt und soll zu der ID einen
      * entsprechenden Knoten liefern (diese id ist also global eindeutig)
+     *
+     * 0 = keine korrekte ID
      */
-    private int id;
+    private int id = 0;
 
     /**
      * der Elternteil (null = kein Elterknoten)
@@ -362,10 +364,7 @@ public class nodeReference extends Object {
      * @return
      */
     public boolean isChildIndexPossible(int index) {
-        if (index < 0 || index >= childs.size()) {
-            return false;
-        }
-        return true;
+        return !(index < 0 || index >= childs.size());
     }
 
     /**

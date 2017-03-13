@@ -1192,6 +1192,7 @@ public class treeBucketNodeTest {
     @Test
     public void testFindChild() {
         System.out.println("findChild");
+        treeBucketNode instance = new treeBucketNode("A");
         System.out.println("The test case is a prototype.");
     }
 
@@ -1201,7 +1202,8 @@ public class treeBucketNodeTest {
     @Test
     public void testGetStoreId() {
         System.out.println("getStoreId");
-        System.out.println("The test case is a prototype.");
+        treeBucketNode instance = new treeBucketNode("A");
+        assertEquals(0, instance.getStoreId());
     }
 
     /**
@@ -1210,6 +1212,71 @@ public class treeBucketNodeTest {
     @Test
     public void testSetStoreId() {
         System.out.println("setStoreId");
+        treeBucketNode instance = new treeBucketNode("A");
+        instance.setStoreId(15);
+        assertEquals(15, instance.getStoreId());
+    }
+
+    /**
+     * Test of cloneNodeBase method, of class treeBucketNode.
+     */
+    @Test
+    public void testCloneNodeBase_int() {
+        System.out.println("cloneNodeBase");
+        System.out.println("The test case is a prototype.");
+    }
+
+    /**
+     * Test of cloneNodeBase method, of class treeBucketNode.
+     */
+    @Test
+    public void testCloneNodeBase_0args() {
+        System.out.println("cloneNodeBase");
+        System.out.println("The test case is a prototype.");
+    }
+
+    /**
+     * Test of findChilds method, of class treeBucketNode.
+     */
+    @Test
+    public void testFindChilds() {
+        System.out.println("findChilds");
+        System.out.println("The test case is a prototype.");
+    }
+
+    /**
+     * Test of updateStoreId method, of class treeBucketNode.
+     */
+    @Test
+    public void testUpdateStoreId() {
+        System.out.println("updateStoreId");
+        System.out.println("The test case is a prototype.");
+    }
+
+    /**
+     * Test of getId method, of class treeBucketNode.
+     */
+    @Test
+    public void testGetId() {
+        System.out.println("getId");
+        System.out.println("The test case is a prototype.");
+    }
+
+    /**
+     * Test of setId method, of class treeBucketNode.
+     */
+    @Test
+    public void testSetId() {
+        System.out.println("setId");
+        System.out.println("The test case is a prototype.");
+    }
+
+    /**
+     * Test of hasValidId method, of class treeBucketNode.
+     */
+    @Test
+    public void testHasValidId() {
+        System.out.println("hasValidId");
         System.out.println("The test case is a prototype.");
     }
 
