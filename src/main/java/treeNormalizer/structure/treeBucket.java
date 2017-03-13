@@ -276,21 +276,23 @@ public class treeBucket {
 
         // wenn der referenzierte Knoten alleine in diesem Knoten ist,
         // muss er nicht aufgespalten werden
-        if (realNode.getNodeReferences().size() <= 1) {
+        if (realNode.getNodeReferences().size() <= 1) { // obwohl 0 nicht möglich ist
+            // damit gab es auch keine weitere Anpassung
             return realNode;
         }
 
         // nun wird die Referenz aus dem Knoten entfernt
         realNode.removeNodeReference(node);
 
-        // jetzt muss ein neuer Knoten erzeugt werden
+        // jetzt muss ein neuer Knoten erzeugt werden (eine Kopie)
+        // (aber ohne Kinder und Eltern)
         treeBucketNode splittedNode = realNode.cloneNodeBase();
         splittedNode.addNodeReference(node);
 
         // der neue Knoten soll eindeutig sein, damit er beim Einfügen nicht
         // mit einem anderen vereint wird
         splittedNode = makeNodeUnique(splittedNode);
-        addNodeSimple(splittedNode);
+        addNodeSimple(splittedNode); // fügt den Knoten ein
 
         // die Knotenreferenz soll nun auf einen neuen realen Knoten zeigen
         nodeReference.replace(node.getId(), splittedNode);
@@ -306,7 +308,7 @@ public class treeBucket {
             // die Eltern werden ebenfalls in den neuen Baum überführt
             treeBucketNode realParent = getInternalNodeByReference(parent);
             treeBucketNode splittedParent = splitNode(parent);
-            splittedNode.addParent(splittedParent);
+            splittedNode.addParent(splittedParent); // und was ist mit splittedNode als Kind von splitted Parent???????
         }
 
         return splittedNode;
@@ -339,8 +341,8 @@ public class treeBucket {
      * @param nodeB der Zielknoten
      */
     public void addEdge(nodeReference nodeA, nodeReference nodeB) {
-        treeBucketNode nA = getInternalNodeByReference(nodeA);
-        treeBucketNode nB = splitNode(nodeB);
+        treeBucketNode nA = splitNode(nodeA);
+        treeBucketNode nB = getInternalNodeByReference(nodeB);
 
         if (nA == null) {
             throw new NullPointerException("der Knoten A existiert nicht");

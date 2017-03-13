@@ -46,7 +46,7 @@ public class treeBucketNode {
     /**
      * der Hashwert (wird durch rehash berechnet)
      */
-    private int hash = 0; // Default to 0
+    private int rawHash = 0; // Default to 0
 
     /**
      * der Name des Knotens/Bezeichner (beispielsweise sowas wie "1" oder "+").
@@ -487,6 +487,13 @@ public class treeBucketNode {
     }
 
     /**
+     * entfernt alle Eltern aus der Elternliste
+     */
+    public void removeAllParents() {
+        setParents(null);
+    }
+
+    /**
      * liefert alle verknüpften Bäume
      *
      * @return die zugehörigen Bäume
@@ -557,7 +564,7 @@ public class treeBucketNode {
         if (isChangedNode()) {
             rehash();
         }
-        return getHash();
+        return getRawHash();
     }
 
     /**
@@ -738,7 +745,7 @@ public class treeBucketNode {
         for (Map.Entry<String, String> attribute : getAttributes().entrySet()) {
             tmpHash += "." + attribute.getKey() + "=" + attribute.getValue();
         }
-        setHash(tmpHash.hashCode());
+        setRawHash(tmpHash.hashCode());
     }
 
     /**
@@ -791,7 +798,7 @@ public class treeBucketNode {
      */
     public void removeChildEdges() {
         ArrayList<treeBucketNode> list = getChilds();
-        for (int i = 0; i < list.size(); i++) {
+        for (int i = 0; i < list.size();) {
             treeBucketNode child = list.get(i);
             removeEdgeTo(child);
         }
@@ -898,7 +905,9 @@ public class treeBucketNode {
      * entfernt alle Verbindungen zu den Eltern dieses Knotens
      */
     public void removeParentEdges() {
-        for (treeBucketNode parent : getParents()) {
+        ArrayList<treeBucketNode> list = getParents();
+        for (int i = 0; i < list.size();) {
+            treeBucketNode parent = list.get(i);
             removeEdgeFrom(parent);
         }
     }
@@ -930,15 +939,15 @@ public class treeBucketNode {
      *
      * @return the hash (sollte nicht verwendet werden)
      */
-    public int getHash() {
-        return hash;
+    public int getRawHash() {
+        return rawHash;
     }
 
     /**
      * @param hash the hash to set (sollte nicht verwendet werden)
      */
-    public void setHash(int hash) {
-        this.hash = hash;
+    public void setRawHash(int hash) {
+        this.rawHash = hash;
     }
 
     /**

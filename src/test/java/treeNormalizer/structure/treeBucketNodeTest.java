@@ -74,7 +74,12 @@ public class treeBucketNodeTest {
     @Test
     public void testAddEdgeFrom() {
         System.out.println("addEdgeFrom");
-        System.out.println("The test case is a prototype.");
+        treeBucketNode instance = new treeBucketNode("A");
+        treeBucketNode instance2 = new treeBucketNode("B");
+        instance2.addEdgeFrom(instance);
+        assertTrue(instance.hasChilds());
+        assertTrue(instance2.hasParents());
+        assertTrue(instance.isChangedNode());
     }
 
     /**
@@ -83,7 +88,12 @@ public class treeBucketNodeTest {
     @Test
     public void testAddEdgeTo() {
         System.out.println("addEdgeTo");
-        System.out.println("The test case is a prototype.");
+        treeBucketNode instance = new treeBucketNode("A");
+        treeBucketNode instance2 = new treeBucketNode("B");
+        instance.addEdgeTo(instance2);
+        assertTrue(instance.hasChilds());
+        assertTrue(instance2.hasParents());
+        assertTrue(instance.isChangedNode());
     }
 
     /**
@@ -270,6 +280,14 @@ public class treeBucketNodeTest {
     public void testDisconnect() {
         System.out.println("disconnect");
         System.out.println("The test case is a prototype.");
+        treeBucketNode instance = new treeBucketNode("A");
+        instance.addParent(new treeBucketNode("B"));
+        instance.addParent(new treeBucketNode("D"));
+        instance.addChild(new treeBucketNode("C"));
+        instance.addChild(new treeBucketNode("E"));
+        instance.disconnect();
+        assertFalse(instance.hasChilds());
+        assertFalse(instance.hasParents());
     }
 
     /**
@@ -278,7 +296,13 @@ public class treeBucketNodeTest {
     @Test
     public void testEquals() {
         System.out.println("equals");
-        System.out.println("The test case is a prototype.");
+        assertTrue(new treeBucketNode("").equals(new treeBucketNode("")));
+        assertTrue(new treeBucketNode("A").equals(new treeBucketNode("A")));
+        assertFalse(new treeBucketNode("A").equals(new treeBucketNode("B")));
+        assertTrue(new treeBucketNode("A", "typeA").equals(new treeBucketNode("A", "typeA")));
+        assertFalse(new treeBucketNode("A", "typeA").equals(new treeBucketNode("A", "typeB")));
+        assertFalse(new treeBucketNode("A", "typeA").equals(new treeBucketNode("B", "typeA")));
+        assertTrue(new treeBucketNode("A", "typeA", new HashMap<String, String>()).equals(new treeBucketNode("A", "typeA", new HashMap<String, String>())));
     }
 
     /**
@@ -562,7 +586,7 @@ public class treeBucketNodeTest {
     public void testHashCode() {
         System.out.println("hashCode");
         treeBucketNode instance = new treeBucketNode("A");
-        assertEquals(0, instance.getHash());
+        assertEquals(0, instance.getRawHash());
         assertNotEquals(0, instance.hashCode()); // sehr wahrscheinlich
     }
 
@@ -735,15 +759,15 @@ public class treeBucketNodeTest {
     public void testRehash() {
         System.out.println("rehash");
         treeBucketNode instance = new treeBucketNode("A");
-        assertEquals(0, instance.getHash());
+        assertEquals(0, instance.getRawHash());
         instance.rehash();
-        assertNotEquals(0, instance.getHash()); // sehr wahrscheinlich
-        int a = instance.getHash();
+        assertNotEquals(0, instance.getRawHash()); // sehr wahrscheinlich
+        int a = instance.getRawHash();
         instance.rehash();
-        assertEquals(a, instance.getHash()); // das muss so sein
+        assertEquals(a, instance.getRawHash()); // das muss so sein
         instance.addAttribute("test", "2");
         instance.rehash();
-        assertNotEquals(a, instance.getHash()); // sehr wahrscheinlich
+        assertNotEquals(a, instance.getRawHash()); // sehr wahrscheinlich
 
     }
 
@@ -1028,28 +1052,28 @@ public class treeBucketNodeTest {
     }
 
     /**
-     * Test of getHash method, of class treeBucketNode.
+     * Test of getRawHash method, of class treeBucketNode.
      */
     @Test
-    public void testGetHash() {
-        System.out.println("getHash");
+    public void testGetRawHash() {
+        System.out.println("getRawHash");
         // diese Methode sollte nicht verwendet werden
         treeBucketNode instance = new treeBucketNode("A");
-        assertEquals(0, instance.getHash());
-        instance.setHash(15);
-        assertEquals(15, instance.getHash());
+        assertEquals(0, instance.getRawHash());
+        instance.setRawHash(15);
+        assertEquals(15, instance.getRawHash());
     }
 
     /**
-     * Test of setHash method, of class treeBucketNode.
+     * Test of setRawHash method, of class treeBucketNode.
      */
     @Test
-    public void testSetHash() {
-        System.out.println("setHash");
+    public void testSetRawHash() {
+        System.out.println("setRawHash");
         // diese Methode sollte nicht verwendet werden
         treeBucketNode instance = new treeBucketNode("A");
-        instance.setHash(15);
-        assertEquals(15, instance.getHash());
+        instance.setRawHash(15);
+        assertEquals(15, instance.getRawHash());
     }
 
     /**
@@ -1102,7 +1126,64 @@ public class treeBucketNodeTest {
     @Test
     public void testGetParent() {
         System.out.println("getParent");
-        System.out.println("The test case is a prototype.");
+        treeBucketNode instance = new treeBucketNode("A");
+        treeBucketNode instance2 = new treeBucketNode("B");
+        assertNull(instance.getParent(0));
+        instance.addParent(instance2);
+        assertEquals(instance2, instance.getParent(0));
+    }
+
+    /**
+     * Test of nodeChanged method, of class treeBucketNode.
+     */
+    @Test
+    public void testNodeChanged() {
+        System.out.println("nodeChanged");
+        treeBucketNode instance = new treeBucketNode("A");
+        instance.hashCode();
+        assertFalse(instance.isChangedNode());
+        instance.nodeChanged();
+        assertTrue(instance.isChangedNode());
+    }
+
+    /**
+     * Test of removeAllParents method, of class treeBucketNode.
+     */
+    @Test
+    public void testRemoveAllParents() {
+        System.out.println("removeAllParents");
+        treeBucketNode instance = new treeBucketNode("A");
+        instance.removeAllParents();
+        assertFalse(instance.hasParents());
+        instance.addParent(new treeBucketNode("B"));
+        instance.addParent(new treeBucketNode("C"));
+        instance.removeAllParents();
+        assertFalse(instance.hasParents());
+    }
+
+    /**
+     * Test of isChangedNode method, of class treeBucketNode.
+     */
+    @Test
+    public void testIsChangedNode() {
+        System.out.println("isChangedNode");
+        treeBucketNode instance = new treeBucketNode("A");
+        instance.setChangedNode(false);
+        assertFalse(instance.isChangedNode());
+        instance.setChangedNode(true);
+        assertTrue(instance.isChangedNode());
+    }
+
+    /**
+     * Test of setChangedNode method, of class treeBucketNode.
+     */
+    @Test
+    public void testSetChangedNode() {
+        System.out.println("setChangedNode");
+        treeBucketNode instance = new treeBucketNode("A");
+        instance.setChangedNode(true);
+        instance.setChangedNode(false);
+        assertFalse(instance.isChangedNode());
     }
 
 }
