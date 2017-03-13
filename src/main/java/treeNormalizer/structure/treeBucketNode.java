@@ -49,6 +49,13 @@ public class treeBucketNode {
     private int rawHash = 0; // Default to 0
 
     /**
+     * Unter dieser Id (quasi der Hash) wird dieser Knoten derzeit verwaltet.
+     * Die wird benötigt, falls der Knoten verändert wird und wir ihn neu
+     * speichern müssen.
+     */
+    private int storeId = 0;
+
+    /**
      * der Name des Knotens/Bezeichner (beispielsweise sowas wie "1" oder "+").
      * Man könnte das Feld auch content nennen.
      */
@@ -373,6 +380,20 @@ public class treeBucketNode {
     }
 
     /**
+     * sucht ein Kind anhand des Knotens
+     *
+     * @param node der zu suchende Knoten
+     * @return die Position oder -1 im Fehlerfall
+     */
+    public int findChild(treeBucketNode node) {
+        int id = childs.indexOf(node);
+        if (id >= 0) {
+            return id;
+        }
+        return -1;
+    }
+
+    /**
      * setzt die Kinderliste
      *
      * @param childs die neuen Kinder
@@ -390,10 +411,11 @@ public class treeBucketNode {
      *
      * @param i        die existierende Kind-Position
      * @param newChild das neue Kind
+     * @return
      */
-    public void setChild(int i, treeBucketNode newChild) {
+    public boolean setChild(int i, treeBucketNode newChild) {
         if (i < 0 || i >= this.childs.size()) {
-            return;
+            return false;
         }
 
         if (newChild == null) {
@@ -401,6 +423,7 @@ public class treeBucketNode {
         }
         this.childs.set(i, newChild);
         nodeChanged();
+        return true;
     }
 
     /**
@@ -979,6 +1002,31 @@ public class treeBucketNode {
      */
     public void setChangedNode(boolean changedNode) {
         this.changedNode = changedNode;
+    }
+
+    /**
+     * liefert die storeId (den Speicherort)
+     *
+     * @return the storeId die derzeitige Id
+     */
+    public int getStoreId() {
+        return storeId;
+    }
+
+    /**
+     * setzt die storeId (der derzeitige Speicherort)
+     *
+     * @param storeId setzt den neuen Speicherort
+     */
+    public void setStoreId(int storeId) {
+        this.storeId = storeId;
+    }
+
+    /**
+     * setzt die storeId auf den aktuellen Hash
+     */
+    public void updateStoreId() {
+        this.storeId = getRawHash();
     }
 
 }

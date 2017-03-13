@@ -279,7 +279,6 @@ public class treeBucketNodeTest {
     @Test
     public void testDisconnect() {
         System.out.println("disconnect");
-        System.out.println("The test case is a prototype.");
         treeBucketNode instance = new treeBucketNode("A");
         instance.addParent(new treeBucketNode("B"));
         instance.addParent(new treeBucketNode("D"));
@@ -351,7 +350,6 @@ public class treeBucketNodeTest {
     @Test
     public void testSetAttributes() {
         System.out.println("setAttributes");
-        System.out.println("The test case is a prototype.");
         treeBucketNode instance = new treeBucketNode("A");
         Map<String, String> attributes = new HashMap<>();
         instance.setAttributes(attributes);
@@ -1116,8 +1114,10 @@ public class treeBucketNodeTest {
         treeBucketNode instance3 = new treeBucketNode("C");
         instance.addChild(instance2);
         assertEquals(instance2, instance.getChild(0));
-        instance.setChild(0, instance3);
+        assertTrue(instance.setChild(0, instance3));
         assertEquals(instance3, instance.getChild(0));
+
+        assertFalse(instance.setChild(15, instance3));
     }
 
     /**
@@ -1184,6 +1184,33 @@ public class treeBucketNodeTest {
         instance.setChangedNode(true);
         instance.setChangedNode(false);
         assertFalse(instance.isChangedNode());
+    }
+
+    /**
+     * Test of findChild method, of class treeBucketNode.
+     */
+    @Test
+    public void testFindChild() {
+        System.out.println("findChild");
+        System.out.println("The test case is a prototype.");
+    }
+
+    /**
+     * Test of getStoreId method, of class treeBucketNode.
+     */
+    @Test
+    public void testGetStoreId() {
+        System.out.println("getStoreId");
+        System.out.println("The test case is a prototype.");
+    }
+
+    /**
+     * Test of setStoreId method, of class treeBucketNode.
+     */
+    @Test
+    public void testSetStoreId() {
+        System.out.println("setStoreId");
+        System.out.println("The test case is a prototype.");
     }
 
 }

@@ -99,7 +99,10 @@ public class treeBucketTest {
     @Test
     public void testGetTreeByName() {
         System.out.println("getTreeByName");
-        System.out.println("The test case is a prototype.");
+        treeBucket instance = initMinimalBucket();
+        tree a = instance.getTreeByName("BaumB");
+        assertNotNull(a);
+        assertEquals("BaumB", a.getName());
     }
 
     /**
@@ -117,7 +120,8 @@ public class treeBucketTest {
     @Test
     public void testGetTrees() {
         System.out.println("getTrees");
-        System.out.println("The test case is a prototype.");
+        treeBucket instance = initMinimalBucket();
+        assertEquals(3, instance.getTrees().size());
     }
 
     /**
@@ -306,6 +310,8 @@ public class treeBucketTest {
         instance.addEdge(plus2, eins);
         instance.addEdge(plus3, zwei);
 
+        instance.createTree("BaumB");
+        instance.createTree("BaumC");
         return instance;
     }
 

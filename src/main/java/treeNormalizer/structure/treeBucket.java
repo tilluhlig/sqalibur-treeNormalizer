@@ -19,6 +19,7 @@ package treeNormalizer.structure;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * Diese Klasse verwaltet eine Menge von Bäumen, möglichst kompakt.
@@ -28,13 +29,11 @@ import java.util.Map;
 public class treeBucket {
 
     /*
-     * beim Vergeben von Referenz-IDs merken wir uns hier die aktuelle
-     * Obergrenze (also die zuletzt vergebene Position)
-     *
-     * TODO: es wird derzeit nicht beachtet, dass IDs wiederverwenet werden
-     * können.
+     * hier wird die Position vermerkt, an der er mit der Vergabe der IDs für
+     * Referenzen weitermachen soll. Wenn beispielsweise eine ID gelöscht wird,
+     * soll er vielleicht dort erstmal anfragen.
      */
-    private int currentReferencePos = 0;
+    private int possibleNextReferenceId = 1;
 
     /**
      * diese Liste von Knotenreferenzen bilden auf die realen Knoten ab
@@ -88,9 +87,11 @@ public class treeBucket {
             // nun müssen noch die Kinder verschmolzen werden, wobei
             // die beiden Subgraphen exakt gleich aufgebraut sind
             node = localNode;
+            node.updateStoreId();
         } else {
             // der Knoten existiert so noch nicht
             nodes.put(node.hashCode(), node);
+            node.updateStoreId();
         }
         return node;
     }
@@ -119,10 +120,17 @@ public class treeBucket {
      * @return die neue Referenz
      */
     private nodeReference createNodeReference(tree tree, treeBucketNode node) {
-        nodeReference tmp = new nodeReference(tree, currentReferencePos);
-        nodeReference.put(currentReferencePos, node);
+        if (nodeReference.containsKey(possibleNextReferenceId)) {
+            possibleNextReferenceId = random.nextPositive();
+            while (nodeReference.containsKey(possibleNextReferenceId)) {
+                possibleNextReferenceId++; // kann endlos laufen
+            }
+        }
+
+        nodeReference tmp = new nodeReference(tree, possibleNextReferenceId);
+        nodeReference.put(possibleNextReferenceId, node);
         node.addNodeReference(tmp);
-        currentReferencePos++;
+        possibleNextReferenceId++;
         return tmp;
     }
 
@@ -143,6 +151,10 @@ public class treeBucket {
      * @return der angepasst (eindeutige) Knoten
      */
     private treeBucketNode makeNodeUnique(treeBucketNode node) {
+        // wenn wir viele dieser Knoten nacheinander unique machen wollen,
+        // dann möchte ich nicht immer bei 0 beginnen müssen
+        node.setUniqueId(random.nextPositive());
+
         while (nodeExists(node)) {
             node.increaseUniqueId();
         }
@@ -192,21 +204,32 @@ public class treeBucket {
     }
 
     /**
+     * prüft, ob eine Knotenreferenz bereits in der Verwaltung existiert
+     *
+     * @param node die zu prüfende Referenz
+     * @return true = vorhanden, false = nicht vorhanden
+     */
+    public boolean referenceExists(nodeReference node) {
+        if (node.getId() == 0) {
+            return false;
+        }
+        return nodeReference.containsKey(node.getId());
+    }
+
+    /**
      * aktualisiert einen Knoten und den Elternpfad
      *
      * @param node der Knoten
      */
     private void propagadeNode(treeBucketNode node) {
-        int oldHash = node.hashCode();
-
         // nun wird der neue Hash berechnet
         node.resetUniqueId();
-        node.rehash();
+        node.rehash(); // damit werden auch die Kinder rehasht
 
         // wenn sich der Hash geändert hat, müssen wir handeln
-        if (oldHash != node.hashCode()) {
+        if (node.getStoreId() != node.hashCode()) {
             // entferne den Knoten aus der Verwaltung
-            nodes.remove(oldHash);
+            nodes.remove(node.getStoreId());
 
             // nun den Knoten wieder neu einfügen, wobei der Knoten eventuell
             // mit einem anderen verschmolzen wird
@@ -217,7 +240,6 @@ public class treeBucket {
                 propagadeNode(parent);
             }
         }
-
     }
 
     /**
@@ -259,6 +281,8 @@ public class treeBucket {
     private void removeNodeReference(nodeReference node) {
         node.disconnect();
         nodeReference.remove(node.getId());
+        possibleNextReferenceId = node.getId();
+        node.setId(0); // quasi ein zurücksetzen der ID
     }
 
     /**
@@ -307,8 +331,18 @@ public class treeBucket {
 
             // die Eltern werden ebenfalls in den neuen Baum überführt
             treeBucketNode realParent = getInternalNodeByReference(parent);
+
+            int myChildPos = realParent.findChild(realNode);
+
+            if (myChildPos == -1) {
+                // das ist ein Problem
+            }
+
             treeBucketNode splittedParent = splitNode(parent);
-            splittedNode.addParent(splittedParent); // und was ist mit splittedNode als Kind von splitted Parent???????
+            splittedNode.addParent(splittedParent);
+
+            // ich muss mich bei meinem Vater noch als Kind korrekt setzen
+            splittedParent.setChild(myChildPos, splittedNode);
         }
 
         return splittedNode;
@@ -574,7 +608,7 @@ public class treeBucket {
     }
 
     /**
-     * entfernt einen Knoten sauber aus der Struktur/Verwaltung
+     * entfernt eine Knotenreferenz sauber aus der Struktur/Verwaltung
      *
      * @param node der Knoten
      */
@@ -586,19 +620,29 @@ public class treeBucket {
             // entfernt werden
             removeNodeReference(node);
             removeInternalNode(realNode);
+
+            nodeReference parent = node.getParent();
+            if (parent != null) {
+                parent.removeEdgeTo(node);
+                treeBucketNode parentNode = getInternalNodeByReference(parent);
+                propagadeNode(parentNode);
+            }
         } else if (realNode.numberOfNodeReferences() > 1) {
             // der Knoten wird noch von anderen Referenzen genutzt
             nodeReference parent = node.getParent();
             removeNodeReference(node);
 
             if (parent != null) {
+                parent.removeEdgeTo(node);
+
                 // es existierte ein Vater
                 treeBucketNode parentNode = getInternalNodeByReference(parent);
 
                 if (parentNode.numberOfNodeReferences() > 1) {
                     // der Vater benötigt einen eigenen Zweig, denn eine andere
                     // Referenz nutzt diesen Knoten weiterhin
-                    splitNode(parent);
+                    treeBucketNode splittedParent = splitNode(parent);
+                    propagadeNode(splittedParent); // TODO: stimmt das so?
                 }
             }
         } else {
@@ -612,10 +656,14 @@ public class treeBucket {
      * @param node der Startknoten
      */
     public void removeSubtree(nodeReference node) {
+        // dazu wandern wir zunächst Rekursiv bis zu den Kindern und beginnen
+        // dort mit dem Löschen
         for (nodeReference child : node.getExistingChilds()) {
             removeSubtree(child);
         }
 
+        // wenn die Kinder dieses Knotens weg sind, dann können wir diesen
+        // Knoten löschen (erst ist dann also ein Blatt)
         removeNode(node);
     }
 
@@ -675,6 +723,7 @@ public class treeBucket {
      *
      * @param tree der Baum
      * @param name der neue Name
+     * @return true = Umbenennung war erfolgreich, false = sonst
      */
     public boolean renameTree(tree tree, String name) {
         if (name == null) {
@@ -703,6 +752,7 @@ public class treeBucket {
      *
      * @param node ein Knoten, welcher zum Baum gehört
      * @param name der neue Name
+     * @return true = Umbenennung war erfolgreich, false = sonst
      */
     public boolean renameTree(nodeReference node, String name) {
         return renameTree(node.getTree(), name);
@@ -713,6 +763,7 @@ public class treeBucket {
      *
      * @param edge eine Kante des Baums
      * @param name der neue Name
+     * @return true = Umbenennung war erfolgreich, false = sonst
      */
     public boolean renameTree(edge edge, String name) {
         nodeReference tmp = edge.getSource();
@@ -736,6 +787,27 @@ public class treeBucket {
         }
 
         setTreeRoot(root);
+    }
+
+    /**
+     * bietet Zufallszahlen an
+     */
+    public static class random {
+
+        private static Random rnd = null;
+
+        /**
+         * liefert eine Zahl zwischen 1 und Integer.Size-1
+         *
+         * @return die Zufallszahl
+         */
+        public static int nextPositive() {
+            if (rnd == null) {
+                rnd = new Random();
+            }
+            return 1 + rnd.nextInt(Integer.SIZE - 2);
+        }
+
     }
 
 }
