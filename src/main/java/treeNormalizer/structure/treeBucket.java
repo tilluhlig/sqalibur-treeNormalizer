@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import treeNormalizer.utils.UID;
 
 /**
  * Diese Klasse verwaltet eine Menge von Bäumen, möglichst kompakt.
@@ -34,6 +35,11 @@ public class treeBucket {
      * soll er vielleicht dort erstmal anfragen.
      */
     private int possibleNextReferenceId = 1;
+
+    /*
+     * erzeugt für uns eindeutige IDs
+     */
+    private final UID UID = new UID();
 
     /**
      * diese Liste von Knotenreferenzen bilden auf die realen Knoten ab
@@ -83,9 +89,7 @@ public class treeBucket {
             // der Knoten existiert bereits
             treeBucketNode localNode = nodes.get(node.hashCode());
             mergeNode(localNode, node);
-
-            // nun müssen noch die Kinder verschmolzen werden, wobei
-            // die beiden Subgraphen exakt gleich aufgebraut sind
+            // TODO: fehlt hier noch ein propagade???
             node = localNode;
             node.updateStoreId();
         } else {
@@ -129,7 +133,7 @@ public class treeBucket {
 
     private int getNextReferenceId() {
         if (nodeReference.containsKey(possibleNextReferenceId)) {
-            possibleNextReferenceId = random.nextNotZero();
+            possibleNextReferenceId = random.nextNonZero();
             while (nodeReference.containsKey(increaseToNextPossibleReferenceId())) {
                 // kann endlos laufen
             }
@@ -138,10 +142,8 @@ public class treeBucket {
         return possibleNextReferenceId;
     }
 
-    private int getNextNodeId() {
-        int newId = random.nextNotZero();
-        // das mit der ID muss noch besser gelöst werden
-        return newId;
+    private long getNextNodeId() {
+        return UID.nextUID();
     }
 
     /**
@@ -850,7 +852,10 @@ public class treeBucket {
          *
          * @return die Zufallszahl
          */
-        public static int nextNotZero() {
+        public static int nextNonZero() {
+            if (rnd == null) {
+                rnd = new Random();
+            }
             int r = rnd.nextInt();
             if (r == 0) {
                 r = 1;

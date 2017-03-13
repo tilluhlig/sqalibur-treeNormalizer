@@ -1250,7 +1250,11 @@ public class treeBucketNodeTest {
     @Test
     public void testUpdateStoreId() {
         System.out.println("updateStoreId");
-        System.out.println("The test case is a prototype.");
+        treeBucketNode instance = new treeBucketNode("A");
+        int current = instance.getStoreId();
+        instance.setRawHash(15);
+        instance.updateStoreId();
+        assertEquals(15, instance.getStoreId());
     }
 
     /**
@@ -1259,7 +1263,9 @@ public class treeBucketNodeTest {
     @Test
     public void testGetId() {
         System.out.println("getId");
-        System.out.println("The test case is a prototype.");
+        treeBucketNode instance = new treeBucketNode("A");
+        instance.setId(99);
+        assertEquals(99, instance.getId());
     }
 
     /**
@@ -1268,7 +1274,12 @@ public class treeBucketNodeTest {
     @Test
     public void testSetId() {
         System.out.println("setId");
-        System.out.println("The test case is a prototype.");
+        treeBucketNode instance = new treeBucketNode("A");
+        instance.setId(0);
+        assertEquals(0, instance.getId());
+        instance.setId(14);
+        instance.setId(-5);
+        assertEquals(-5, instance.getId());
     }
 
     /**
@@ -1277,7 +1288,11 @@ public class treeBucketNodeTest {
     @Test
     public void testHasValidId() {
         System.out.println("hasValidId");
-        System.out.println("The test case is a prototype.");
+        treeBucketNode instance = new treeBucketNode("A");
+        instance.setId(0);
+        assertFalse(instance.hasValidId()); // 0 ist ungültig
+        instance.setId(15);
+        assertTrue(instance.hasValidId());
     }
 
 }

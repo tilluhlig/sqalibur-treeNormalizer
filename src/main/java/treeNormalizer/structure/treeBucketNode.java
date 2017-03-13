@@ -70,7 +70,7 @@ public class treeBucketNode {
      *
      * 0 = keine korrekte ID
      */
-    private int id = 0;
+    private long id = 0;
 
     /**
      * Diese Liste enthält die Knotenreferenzen, welche auf diesen Knoten
@@ -122,7 +122,7 @@ public class treeBucketNode {
      * @param id    die ID des Knotens
      * @param label der Name
      */
-    public treeBucketNode(int id, String label) {
+    public treeBucketNode(long id, String label) {
         this.label = label;
         this.id = id;
     }
@@ -143,7 +143,7 @@ public class treeBucketNode {
      * @param label das Label
      * @param type  der Typ (Klasse)
      */
-    public treeBucketNode(int id, String label, String type) {
+    public treeBucketNode(long id, String label, String type) {
         this.label = label;
         this.type = type;
         this.id = id;
@@ -168,7 +168,7 @@ public class treeBucketNode {
      * @param type       der Typ (Klasse)
      * @param attributes die Attribute
      */
-    public treeBucketNode(int id, String label, String type, Map<String, String> attributes) {
+    public treeBucketNode(long id, String label, String type, Map<String, String> attributes) {
         this.label = label;
         this.type = type;
         this.attributes = attributes;
@@ -300,7 +300,7 @@ public class treeBucketNode {
      *
      * @return der neue Knoten
      */
-    public treeBucketNode cloneNodeBase(int newId) {
+    public treeBucketNode cloneNodeBase(long newId) {
         treeBucketNode tmp = new treeBucketNode(newId, getLabel(), getType(), getAttributes());
         return tmp;
     }
@@ -446,9 +446,10 @@ public class treeBucketNode {
      * @return die Position oder -1 im Fehlerfall
      */
     public int findChild(treeBucketNode node) {
-        int id = childs.indexOf(node);
-        if (id >= 0) {
-            return id;
+        for (int i = 0; i < childs.size(); i++) {
+            if (childs.get(i).getId() == node.getId()) {
+                return i;
+            }
         }
         return -1;
     }
@@ -463,12 +464,10 @@ public class treeBucketNode {
         List<Integer> list = new ArrayList<>();
         ArrayList<treeBucketNode> list2 = getChilds();
         for (int i = 0; i < list2.size(); i++) {
-            treeBucketNode child = list2.get(i);
-            if (node.equals(child)) {
+            if (node.getId() == list2.get(i).getId()) {
                 list.add(i);
             }
         }
-
         return ArrayUtils.toPrimitive(list.toArray(new Integer[list.size()]));
     }
 
@@ -1113,7 +1112,7 @@ public class treeBucketNode {
      *
      * @return the id
      */
-    public int getId() {
+    public long getId() {
         return id;
     }
 
@@ -1122,7 +1121,7 @@ public class treeBucketNode {
      *
      * @param id the id to set
      */
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
