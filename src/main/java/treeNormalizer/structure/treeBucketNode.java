@@ -298,6 +298,7 @@ public class treeBucketNode {
      * Erzeugt eine Kopie des Knotens (nur die Grunddaten) also: label, type,
      * attributes
      *
+     * @param newId die KnotenId des dabei neu entstehenden Knoten
      * @return der neue Knoten
      */
     public treeBucketNode cloneNodeBase(long newId) {

@@ -131,6 +131,11 @@ public class treeBucket {
         return tmp;
     }
 
+    /**
+     * liefert die nächste eindeutige Id für eine neue Referenz
+     *
+     * @return die neue ReferenzId
+     */
     private int getNextReferenceId() {
         if (nodeReference.containsKey(possibleNextReferenceId)) {
             possibleNextReferenceId = random.nextNonZero();
@@ -142,6 +147,11 @@ public class treeBucket {
         return possibleNextReferenceId;
     }
 
+    /**
+     * liefert die nächste eindeutige Id einen treeBucketNode
+     *
+     * @return die neue KnotenId
+     */
     private long getNextNodeId() {
         return UID.nextUID();
     }
@@ -579,7 +589,7 @@ public class treeBucket {
         treeBucketNode nodeA = getInternalNodeByReference(treeA.getRoot());
         treeBucketNode nodeB = getInternalNodeByReference(treeB.getRoot());
 
-        return nodeA.equals(nodeB);
+        return nodeA.getId() == nodeB.getId();
     }
 
     /**
