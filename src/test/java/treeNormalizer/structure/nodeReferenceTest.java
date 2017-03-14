@@ -798,7 +798,18 @@ public class nodeReferenceTest {
     @Test
     public void testGetChild() {
         System.out.println("getChild");
-        System.out.println("The test case is a prototype.");
+        nodeReference instance = new nodeReference(null, 31);
+        nodeReference instance2 = new nodeReference(null, 1);
+        nodeReference instance3 = new nodeReference(null, 2);
+        nodeReference instance4 = new nodeReference(null, 3);
+        instance.addChild(instance2);
+        instance.addChild(instance3);
+        instance.addChild(null);
+        instance.addChild(instance4);
+        assertEquals(instance2,instance.getChild(0));
+        assertEquals(instance3,instance.getChild(1));
+        assertEquals(null,instance.getChild(2));
+        assertEquals(instance4,instance.getChild(3));
     }
 
     /**

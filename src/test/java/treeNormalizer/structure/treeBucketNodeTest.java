@@ -19,6 +19,7 @@ package treeNormalizer.structure;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import org.junit.Assert;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -214,22 +215,6 @@ public class treeBucketNodeTest {
     public void testCleanParents() {
         System.out.println("cleanParents");
         // kein Test, die Methode soll doppelte Elternknoten entfernen
-    }
-
-    /**
-     * Test of cloneNodeBase method, of class treeBucketNode.
-     */
-    @Test
-    public void testCloneNodeBase() {
-        System.out.println("cloneNodeBase");
-        treeBucketNode instance = new treeBucketNode("A");
-        treeBucketNode instance2 = instance.cloneNodeBase();
-        assertEquals(instance.getLabel(), instance2.getLabel());
-        assertEquals(instance.getType(), instance2.getType());
-        assertEquals(instance.getAttributes(), instance2.getAttributes());
-        assertNotEquals(System.identityHashCode(instance), System.identityHashCode(instance2));
-        instance.setLabel("B");
-        assertNotEquals(instance.getLabel(), instance2.getLabel());
     }
 
     /**
@@ -1192,8 +1177,16 @@ public class treeBucketNodeTest {
     @Test
     public void testFindChild() {
         System.out.println("findChild");
-        treeBucketNode instance = new treeBucketNode("A");
-        System.out.println("The test case is a prototype.");
+        treeBucketNode instance = new treeBucketNode(1, "A");
+        treeBucketNode instance2 = new treeBucketNode(2, "B");
+        treeBucketNode instance3 = new treeBucketNode(3, "C");
+        instance.addChild(instance2);
+        instance.addChild(null);
+        instance.addChild(instance3);
+        assertEquals(0, instance.findChild(instance2));
+        assertEquals(-1, instance.findChild(null));
+        assertEquals(2, instance.findChild(instance3));
+        assertEquals(-1, instance.findChild(new treeBucketNode(4, "D")));
     }
 
     /**
@@ -1223,7 +1216,15 @@ public class treeBucketNodeTest {
     @Test
     public void testCloneNodeBase_int() {
         System.out.println("cloneNodeBase");
-        System.out.println("The test case is a prototype.");
+        treeBucketNode instance = new treeBucketNode(2,"A");
+        treeBucketNode instance2 = instance.cloneNodeBase(3);
+        assertEquals(3,instance2.getId());
+        assertEquals(instance.getLabel(), instance2.getLabel());
+        assertEquals(instance.getType(), instance2.getType());
+        assertEquals(instance.getAttributes(), instance2.getAttributes());
+        assertNotEquals(System.identityHashCode(instance), System.identityHashCode(instance2));
+        instance.setLabel("B");
+        assertNotEquals(instance.getLabel(), instance2.getLabel());
     }
 
     /**
@@ -1232,7 +1233,14 @@ public class treeBucketNodeTest {
     @Test
     public void testCloneNodeBase_0args() {
         System.out.println("cloneNodeBase");
-        System.out.println("The test case is a prototype.");
+        treeBucketNode instance = new treeBucketNode("A");
+        treeBucketNode instance2 = instance.cloneNodeBase();
+        assertEquals(instance.getLabel(), instance2.getLabel());
+        assertEquals(instance.getType(), instance2.getType());
+        assertEquals(instance.getAttributes(), instance2.getAttributes());
+        assertNotEquals(System.identityHashCode(instance), System.identityHashCode(instance2));
+        instance.setLabel("B");
+        assertNotEquals(instance.getLabel(), instance2.getLabel());
     }
 
     /**
@@ -1241,7 +1249,17 @@ public class treeBucketNodeTest {
     @Test
     public void testFindChilds() {
         System.out.println("findChilds");
-        System.out.println("The test case is a prototype.");
+        treeBucketNode instance = new treeBucketNode(1, "A");
+        treeBucketNode instance2 = new treeBucketNode(2, "B");
+        treeBucketNode instance3 = new treeBucketNode(3, "C");
+        instance.addChild(instance2);
+        instance.addChild(instance3);
+        instance.addChild(null);
+        instance.addChild(instance3);
+        assertArrayEquals(new int[]{0}, instance.findChilds(instance2));
+        assertArrayEquals(new int[]{}, instance.findChilds(null));
+        assertArrayEquals(new int[]{1,3}, instance.findChilds(instance3));
+        assertArrayEquals(new int[]{}, instance.findChilds(new treeBucketNode(4, "D")));
     }
 
     /**

@@ -89,7 +89,6 @@ public class treeBucket {
             // der Knoten existiert bereits
             treeBucketNode localNode = nodes.get(node.hashCode());
             mergeNode(localNode, node);
-            // TODO: fehlt hier noch ein propagade???
             node = localNode;
             node.updateStoreId();
         } else {
@@ -109,6 +108,7 @@ public class treeBucket {
     private tree addTree(tree tree) {
         // der Name des Baums soll eindeutig sein
         if (getTreeByName(tree.getName()) != null) {
+            // der Baum existiert bereits
             return null;
         }
 

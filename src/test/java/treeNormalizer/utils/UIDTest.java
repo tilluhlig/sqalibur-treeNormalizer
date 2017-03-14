@@ -16,16 +16,37 @@
  */
 package treeNormalizer.utils;
 
+import java.util.HashMap;
+import org.junit.Test;
+import static org.junit.Assert.*;
+
 /**
  *
  * @author Till Uhlig <till.uhlig@student.uni-halle.de>
  */
-public class UID {
-
-    private long lastUID = 1;
-
-    public long nextUID() {
-        return lastUID++;
+public class UIDTest {
+    
+    public UIDTest() {
     }
 
+    /**
+     * Test of nextUID method, of class UID.
+     */
+    @Test
+    public void testNextUID() {
+        System.out.println("nextUID");
+        UID uid = new UID();
+        HashMap<Long,Integer> list = new HashMap<>();
+        for (int i=0;i<25;i++){
+            long a = uid.nextUID();
+            if (a==0){
+                fail("darf nicht zero sein");
+            }
+            if (list.containsKey(a)){
+                fail("eine doppelte Id");                
+            }
+            list.put(a, i);
+        }
+    }
+    
 }

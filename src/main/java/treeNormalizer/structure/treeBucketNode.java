@@ -447,7 +447,13 @@ public class treeBucketNode {
      * @return die Position oder -1 im Fehlerfall
      */
     public int findChild(treeBucketNode node) {
+        if (node == null) {
+            return -1;
+        }
         for (int i = 0; i < childs.size(); i++) {
+            if (childs.get(i) == null) {
+                continue;
+            }
             if (childs.get(i).getId() == node.getId()) {
                 return i;
             }
@@ -463,8 +469,15 @@ public class treeBucketNode {
      */
     public int[] findChilds(treeBucketNode node) {
         List<Integer> list = new ArrayList<>();
+        if (node == null) {
+            return new int[]{};
+        }
+
         ArrayList<treeBucketNode> list2 = getChilds();
         for (int i = 0; i < list2.size(); i++) {
+            if (list2.get(i) == null) {
+                continue;
+            }
             if (node.getId() == list2.get(i).getId()) {
                 list.add(i);
             }
