@@ -14,8 +14,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package treeNormalizer.structure;
+package treeNormalizer.structure.internal;
 
+import treeNormalizer.structure.internal.tree;
+import treeNormalizer.structure.internal.edge;
 import java.util.ArrayList;
 
 /**
@@ -212,6 +214,13 @@ public class nodeReference extends Object {
         return childs.get(0);
     }
 
+    /**
+     * liefert das Kind an der Position id
+     *
+     * @param id die Position in der Kinderliste
+     * @return das Kind oder null (wenn es nicht existiert oder nicht nicht
+     *         gesetzt ist)
+     */
     public nodeReference getChild(int id) {
         if (!isChildIndexPossible(id)) {
             return null;

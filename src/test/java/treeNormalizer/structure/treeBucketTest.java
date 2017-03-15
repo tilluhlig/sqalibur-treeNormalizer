@@ -16,6 +16,9 @@
  */
 package treeNormalizer.structure;
 
+import treeNormalizer.structure.internal.nodeReference;
+import treeNormalizer.structure.internal.tree;
+import treeNormalizer.structure.internal.edge;
 import java.util.ArrayList;
 import static javaapplication3.JavaApplication3.writeNodeSetToFile;
 import org.junit.Test;
@@ -72,24 +75,6 @@ public class treeBucketTest {
     @Test
     public void testCreateTree() {
         System.out.println("createTree");
-        System.out.println("The test case is a prototype.");
-    }
-
-    /**
-     * Test of getInternalNodeByReference method, of class treeBucket.
-     */
-    @Test
-    public void testGetInternalNodeByReference() {
-        System.out.println("getInternalNodeByReference");
-        System.out.println("The test case is a prototype.");
-    }
-
-    /**
-     * Test of getPreparedNode method, of class treeBucket.
-     */
-    @Test
-    public void testGetPreparedNode() {
-        System.out.println("getPreparedNode");
         System.out.println("The test case is a prototype.");
     }
 
@@ -313,6 +298,7 @@ public class treeBucketTest {
 
         instance.createTree("BaumB");
         instance.createTree("BaumC");
+
         return instance;
     }
 
@@ -333,6 +319,73 @@ public class treeBucketTest {
                 fail("der Zufallswert soll nicht kleiner 1 sein.");
             }
         }
+    }
+
+    @Test
+    public void simpleVisualizedTest() {
+
+        treeBucket instance = new treeBucket();
+        tree treeA = instance.createTree("BaumA");
+        nodeReference plus = instance.createNode(treeA, "", "addition");
+        System.out.println(instance.simplePrint());
+        instance.setTreeRoot(treeA, plus);
+
+        nodeReference plus2 = instance.createNode(treeA, "", "addition");
+        System.out.println(instance.simplePrint());
+        nodeReference plus3 = instance.createNode(treeA, "", "addition");
+        System.out.println(instance.simplePrint());
+        instance.addEdge(plus, plus2);
+        System.out.println(instance.simplePrint());
+        instance.addEdge(plus, plus3);
+        System.out.println(instance.simplePrint());
+
+        nodeReference eins = instance.createNode(treeA, "1", "const");
+        System.out.println(instance.simplePrint());
+        nodeReference zwei = instance.createNode(treeA, "2", "const");
+        System.out.println(instance.simplePrint());
+        instance.addEdge(plus2, eins);
+        System.out.println(instance.simplePrint());
+        instance.addEdge(plus3, zwei);
+        System.out.println(instance.simplePrint());
+
+        instance.createTree("BaumB");
+        instance.createTree("BaumC");
+    }
+
+    /**
+     * Test of createNode method, of class treeBucket.
+     */
+    @Test
+    public void testCreateNode_3args_1() {
+        System.out.println("createNode");
+        System.out.println("The test case is a prototype.");
+    }
+
+    /**
+     * Test of createNode method, of class treeBucket.
+     */
+    @Test
+    public void testCreateNode_3args_2() {
+        System.out.println("createNode");
+        System.out.println("The test case is a prototype.");
+    }
+
+    /**
+     * Test of createNode method, of class treeBucket.
+     */
+    @Test
+    public void testCreateNode_4args() {
+        System.out.println("createNode");
+        System.out.println("The test case is a prototype.");
+    }
+
+    /**
+     * Test of simplePrint method, of class treeBucket.
+     */
+    @Test
+    public void testSimplePrint() {
+        System.out.println("simplePrint");
+        System.out.println("The test case is a prototype.");
     }
 
 }

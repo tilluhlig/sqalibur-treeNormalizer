@@ -16,6 +16,10 @@
  */
 package treeNormalizer.structure;
 
+import treeNormalizer.structure.internal.treeBucketNode;
+import treeNormalizer.structure.internal.nodeReference;
+import treeNormalizer.structure.internal.tree;
+import treeNormalizer.structure.internal.edge;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -145,8 +149,9 @@ public class treeBucket {
                 // kann endlos laufen
             }
         }
+        int a = possibleNextReferenceId;
         increaseToNextPossibleReferenceId();
-        return possibleNextReferenceId;
+        return a;
     }
 
     /**
@@ -323,6 +328,13 @@ public class treeBucket {
         node.setId(0); // quasi ein zurücksetzen der ID
     }
 
+    private treeBucketNode getParent(nodeReference node) {
+        if (!node.hasParent()) {
+            return null;
+        }
+        return getInternalNodeByReference(node.getParent());
+    }
+
     /**
      * spaltet eine Kante ab und macht daraus einen eigenständigen Arm diese
      * Operation bereitet eine Änderung an einem Knoten vor, wobei immer ein
@@ -346,6 +358,10 @@ public class treeBucket {
         // nun wird die Referenz aus dem Knoten entfernt
         realNode.removeNodeReference(node);
 
+        // um Fehler zu vermeiden, setzen wir die Referenz vorübergehend auf
+        // etwas Ungültiges
+        nodeReference.replace(node.getId(), null);
+
         // jetzt muss ein neuer Knoten erzeugt werden (eine Kopie)
         // (aber ohne Kinder und Eltern)
         long nextId = getNextNodeId();
@@ -360,7 +376,10 @@ public class treeBucket {
         // die Knotenreferenz soll nun auf einen neuen realen Knoten zeigen
         nodeReference.replace(node.getId(), splittedNode);
 
-        splittedNode.setChilds(realNode.getChilds());
+        ///// TODO: HIER IST DER FEHLER
+        ///// TODO: HIER IST DER FEHLER
+        ///// TODO: HIER IST DER FEHLER
+        splittedNode.addChilds(realNode.getChilds());
 
         // nun muss der Pfad über die Eltern bis zur Wurzel des Baums
         // aufgespalten werden
@@ -414,8 +433,6 @@ public class treeBucket {
      * @param nodeB der Zielknoten
      */
     public void addEdge(nodeReference nodeA, nodeReference nodeB) {
-        Map<Integer, treeBucketNode> list = nodes;
-        
         treeBucketNode nA = splitNode(nodeA);
         treeBucketNode nB = getInternalNodeByReference(nodeB);
 
@@ -439,10 +456,11 @@ public class treeBucket {
             throw new IllegalArgumentException("es darf keine Kante zur Wurzel gezogen werden");
         }
 
-        
+        // jetzt werden die zwei miteinander verbunden, dabei werden die
+        // Referenzen und die realen Knoten verknüpft
         nodeA.addChild(nodeB);
         nodeB.setParent(nodeA);
-        nA.addEdgeTo(nB); // ???
+        nA.addEdgeTo(nB);
 
         // nodeA hat sich verändert
         propagadeNode(nodeA);
@@ -471,19 +489,6 @@ public class treeBucket {
     /**
      * fügt einen Knoten in einen Baum ein
      *
-     * @param newId die neue ID des Knotens (normalerweise automatisch gesetzt)
-     *              (wir vorallem für Tests genutzt)
-     * @param tree  der Baum
-     * @param name  der Name des Knotens
-     * @return die Referenz auf den Knoten
-     */
-    public nodeReference createNode(long newId, tree tree, String name) {
-        return createNode(newId, tree, name, "");
-    }
-
-    /**
-     * fügt einen Knoten in einen Baum ein
-     *
      * @param tree der Baum
      * @param name der Name des Knotens
      * @param type der Typ des Knotens
@@ -503,9 +508,8 @@ public class treeBucket {
      * @param type  der Typ des Knotens
      * @return die Referenz auf den Knoten
      */
-    public nodeReference createNode(long newId, tree tree, String name, String type) {
+    private nodeReference createNode(long newId, tree tree, String name, String type) {
         treeBucketNode tmp = new treeBucketNode(newId, name, type);
-        //UID.useUID(newId);
         return addNode(tree, tmp);
 
     }
@@ -528,18 +532,19 @@ public class treeBucket {
      * @param node die Referenz
      * @return der Knoten
      */
-    public treeBucketNode getInternalNodeByReference(nodeReference node) {
+    private treeBucketNode getInternalNodeByReference(nodeReference node) {
         return nodeReference.get(node.getId());
     }
 
     /**
      * liefert zu der Referenz einen Knoten, welcher für eine Änderung
-     * vorbereitet wurde
+     * vorbereitet wurde (er muss danach mit propagade wieder normal in die
+     * Verwaltung übernommen werden)
      *
      * @param node der Knoten
      * @return der änderbare Knoten
      */
-    public treeBucketNode getPreparedNode(nodeReference node) {
+    private treeBucketNode getPreparedNode(nodeReference node) {
         treeBucketNode realNode = getInternalNodeByReference(node);
 
         if (realNode.numberOfNodeReferences() == 1) {
@@ -772,25 +777,44 @@ public class treeBucket {
     }
 
     /**
-     * benennt einen Knoten um
+     * benennt einen Knoten um (der Knoten wir anschließend automatisch in der
+     * Verwaltung aktualisiert)
      *
-     * @param node der Knoten
-     * @param name der neue Name
+     * @param node    der Knoten
+     * @param newName der neue Name
      */
-    public void renameNode(nodeReference node, String name) {
-        tree tree = node.getTree();
-
-        // der Untergraph muss eventuell aufgespalten werden
+    public void renameNode(nodeReference node, String newName) {
+        // der Knoten muss eventuell aufgespalten werden
         treeBucketNode tmp = getInternalNodeByReference(node);
 
-        if (name.equals(tmp.getLabel())) {
+        if (newName.equals(tmp.getLabel())) {
             // der Name hat sich nicht geändert
             return;
         }
 
         treeBucketNode preparedNode = getPreparedNode(node);
+        preparedNode.setLabel(newName);
+        propagadeNode(preparedNode);
+    }
 
-        preparedNode.setLabel(name);
+    /**
+     * ändert den Typbezeichner eines Knotens (der Knoten wir anschließend
+     * automatisch in der Verwaltung aktualisiert)
+     *
+     * @param node    die Referenz auf den Knoten
+     * @param newType der neue Bezeichner
+     */
+    public void changeNodeType(nodeReference node, String newType) {
+        // der Knoten muss eventuell aufgespalten werden
+        treeBucketNode tmp = getInternalNodeByReference(node);
+
+        if (newType.equals(tmp.getType())) {
+            // der Name hat sich nicht geändert
+            return;
+        }
+
+        treeBucketNode preparedNode = getPreparedNode(node);
+        preparedNode.setType(newType);
         propagadeNode(preparedNode);
     }
 

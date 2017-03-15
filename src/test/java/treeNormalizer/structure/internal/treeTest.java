@@ -14,8 +14,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package treeNormalizer.structure;
+package treeNormalizer.structure.internal;
 
+import treeNormalizer.structure.internal.nodeReference;
+import treeNormalizer.structure.internal.tree;
 import org.junit.Test;
 import static org.junit.Assert.*;
 

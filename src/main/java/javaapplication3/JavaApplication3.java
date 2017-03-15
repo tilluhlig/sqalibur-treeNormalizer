@@ -16,8 +16,8 @@
  */
 package javaapplication3;
 
-import treeNormalizer.structure.nodeReference;
-import treeNormalizer.structure.tree;
+import treeNormalizer.structure.internal.nodeReference;
+import treeNormalizer.structure.internal.tree;
 import treeNormalizer.structure.treeBucket;
 import java.io.BufferedWriter;
 import java.io.File;

@@ -14,10 +14,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package treeNormalizer.structure;
+package treeNormalizer.structure.internal;
 
+import treeNormalizer.structure.internal.treeBucketNode;
+import treeNormalizer.structure.internal.nodeReference;
+import treeNormalizer.structure.internal.tree;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.junit.Assert;
 import org.junit.Test;
@@ -1216,9 +1220,9 @@ public class treeBucketNodeTest {
     @Test
     public void testCloneNodeBase_int() {
         System.out.println("cloneNodeBase");
-        treeBucketNode instance = new treeBucketNode(2,"A");
+        treeBucketNode instance = new treeBucketNode(2, "A");
         treeBucketNode instance2 = instance.cloneNodeBase(3);
-        assertEquals(3,instance2.getId());
+        assertEquals(3, instance2.getId());
         assertEquals(instance.getLabel(), instance2.getLabel());
         assertEquals(instance.getType(), instance2.getType());
         assertEquals(instance.getAttributes(), instance2.getAttributes());
@@ -1258,7 +1262,7 @@ public class treeBucketNodeTest {
         instance.addChild(instance3);
         assertArrayEquals(new int[]{0}, instance.findChilds(instance2));
         assertArrayEquals(new int[]{}, instance.findChilds(null));
-        assertArrayEquals(new int[]{1,3}, instance.findChilds(instance3));
+        assertArrayEquals(new int[]{1, 3}, instance.findChilds(instance3));
         assertArrayEquals(new int[]{}, instance.findChilds(new treeBucketNode(4, "D")));
     }
 
@@ -1311,6 +1315,24 @@ public class treeBucketNodeTest {
         assertFalse(instance.hasValidId()); // 0 ist ungültig
         instance.setId(15);
         assertTrue(instance.hasValidId());
+    }
+
+    /**
+     * Test of addChilds method, of class treeBucketNode.
+     */
+    @Test
+    public void testAddChilds() {
+        System.out.println("addChilds");
+        System.out.println("The test case is a prototype.");
+    }
+
+    /**
+     * Test of resetChilds method, of class treeBucketNode.
+     */
+    @Test
+    public void testResetChilds() {
+        System.out.println("resetChilds");
+        System.out.println("The test case is a prototype.");
     }
 
 }

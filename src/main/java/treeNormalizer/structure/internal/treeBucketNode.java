@@ -14,8 +14,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package treeNormalizer.structure;
+package treeNormalizer.structure.internal;
 
+import treeNormalizer.structure.internal.nodeReference;
+import treeNormalizer.structure.internal.tree;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -204,8 +206,27 @@ public class treeBucketNode {
      * @param child das neue Kind
      */
     public void addChild(treeBucketNode child) {
-        getChilds().add(child);
+        this.getChilds().add(child);
         nodeChanged();
+    }
+
+    /**
+     * fügt eine Menge von Kindern hinzu
+     *
+     * @param childs die neuen Kinder
+     */
+    public void addChilds(List<treeBucketNode> childs) {
+        for (treeBucketNode child : childs) {
+            this.getChilds().add(child);
+        }
+        nodeChanged();
+    }
+
+    /**
+     * löscht alle Kindeinträge dieses Knotens
+     */
+    public void resetChilds() {
+        childs.clear();
     }
 
     /**
@@ -225,7 +246,7 @@ public class treeBucketNode {
      */
     public void addEdgeTo(treeBucketNode targetNode) {
         targetNode.addParent(this);
-        addChild(targetNode);
+        this.addChild(targetNode);
         nodeChanged();
     }
 
@@ -259,6 +280,7 @@ public class treeBucketNode {
      */
     public void addParent(treeBucketNode parent) {
         getParents().add(parent);
+        cleanParents();
     }
 
     /**
@@ -486,7 +508,8 @@ public class treeBucketNode {
     }
 
     /**
-     * setzt die Kinderliste
+     * setzt die Kinderliste(sollte nicht zum Verschieben oder Kopieren zwischen
+     * zwei Knoten verwendet werden, dazu besser addChilds())
      *
      * @param childs die neuen Kinder
      */
