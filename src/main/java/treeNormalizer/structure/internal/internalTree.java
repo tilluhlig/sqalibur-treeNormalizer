@@ -16,6 +16,8 @@
  */
 package treeNormalizer.structure.internal;
 
+import treeNormalizer.structure.tree;
+import treeNormalizer.structure.reference;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -23,11 +25,11 @@ import java.util.Objects;
  * Diese Klasse stellt einen Baum dar, dabei ist sie im Wesentlichen ein Zeiger
  * in Form einer nodeReference auf die Wurzel des Baums enthält.
  *
- * Damit ist tree eine Hilfskonstrukt.
+ * Damit ist internalTree eine Hilfskonstrukt.
  *
  * @author Till
  */
-public class tree {
+public class internalTree implements tree {
 
     /**
      * der Name des Baums
@@ -44,7 +46,7 @@ public class tree {
      *
      * @param name der Name
      */
-    public tree(String name) {
+    public internalTree(String name) {
         this.name = name;
     }
 
@@ -53,7 +55,7 @@ public class tree {
      *
      * @param root die Wurzel
      */
-    public tree(nodeReference root) {
+    public internalTree(nodeReference root) {
         this.root = root;
     }
 
@@ -63,7 +65,7 @@ public class tree {
      * @param root die Wurzel
      * @param name der Name
      */
-    public tree(nodeReference root, String name) {
+    public internalTree(nodeReference root, String name) {
         this.root = root;
         this.name = name;
     }
@@ -79,7 +81,7 @@ public class tree {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final tree other = (tree) obj;
+        final internalTree other = (internalTree) obj;
         if (!Objects.equals(this.name, other.name)) {
             return false;
         }
@@ -94,6 +96,7 @@ public class tree {
      *
      * @return der Name
      */
+    @Override
     public String getName() {
         return name;
     }
@@ -112,6 +115,7 @@ public class tree {
      *
      * @return der Wurzelknoten
      */
+    @Override
     public nodeReference getRoot() {
         return root;
     }
@@ -136,6 +140,7 @@ public class tree {
      *
      * @return ob die Wurzel gesetzt ist (true = ja, false = sonst)
      */
+    @Override
     public boolean hasRoot() {
         return getRoot() != null;
     }
@@ -152,6 +157,7 @@ public class tree {
      *
      * @return die Textdarstellung des Baums
      */
+    @Override
     public String print() {
         String tmp = "";
         tmp += getName() + ":\n";
@@ -167,10 +173,10 @@ public class tree {
 
                 tmp += ref.getId() + " -> ";
                 ArrayList<String> par = new ArrayList<>();
-                for (nodeReference child : ref.getChilds()) {
+                for (reference child : ref.getChilds()) {
                     int a = child.getId();
                     par.add(Integer.toString(a));
-                    tmp2.add(child);
+                    tmp2.add((nodeReference) child);
                 }
                 tmp += String.join(", ", par);
                 tmp += "\n";

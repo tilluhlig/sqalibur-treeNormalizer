@@ -16,8 +16,9 @@
  */
 package treeNormalizer.structure.internal;
 
-import treeNormalizer.structure.internal.tree;
-import treeNormalizer.structure.internal.edge;
+import treeNormalizer.structure.reference;
+import treeNormalizer.structure.internal.internalTree;
+import treeNormalizer.structure.internal.internalEdge;
 import java.util.ArrayList;
 
 /**
@@ -26,7 +27,7 @@ import java.util.ArrayList;
  *
  * @author Till
  */
-public class nodeReference extends Object {
+public class nodeReference extends Object implements reference {
 
     /**
      * die Kinder dieser Referenz
@@ -51,7 +52,7 @@ public class nodeReference extends Object {
      * der verknüpfte Baum (wir gehören also zu diesem Baum oder sind sogar die
      * Wurzel)
      */
-    private tree tree;
+    private internalTree tree;
 
     /**
      * erzeugt eine neue Referenz
@@ -59,7 +60,7 @@ public class nodeReference extends Object {
      * @param tree der zugehörige Baum
      * @param id   die eindeutige Knoten-ID
      */
-    public nodeReference(tree tree, int id) {
+    public nodeReference(internalTree tree, int id) {
         this.id = id;
         this.tree = tree;
     }
@@ -85,6 +86,7 @@ public class nodeReference extends Object {
      * @param child das Kind
      * @return true = Kind gefunden, false = Kind existiert nicht
      */
+    @Override
     public boolean childExists(nodeReference child) {
         return childs.contains(child);
     }
@@ -127,6 +129,7 @@ public class nodeReference extends Object {
      *
      * @return die Kinder
      */
+    @Override
     public ArrayList<nodeReference> getChilds() {
         return childs;
     }
@@ -146,6 +149,7 @@ public class nodeReference extends Object {
      *
      * @return die Kinder
      */
+    @Override
     public ArrayList<nodeReference> getExistingChilds() {
         ArrayList<nodeReference> res = new ArrayList<>();
         for (nodeReference child : childs) {
@@ -162,12 +166,13 @@ public class nodeReference extends Object {
      *
      * @return die ausgehenden Kanten
      */
-    public edge[] getExistingOutgoingEdges() {
+    @Override
+    public internalEdge[] getExistingOutgoingEdges() {
         ArrayList<nodeReference> existingChilds = getExistingChilds();
-        edge[] res = new edge[existingChilds.size()];
+        internalEdge[] res = new internalEdge[existingChilds.size()];
         int i = 0;
         for (nodeReference node : existingChilds) {
-            res[i] = new edge(this, node);
+            res[i] = new internalEdge(this, node);
             i++;
         }
         return res;
@@ -178,6 +183,7 @@ public class nodeReference extends Object {
      *
      * @return die ID
      */
+    @Override
     public int getId() {
         return id;
     }
@@ -197,6 +203,7 @@ public class nodeReference extends Object {
      *
      * @return der Eingangsgrad (Anzahl der Eltern, also 1 oder 0)
      */
+    @Override
     public int getInDegree() {
         // es ist ein Baum
         return hasParent() ? 1 : 0;
@@ -207,6 +214,7 @@ public class nodeReference extends Object {
      *
      * @return null = das Kind existiert nicht, sonst = das Kind
      */
+    @Override
     public nodeReference getLeftChild() {
         if (!isChildIndexPossible(0)) {
             return null;
@@ -221,6 +229,7 @@ public class nodeReference extends Object {
      * @return das Kind oder null (wenn es nicht existiert oder nicht nicht
      *         gesetzt ist)
      */
+    @Override
     public nodeReference getChild(int id) {
         if (!isChildIndexPossible(id)) {
             return null;
@@ -234,6 +243,7 @@ public class nodeReference extends Object {
      *
      * @return der Ausgangsgrad (Anzahl der Kindknoten)
      */
+    @Override
     public int getOutDegree() {
         return getChilds().size();
     }
@@ -243,11 +253,12 @@ public class nodeReference extends Object {
      *
      * @return die Kanten
      */
-    public edge[] getOutgoingEdges() {
-        edge[] res = new edge[childs.size()];
+    @Override
+    public internalEdge[] getOutgoingEdges() {
+        internalEdge[] res = new internalEdge[childs.size()];
         int i = 0;
         for (nodeReference node : childs) {
-            res[i] = new edge(this, node);
+            res[i] = new internalEdge(this, node);
             i++;
         }
         return res;
@@ -258,6 +269,7 @@ public class nodeReference extends Object {
      *
      * @return die Eltern
      */
+    @Override
     public nodeReference getParent() {
         return parent;
     }
@@ -277,6 +289,7 @@ public class nodeReference extends Object {
      *
      * @return der Ausgangsgrad (Anzahl der gesetzten Kindknoten)
      */
+    @Override
     public int getRealOutDegree() {
         return getExistingChilds().size();
     }
@@ -286,6 +299,7 @@ public class nodeReference extends Object {
      *
      * @return null = das Kind existiert nicht , sonst = das Kind
      */
+    @Override
     public nodeReference getRightChild() {
         if (!isChildIndexPossible(0)) {
             return null;
@@ -298,7 +312,8 @@ public class nodeReference extends Object {
      *
      * @return der Baum
      */
-    public tree getTree() {
+    @Override
+    public internalTree getTree() {
         return tree;
     }
 
@@ -307,7 +322,7 @@ public class nodeReference extends Object {
      *
      * @param tree der Baum
      */
-    public void setTree(tree tree) {
+    public void setTree(internalTree tree) {
         this.tree = tree;
     }
 
@@ -316,6 +331,7 @@ public class nodeReference extends Object {
      *
      * @return die Wurzel des Baums und null wenn kein Baum gesetzt ist
      */
+    @Override
     public nodeReference getTreeRoot() {
         if (tree == null) {
             return null;
@@ -328,6 +344,7 @@ public class nodeReference extends Object {
      *
      * @return true = hat keine Kinder, false = hat Kinder
      */
+    @Override
     public boolean hasChilds() {
         // die Kinder könnten leer sein
         for (nodeReference child : childs) {
@@ -343,6 +360,7 @@ public class nodeReference extends Object {
      *
      * @return true = hat einen Vater, false = hat keinen Vater
      */
+    @Override
     public boolean hasParent() {
         return parent != null;
     }
@@ -362,6 +380,7 @@ public class nodeReference extends Object {
      *
      * @return true = ist ein Kind, false = ist kein Kind
      */
+    @Override
     public boolean isChild() {
         return hasParent();
     }
@@ -372,6 +391,7 @@ public class nodeReference extends Object {
      * @param index der Index
      * @return
      */
+    @Override
     public boolean isChildIndexPossible(int index) {
         return !(index < 0 || index >= childs.size());
     }
@@ -383,6 +403,7 @@ public class nodeReference extends Object {
      * @return true = das Feld child[i] hat einen Knoten, false = es existiert
      *         kein Knoten
      */
+    @Override
     public boolean isChildPresent(int index) {
         if (!isChildIndexPossible(index)) {
             return false;
@@ -395,6 +416,7 @@ public class nodeReference extends Object {
      *
      * @return true = ist ein Blatt, false = ist kein Blatt
      */
+    @Override
     public boolean isLeaf() {
         return !hasChilds();
     }
@@ -404,6 +426,7 @@ public class nodeReference extends Object {
      *
      * @return true = keine Eltern, false = hat Eltern
      */
+    @Override
     public boolean isOrphan() {
         return !hasParent();
     }
@@ -413,6 +436,7 @@ public class nodeReference extends Object {
      *
      * @return true = ist Wurzel, false = ist nicht die Wurzel
      */
+    @Override
     public boolean isRoot() {
         return !hasParent();
     }
@@ -422,6 +446,7 @@ public class nodeReference extends Object {
      *
      * @return die Textdarstellung des Knotens
      */
+    @Override
     public String print() {
         String tmp = "";
         // ausfüllen

@@ -17,7 +17,7 @@
 package treeNormalizer.structure.internal;
 
 import treeNormalizer.structure.internal.nodeReference;
-import treeNormalizer.structure.internal.tree;
+import treeNormalizer.structure.internal.internalTree;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -345,7 +345,7 @@ public class treeBucketNode {
      * @param tree der Baum
      * @return ob der Baum in der Liste auftaucht
      */
-    public boolean containsReferencedTree(tree tree) {
+    public boolean containsReferencedTree(internalTree tree) {
         for (nodeReference tmp : getNodeReferences()) {
             if (tmp == null) {
                 continue;
@@ -636,8 +636,8 @@ public class treeBucketNode {
      *
      * @return die zugehörigen Bäume
      */
-    public ArrayList<tree> getReferencedTrees() {
-        ArrayList<tree> tmp = new ArrayList<tree>();
+    public ArrayList<internalTree> getReferencedTrees() {
+        ArrayList<internalTree> tmp = new ArrayList<internalTree>();
         for (nodeReference ref : getNodeReferences()) {
             if (!tmp.contains(ref.getTree())) {
                 tmp.add(ref.getTree());
@@ -783,7 +783,7 @@ public class treeBucketNode {
      * @param tree der Baum
      * @return ob der Knoten zum Baum gehört
      */
-    public boolean isTreeReferenced(tree tree) {
+    public boolean isTreeReferenced(internalTree tree) {
         return containsReferencedTree(tree);
     }
 

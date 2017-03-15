@@ -16,12 +16,12 @@
  */
 package treeNormalizer.structure.internal;
 
-import treeNormalizer.structure.internal.edge;
+import treeNormalizer.structure.internal.internalEdge;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- * diese Klasse testet die edge-Klasse
+ * diese Klasse testet die internalEdge-Klasse
  *
  * @author Till
  */
@@ -30,12 +30,12 @@ public class edgeTest {
     /**
      * ein Baum
      */
-    public static tree testTree;
+    public static internalTree testTree;
 
     /**
      * eine Kante
      */
-    public static edge testEdge;
+    public static internalEdge testEdge;
 
     /**
      * eine Knotenreferenz
@@ -61,17 +61,17 @@ public class edgeTest {
      * initialisiert die Testdaten
      */
     public edgeTest() {
-        testTree = new tree("test");
+        testTree = new internalTree("test");
         nodeA = new nodeReference(testTree, 100);
         nodeB = new nodeReference(testTree, 200);
         nodeC = new nodeReference(testTree, 300);
         root = new nodeReference(testTree, 400);
         testTree.setRoot(root);
-        testEdge = new edge(nodeA, nodeB);
+        testEdge = new internalEdge(nodeA, nodeB);
     }
 
     /**
-     * Test of getSource method, of class edge.
+     * Test of getSource method, of class internalEdge.
      */
     @Test
     public void testGetSource() {
@@ -83,7 +83,7 @@ public class edgeTest {
     }
 
     /**
-     * Test of setSource method, of class edge.
+     * Test of setSource method, of class internalEdge.
      */
     @Test
     public void testSetSource() {
@@ -103,7 +103,7 @@ public class edgeTest {
     }
 
     /**
-     * Test of getTarget method, of class edge.
+     * Test of getTarget method, of class internalEdge.
      */
     @Test
     public void testGetTarget() {
@@ -115,7 +115,7 @@ public class edgeTest {
     }
 
     /**
-     * Test of setTarget method, of class edge.
+     * Test of setTarget method, of class internalEdge.
      */
     @Test
     public void testSetTarget() {
@@ -135,7 +135,7 @@ public class edgeTest {
     }
 
     /**
-     * Test of getTreeRoot method, of class edge.
+     * Test of getTreeRoot method, of class internalEdge.
      */
     @Test
     public void testGetTreeRoot() {

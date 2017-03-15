@@ -17,8 +17,8 @@
 package treeNormalizer.structure.internal;
 
 import treeNormalizer.structure.internal.nodeReference;
-import treeNormalizer.structure.internal.tree;
-import treeNormalizer.structure.internal.edge;
+import treeNormalizer.structure.internal.internalTree;
+import treeNormalizer.structure.internal.internalEdge;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Test;
@@ -43,7 +43,7 @@ public class nodeReferenceTest {
     @Test
     public void testAddChild() {
         System.out.println("addChild");
-        tree a = new tree("test");
+        internalTree a = new internalTree("test");
         nodeReference child = new nodeReference(a, 100);
         nodeReference instance = new nodeReference(a, 200);
 
@@ -73,7 +73,7 @@ public class nodeReferenceTest {
     @Test
     public void testChildExists() {
         System.out.println("childExists");
-        tree a = new tree("test");
+        internalTree a = new internalTree("test");
         nodeReference child = new nodeReference(a, 100);
         nodeReference child2 = new nodeReference(a, 300);
         nodeReference instance = new nodeReference(a, 200);
@@ -197,9 +197,9 @@ public class nodeReferenceTest {
     public void testGetExistingOutgoingEdges() {
         System.out.println("getExistingOutgoingEdges");
         nodeReference instance = new nodeReference(null, 31);
-        assertArrayEquals(new edge[]{}, instance.getExistingOutgoingEdges());
+        assertArrayEquals(new internalEdge[]{}, instance.getExistingOutgoingEdges());
         instance.addChild(new nodeReference(null, 15));
-        edge[] result = instance.getExistingOutgoingEdges();
+        internalEdge[] result = instance.getExistingOutgoingEdges();
         assertEquals(1, result.length);
 
         // wenn wir das Kind nochmal einfügen, dann sollte es keine Veränderung geben
@@ -270,9 +270,9 @@ public class nodeReferenceTest {
     public void testGetOutgoingEdges() {
         System.out.println("getOutgoingEdges");
         nodeReference instance = new nodeReference(null, 31);
-        assertArrayEquals(new edge[]{}, instance.getOutgoingEdges());
+        assertArrayEquals(new internalEdge[]{}, instance.getOutgoingEdges());
         instance.addChild(new nodeReference(null, 15));
-        edge[] result = instance.getOutgoingEdges();
+        internalEdge[] result = instance.getOutgoingEdges();
         assertEquals(1, result.length);
 
         // das Ziel muss passen
@@ -362,9 +362,9 @@ public class nodeReferenceTest {
         System.out.println("getTree");
         nodeReference instance = new nodeReference(null, 0);
         assertNull(instance.getTree());
-        instance.setTree(new tree("test"));
+        instance.setTree(new internalTree("test"));
 
-        tree a = instance.getTree();
+        internalTree a = instance.getTree();
         assertNotEquals(null, a);
         assertEquals("test", a.getName());
     }
@@ -378,15 +378,15 @@ public class nodeReferenceTest {
         nodeReference instance = new nodeReference(null, 0);
         assertNull(instance.getTree());
 
-        instance.setTree(new tree("test"));
+        instance.setTree(new internalTree("test"));
 
-        tree a = instance.getTree();
+        internalTree a = instance.getTree();
         assertNotEquals(null, a);
         assertEquals("test", a.getName());
 
-        instance.setTree(new tree("test2"));
+        instance.setTree(new internalTree("test2"));
 
-        tree b = instance.getTree();
+        internalTree b = instance.getTree();
         assertNotEquals(null, b);
         assertEquals("test2", b.getName());
     }
@@ -402,9 +402,9 @@ public class nodeReferenceTest {
         nodeReference instance = new nodeReference(null, 0);
         assertNull(instance.getTree());
 
-        instance.setTree(new tree("test"));
+        instance.setTree(new internalTree("test"));
 
-        tree a = instance.getTree();
+        internalTree a = instance.getTree();
         assertNotEquals(null, a);
         assertEquals("test", a.getName());
         assertNull(a.getRoot());

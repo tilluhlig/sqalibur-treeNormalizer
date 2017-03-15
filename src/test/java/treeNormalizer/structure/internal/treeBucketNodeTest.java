@@ -18,7 +18,7 @@ package treeNormalizer.structure.internal;
 
 import treeNormalizer.structure.internal.treeBucketNode;
 import treeNormalizer.structure.internal.nodeReference;
-import treeNormalizer.structure.internal.tree;
+import treeNormalizer.structure.internal.internalTree;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -108,8 +108,8 @@ public class treeBucketNodeTest {
     public void testAddNodeReference() {
         System.out.println("addNodeReference");
         treeBucketNode instance = new treeBucketNode("A");
-        tree treeA = new tree("test");
-        tree treeB = new tree("test2");
+        internalTree treeA = new internalTree("test");
+        internalTree treeB = new internalTree("test2");
 
         nodeReference instance2 = new nodeReference(treeA, 2);
         nodeReference instance3 = new nodeReference(treeB, 3);
@@ -138,8 +138,8 @@ public class treeBucketNodeTest {
     public void testAddNodeReferences() {
         System.out.println("addNodeReferences");
         treeBucketNode instance = new treeBucketNode("A");
-        tree treeA = new tree("test");
-        tree treeB = new tree("test2");
+        internalTree treeA = new internalTree("test");
+        internalTree treeB = new internalTree("test2");
 
         nodeReference instance2 = new nodeReference(treeA, 2);
         nodeReference instance3 = new nodeReference(treeB, 3);
@@ -228,8 +228,8 @@ public class treeBucketNodeTest {
     public void testContainsReferencedTree() {
         System.out.println("containsReferencedTree");
         treeBucketNode instance = new treeBucketNode("A");
-        tree treeA = new tree("test");
-        tree treeB = new tree("test2");
+        internalTree treeA = new internalTree("test");
+        internalTree treeB = new internalTree("test2");
 
         nodeReference instance2 = new nodeReference(treeA, 2);
         nodeReference instance3 = new nodeReference(treeB, 3);
@@ -497,10 +497,10 @@ public class treeBucketNodeTest {
         System.out.println("getReferencedTrees");
         treeBucketNode instance = new treeBucketNode("A");
         assertEquals(0, instance.getReferencedTrees().size());
-        instance.addNodeReference(new nodeReference(new tree("A"), 1));
-        instance.addNodeReference(new nodeReference(new tree("B"), 2));
+        instance.addNodeReference(new nodeReference(new internalTree("A"), 1));
+        instance.addNodeReference(new nodeReference(new internalTree("B"), 2));
         assertEquals(2, instance.getReferencedTrees().size());
-        assertArrayEquals(new tree[]{new tree("A"), new tree("B")}, instance.getReferencedTrees().toArray(new tree[0]));
+        assertArrayEquals(new internalTree[]{new internalTree("A"), new internalTree("B")}, instance.getReferencedTrees().toArray(new internalTree[0]));
     }
 
     /**
@@ -670,7 +670,7 @@ public class treeBucketNodeTest {
     public void testIsTreeReferenced() {
         System.out.println("isTreeReferenced");
         treeBucketNode instance = new treeBucketNode("A");
-        tree treeA = new tree("A");
+        internalTree treeA = new internalTree("A");
         nodeReference nodeA = new nodeReference(treeA, 1);
         assertFalse(instance.isTreeReferenced(treeA));
         instance.addNodeReference(nodeA);
@@ -711,8 +711,8 @@ public class treeBucketNodeTest {
         System.out.println("numberOfReferencedTrees");
         treeBucketNode instance = new treeBucketNode("A");
         assertEquals(0, instance.numberOfReferencedTrees());
-        instance.addNodeReference(new nodeReference(new tree("A"), 1));
-        instance.addNodeReference(new nodeReference(new tree("B"), 2));
+        instance.addNodeReference(new nodeReference(new internalTree("A"), 1));
+        instance.addNodeReference(new nodeReference(new internalTree("B"), 2));
         assertEquals(2, instance.numberOfReferencedTrees());
     }
 
@@ -781,8 +781,8 @@ public class treeBucketNodeTest {
         treeBucketNode instance = new treeBucketNode("A");
         instance.removeAllNodeReferences();
         assertEquals(0, instance.numberOfNodeReferences());
-        instance.addNodeReference(new nodeReference(new tree("A"), 1));
-        instance.addNodeReference(new nodeReference(new tree("B"), 2));
+        instance.addNodeReference(new nodeReference(new internalTree("A"), 1));
+        instance.addNodeReference(new nodeReference(new internalTree("B"), 2));
         instance.removeAllNodeReferences();
         assertEquals(0, instance.numberOfNodeReferences());
     }

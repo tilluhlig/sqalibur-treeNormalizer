@@ -17,7 +17,7 @@
 package treeNormalizer.structure.internal;
 
 import treeNormalizer.structure.internal.nodeReference;
-import treeNormalizer.structure.internal.tree;
+import treeNormalizer.structure.internal.internalTree;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -31,13 +31,13 @@ public class treeTest {
     }
 
     /**
-     * Test of equals method, of class tree.
+     * Test of equals method, of class internalTree.
      */
     @Test
     public void testEquals() {
         System.out.println("equals");
-        tree instance = new tree("test");
-        tree instance2 = new tree("test");
+        internalTree instance = new internalTree("test");
+        internalTree instance2 = new internalTree("test");
         nodeReference nodeA = new nodeReference(null, 1);
         nodeReference nodeB = new nodeReference(null, 2);
 
@@ -54,22 +54,22 @@ public class treeTest {
     }
 
     /**
-     * Test of getName method, of class tree.
+     * Test of getName method, of class internalTree.
      */
     @Test
     public void testGetName() {
         System.out.println("getName");
-        tree instance = new tree("test");
+        internalTree instance = new internalTree("test");
         assertEquals("test", instance.getName());
     }
 
     /**
-     * Test of setName method, of class tree.
+     * Test of setName method, of class internalTree.
      */
     @Test
     public void testSetName() {
         System.out.println("setName");
-        tree instance = new tree("test");
+        internalTree instance = new internalTree("test");
         assertEquals("test", instance.getName());
         instance.setName("test2");
         assertEquals("test2", instance.getName());
@@ -78,12 +78,12 @@ public class treeTest {
     }
 
     /**
-     * Test of getRoot method, of class tree.
+     * Test of getRoot method, of class internalTree.
      */
     @Test
     public void testGetRoot() {
         System.out.println("getRoot");
-        tree instance = new tree("test");
+        internalTree instance = new internalTree("test");
         nodeReference instance2 = new nodeReference(null, 31);
         assertEquals(null, instance.getRoot());
 
@@ -92,12 +92,12 @@ public class treeTest {
     }
 
     /**
-     * Test of setRoot method, of class tree.
+     * Test of setRoot method, of class internalTree.
      */
     @Test
     public void testSetRoot() {
         System.out.println("setRoot");
-        tree instance = new tree("test");
+        internalTree instance = new internalTree("test");
         nodeReference instance2 = new nodeReference(null, 31);
 
         instance.setRoot(instance2);
@@ -108,12 +108,12 @@ public class treeTest {
     }
 
     /**
-     * Test of hasRoot method, of class tree.
+     * Test of hasRoot method, of class internalTree.
      */
     @Test
     public void testHasRoot() {
         System.out.println("hasRoot");
-        tree instance = new tree("test");
+        internalTree instance = new internalTree("test");
         nodeReference instance2 = new nodeReference(null, 31);
 
         assertEquals(false, instance.hasRoot());
@@ -122,7 +122,7 @@ public class treeTest {
     }
 
     /**
-     * Test of print method, of class tree.
+     * Test of print method, of class internalTree.
      */
     @Test
     public void testPrint() {

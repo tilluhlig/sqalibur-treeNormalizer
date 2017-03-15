@@ -17,10 +17,9 @@
 package treeNormalizer.structure;
 
 import treeNormalizer.structure.internal.nodeReference;
-import treeNormalizer.structure.internal.tree;
-import treeNormalizer.structure.internal.edge;
+import treeNormalizer.structure.internal.internalTree;
+import treeNormalizer.structure.internal.internalEdge;
 import java.util.ArrayList;
-import static javaapplication3.JavaApplication3.writeNodeSetToFile;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -85,7 +84,7 @@ public class treeBucketTest {
     public void testGetTreeByName() {
         System.out.println("getTreeByName");
         treeBucket instance = initMinimalBucket();
-        tree a = instance.getTreeByName("BaumB");
+        internalTree a = instance.getTreeByName("BaumB");
         assertNotNull(a);
         assertEquals("BaumB", a.getName());
     }
@@ -180,12 +179,12 @@ public class treeBucketTest {
     public void testRemoveTree() {
         System.out.println("removeTree");
         treeBucket instance = new treeBucket();
-        tree treeA = instance.createTree("BaumA");
-        tree treeB = instance.createTree("BaumB");
+        internalTree treeA = instance.createTree("BaumA");
+        internalTree treeB = instance.createTree("BaumB");
         assertEquals(2, instance.getTrees().size());
         instance.removeTree(treeA);
         assertEquals(1, instance.getTrees().size());
-        assertArrayEquals(new tree[]{treeB}, instance.getTrees().toArray(new tree[0]));
+        assertArrayEquals(new internalTree[]{treeB}, instance.getTrees().toArray(new internalTree[0]));
     }
 
     /**
@@ -213,7 +212,7 @@ public class treeBucketTest {
     public void testRenameTree_tree_String() {
         System.out.println("renameTree");
         treeBucket instance = initMinimalBucket();
-        tree treeA = instance.getTreeByName("BaumA");
+        internalTree treeA = instance.getTreeByName("BaumA");
         assertEquals("BaumA", treeA.getName());
         boolean result = instance.renameTree(treeA, "BaumARenamed");
         assertTrue(result);
@@ -232,7 +231,7 @@ public class treeBucketTest {
     public void testRenameTree_nodeReference_String() {
         System.out.println("renameTree");
         treeBucket instance = initMinimalBucket();
-        tree treeA = instance.getTreeByName("BaumA");
+        internalTree treeA = instance.getTreeByName("BaumA");
         nodeReference nodeA = treeA.getRoot();
         assertEquals("BaumA", treeA.getName());
         boolean result = instance.renameTree(nodeA, "BaumARenamed");
@@ -252,9 +251,9 @@ public class treeBucketTest {
     public void testRenameTree_edge_String() {
         System.out.println("renameTree");
         treeBucket instance = initMinimalBucket();
-        tree treeA = instance.getTreeByName("BaumA");
+        internalTree treeA = instance.getTreeByName("BaumA");
         nodeReference nodeA = treeA.getRoot();
-        edge edgeA = new edge(nodeA, nodeA);
+        internalEdge edgeA = new internalEdge(nodeA, nodeA);
 
         assertEquals("BaumA", treeA.getName());
         boolean result = instance.renameTree(edgeA, "BaumARenamed");
@@ -274,7 +273,7 @@ public class treeBucketTest {
     public void testSetTreeRoot_tree_nodeReference() {
         System.out.println("setTreeRoot");
         treeBucket instance = initMinimalBucket();
-        tree treeA = instance.getTreeByName("BaumA");
+        internalTree treeA = instance.getTreeByName("BaumA");
         nodeReference nodeA = instance.createNode(treeA, "", "sub");
         instance.setTreeRoot(treeA, nodeA);
         assertEquals(nodeA, treeA.getRoot());
@@ -282,7 +281,7 @@ public class treeBucketTest {
 
     private treeBucket initMinimalBucket() {
         treeBucket instance = new treeBucket();
-        tree treeA = instance.createTree("BaumA");
+        internalTree treeA = instance.createTree("BaumA");
         nodeReference plus = instance.createNode(treeA, "", "addition");
         instance.setTreeRoot(treeA, plus);
 
@@ -325,8 +324,8 @@ public class treeBucketTest {
     public void simpleVisualizedTest() {
 
         treeBucket instance = new treeBucket();
-        tree treeA = instance.createTree("BaumA");
-        nodeReference plus = instance.createNode(treeA, "", "addition");
+        internalTree treeA = instance.createTree("BaumA");
+        reference plus = instance.createNode(treeA, "", "addition");
         System.out.println(instance.simplePrint());
         instance.setTreeRoot(treeA, plus);
 

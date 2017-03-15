@@ -18,8 +18,8 @@ package treeNormalizer.structure;
 
 import treeNormalizer.structure.internal.treeBucketNode;
 import treeNormalizer.structure.internal.nodeReference;
-import treeNormalizer.structure.internal.tree;
-import treeNormalizer.structure.internal.edge;
+import treeNormalizer.structure.internal.internalTree;
+import treeNormalizer.structure.internal.internalEdge;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -61,7 +61,7 @@ public class treeBucket {
     /**
      * enthält alle Zeiger auf die Wurzeln der Bäume
      */
-    private final ArrayList<tree> trees = new ArrayList<>();
+    private final ArrayList<internalTree> trees = new ArrayList<>();
 
     /**
      * initialisiert einen Baumbehälter
@@ -78,7 +78,7 @@ public class treeBucket {
      * @return die eindeutige Knotenreferenz auf diesen Knoten bzw. den Inhalt
      *         den er darstellt
      */
-    private nodeReference addNode(tree tree, treeBucketNode node) {
+    private nodeReference addNode(internalTree tree, treeBucketNode node) {
         node = addNodeSimple(node);
         return createNodeReference(tree, node);
     }
@@ -111,7 +111,7 @@ public class treeBucket {
      * @param tree der Baum
      * @return der Baum oder null, wenn nichts eingefügt werden konnte
      */
-    private tree addTree(tree tree) {
+    private internalTree addTree(internalTree tree) {
         // der Name des Baums soll eindeutig sein
         if (getTreeByName(tree.getName()) != null) {
             // der Baum existiert bereits
@@ -129,7 +129,7 @@ public class treeBucket {
      * @param node der Knoten
      * @return die neue Referenz
      */
-    private nodeReference createNodeReference(tree tree, treeBucketNode node) {
+    private nodeReference createNodeReference(internalTree tree, treeBucketNode node) {
         int newId = getNextReferenceId();
         nodeReference tmp = new nodeReference(tree, newId);
         nodeReference.put(newId, node);
@@ -427,12 +427,23 @@ public class treeBucket {
     }
 
     /**
+     * liefert die Anzahl der real existierenden Knoten
+     *
+     * @return die Anzahl
+     */
+    public int getNumberOfInternalNodes() {
+        return nodes.size();
+    }
+
+    /**
      * fügt eine Kante ein
      *
-     * @param nodeA der Startknoten
-     * @param nodeB der Zielknoten
+     * @param referenceA der Startknoten
+     * @param referenceB der Zielknoten
      */
-    public void addEdge(nodeReference nodeA, nodeReference nodeB) {
+    public void addEdge(reference referenceA, reference referenceB) {
+        nodeReference nodeA = (nodeReference) referenceA;
+        nodeReference nodeB = (nodeReference) referenceB;
         treeBucketNode nA = splitNode(nodeA);
         treeBucketNode nB = getInternalNodeByReference(nodeB);
 
@@ -471,7 +482,7 @@ public class treeBucket {
      *
      * @param edge die Definition der Kante
      */
-    public void addEdge(edge edge) {
+    public void addEdge(internalEdge edge) {
         addEdge(edge.getSource(), edge.getTarget());
     }
 
@@ -482,7 +493,7 @@ public class treeBucket {
      * @param name der Name des Knotens
      * @return die Referenz auf den Knoten
      */
-    public nodeReference createNode(tree tree, String name) {
+    public nodeReference createNode(internalTree tree, String name) {
         return createNode(getNextNodeId(), tree, name, "");
     }
 
@@ -494,7 +505,7 @@ public class treeBucket {
      * @param type der Typ des Knotens
      * @return die Referenz auf den Knoten
      */
-    public nodeReference createNode(tree tree, String name, String type) {
+    public nodeReference createNode(internalTree tree, String name, String type) {
         return createNode(getNextNodeId(), tree, name, type);
     }
 
@@ -508,7 +519,7 @@ public class treeBucket {
      * @param type  der Typ des Knotens
      * @return die Referenz auf den Knoten
      */
-    private nodeReference createNode(long newId, tree tree, String name, String type) {
+    private nodeReference createNode(long newId, internalTree tree, String name, String type) {
         treeBucketNode tmp = new treeBucketNode(newId, name, type);
         return addNode(tree, tmp);
 
@@ -520,8 +531,8 @@ public class treeBucket {
      * @param name der Name
      * @return der neue Baum
      */
-    public tree createTree(String name) {
-        tree tmp = new tree(name);
+    public internalTree createTree(String name) {
+        internalTree tmp = new internalTree(name);
         tmp = addTree(tmp);
         return tmp;
     }
@@ -566,8 +577,8 @@ public class treeBucket {
      * @param name der Name
      * @return der Baum
      */
-    public tree getTreeByName(String name) {
-        for (tree tmp : getTrees()) {
+    public internalTree getTreeByName(String name) {
+        for (internalTree tmp : getTrees()) {
             if (name.equals(tmp.getName())) {
                 return tmp;
             }
@@ -580,8 +591,8 @@ public class treeBucket {
      *
      * @param root der Wurzelknoten
      */
-    public void setTreeRoot(nodeReference root) {
-        tree tree = root.getTree();
+    public void setTreeRoot(reference root) {
+        internalTree tree = root.getTree();
 
         // wenn root nicht neu ist, muss auch nichts gemacht werden
         if (tree.getRoot() == root) {
@@ -589,7 +600,7 @@ public class treeBucket {
         }
 
         // nun kann die neue Wurzel gesetzt werden
-        tree.setRoot(root);
+        tree.setRoot((nodeReference) root);
     }
 
     /**
@@ -597,7 +608,7 @@ public class treeBucket {
      *
      * @return die Bäume
      */
-    public ArrayList<tree> getTrees() {
+    public ArrayList<internalTree> getTrees() {
         return trees;
     }
 
@@ -610,24 +621,27 @@ public class treeBucket {
      * @return true = sind gleich, false = sind nicht gleich
      */
     public boolean isTreeEquivalentTo(tree treeA, tree treeB) {
-        if (treeA.equals(treeB)) {
+        internalTree realA = (internalTree) treeA;
+        internalTree realB = (internalTree) treeB;
+        
+        if (realA.equals(realB)) {
             return true;
         }
 
-        if (treeA.getRoot().equals(treeB.getRoot())) {
+        if (realA.getRoot().equals(realB.getRoot())) {
             return true;
         }
 
-        if (treeA.getRoot() == null) {
+        if (realA.getRoot() == null) {
             return false;
         }
 
-        if (treeB.getRoot() == null) {
+        if (realB.getRoot() == null) {
             return false;
         }
 
-        treeBucketNode nodeA = getInternalNodeByReference(treeA.getRoot());
-        treeBucketNode nodeB = getInternalNodeByReference(treeB.getRoot());
+        treeBucketNode nodeA = getInternalNodeByReference(realA.getRoot());
+        treeBucketNode nodeB = getInternalNodeByReference(realB.getRoot());
 
         return nodeA.getId() == nodeB.getId();
     }
@@ -640,7 +654,7 @@ public class treeBucket {
      * @param nodeB ein Knoten des zweiten Baums
      * @return true = sind gleich, false = sind nicht gleich
      */
-    public boolean isTreeEquivalentTo(nodeReference nodeA, nodeReference nodeB) {
+    public boolean isTreeEquivalentTo(reference nodeA, reference nodeB) {
         return isTreeEquivalentTo(nodeA.getTree(), nodeB.getTree());
     }
 
@@ -682,10 +696,12 @@ public class treeBucket {
     /**
      * entfernt eine Kante
      *
-     * @param nodeA der Startknoten
-     * @param nodeB der Zielknoten
+     * @param refA der Startknoten
+     * @param refB der Zielknoten
      */
-    public void removeEdge(nodeReference nodeA, nodeReference nodeB) {
+    public void removeEdge(reference refA, reference refB) {
+        nodeReference nodeA = (nodeReference) refA;
+        nodeReference nodeB = (nodeReference) refB;
         // dazu muss die Kante aus den Referenzen entfernt werden
         nodeA.removeEdgeTo(nodeB);
 
@@ -705,9 +721,10 @@ public class treeBucket {
     /**
      * entfernt eine Knotenreferenz sauber aus der Struktur/Verwaltung
      *
-     * @param node der Knoten
+     * @param ref der Knoten
      */
-    public void removeNode(nodeReference node) {
+    public void removeNode(reference ref) {
+        nodeReference node = (nodeReference) ref;
         treeBucketNode realNode = getInternalNodeByReference(node);
 
         if (realNode.numberOfNodeReferences() == 1) {
@@ -750,7 +767,7 @@ public class treeBucket {
      *
      * @param node der Startknoten
      */
-    public void removeSubtree(nodeReference node) {
+    public void removeSubtree(reference node) {
         // dazu wandern wir zunächst Rekursiv bis zu den Kindern und beginnen
         // dort mit dem Löschen
         for (nodeReference child : node.getExistingChilds()) {
@@ -768,22 +785,24 @@ public class treeBucket {
      * @param tree der zu entfernende Baum
      */
     public void removeTree(tree tree) {
-        nodeReference root = tree.getRoot();
+        internalTree realTree = (internalTree) tree;
+        nodeReference root = realTree.getRoot();
         if (root != null) {
             // der Baum bestitzt eine Wurzel
             removeSubtree(root);
         }
-        trees.remove(tree);
+        trees.remove(realTree);
     }
 
     /**
      * benennt einen Knoten um (der Knoten wir anschließend automatisch in der
      * Verwaltung aktualisiert)
      *
-     * @param node    der Knoten
+     * @param ref    der Knoten
      * @param newName der neue Name
      */
-    public void renameNode(nodeReference node, String newName) {
+    public void renameNode(reference ref, String newName) {
+        nodeReference node = (nodeReference) ref;
         // der Knoten muss eventuell aufgespalten werden
         treeBucketNode tmp = getInternalNodeByReference(node);
 
@@ -801,10 +820,11 @@ public class treeBucket {
      * ändert den Typbezeichner eines Knotens (der Knoten wir anschließend
      * automatisch in der Verwaltung aktualisiert)
      *
-     * @param node    die Referenz auf den Knoten
+     * @param ref    die Referenz auf den Knoten
      * @param newType der neue Bezeichner
      */
-    public void changeNodeType(nodeReference node, String newType) {
+    public void changeNodeType(reference ref, String newType) {
+        nodeReference node = (nodeReference) ref;
         // der Knoten muss eventuell aufgespalten werden
         treeBucketNode tmp = getInternalNodeByReference(node);
 
@@ -825,7 +845,7 @@ public class treeBucket {
      * @param node der Knoten
      * @param name der neue Name
      */
-    public void renameNode(tree tree, nodeReference node, String name) {
+    public void renameNode(tree tree, reference node, String name) {
         if (node.getTree() != tree) {
             throw new IllegalArgumentException("die beiden Elemente gehören nicht zueinander");
         }
@@ -840,15 +860,16 @@ public class treeBucket {
      * @return true = Umbenennung war erfolgreich, false = sonst
      */
     public boolean renameTree(tree tree, String name) {
+        internalTree realTree = (internalTree) tree;
         if (name == null) {
             return false;
         }
 
-        if (tree.getName() == name) {
+        if (realTree.getName() == name) {
             return false;
         }
 
-        if (tree.getName() == null ? name == null : tree.getName().equals(name)) {
+        if (realTree.getName() == null ? name == null : realTree.getName().equals(name)) {
             return false;
         }
 
@@ -857,7 +878,7 @@ public class treeBucket {
             return false;
         }
 
-        tree.setName(name);
+        realTree.setName(name);
         return true;
     }
 
@@ -868,7 +889,7 @@ public class treeBucket {
      * @param name der neue Name
      * @return true = Umbenennung war erfolgreich, false = sonst
      */
-    public boolean renameTree(nodeReference node, String name) {
+    public boolean renameTree(reference node, String name) {
         return renameTree(node.getTree(), name);
     }
 
@@ -889,13 +910,13 @@ public class treeBucket {
     }
 
     /**
-     * setzt den Wurzelknoten des Baums, wobei der Parameter tree eigentlich
-     * nicht notwendig ist (dient nur der lesbarkeit)
+     * setzt den Wurzelknoten des Baums, wobei der Parameter internalTree
+     * eigentlich nicht notwendig ist (dient nur der lesbarkeit)
      *
      * @param tree der Baum
      * @param root der Wurzelknoten
      */
-    public void setTreeRoot(tree tree, nodeReference root) {
+    public void setTreeRoot(tree tree, reference root) {
         if (root.getTree() != tree) {
             throw new IllegalArgumentException("die beiden Elemente gehören nicht zueinander");
         }

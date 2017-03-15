@@ -16,6 +16,8 @@
  */
 package treeNormalizer.structure.internal;
 
+import treeNormalizer.structure.edge;
+
 /**
  * Diese Klasse stellt Kanten zwischen Knotenreferenzen dar. Dabei enthalten
  * Knotenreferenzen bereits implizite Kanten durch die Verwaltung von Kindern,
@@ -25,7 +27,7 @@ package treeNormalizer.structure.internal;
  *
  * @author Till
  */
-public class edge {
+public class internalEdge implements edge {
 
     /**
      * der Startknoten der Kante
@@ -43,7 +45,7 @@ public class edge {
      * @param source der Quellknoten
      * @param target der Zielknoten
      */
-    public edge(nodeReference source, nodeReference target) {
+    public internalEdge(nodeReference source, nodeReference target) {
         if (source.getTree() != target.getTree()) {
             throw new IllegalArgumentException("der Baum von Quelle und Ziel müssen übereinstimmen");
         }
@@ -57,6 +59,7 @@ public class edge {
      *
      * @return der Startknoten
      */
+    @Override
     public nodeReference getSource() {
         return source;
     }
@@ -75,6 +78,7 @@ public class edge {
      *
      * @return der Zielknoten
      */
+    @Override
     public nodeReference getTarget() {
         return target;
     }
@@ -93,6 +97,7 @@ public class edge {
      *
      * @return die Wurzel des Baums
      */
+    @Override
     public nodeReference getTreeRoot() {
         nodeReference tmp = source;
 
@@ -100,7 +105,7 @@ public class edge {
             return null;
         }
 
-        tree tree = tmp.getTree();
+        internalTree tree = tmp.getTree();
 
         if (tree == null) {
             return null;
