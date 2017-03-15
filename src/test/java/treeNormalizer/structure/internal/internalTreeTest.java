@@ -125,7 +125,8 @@ public class internalTreeTest {
     @Test
     public void testPrint() {
         System.out.println("print");
-        // kein Test (was da lesbar gedruckt wird, ist mir egal
+        internalTree instance = new internalTree("test");
+        assertNotNull(instance.print());
     }
 
 }
