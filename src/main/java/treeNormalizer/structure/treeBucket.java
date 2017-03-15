@@ -525,6 +525,13 @@ public class treeBucket {
         addEdge(edge.getSource(), edge.getTarget());
     }
 
+    /**
+     * prüft, ob ein Attribut in dieser Knotenreferenz existiert
+     *
+     * @param ref  die Referenz des Knotens
+     * @param name der Name des Attributs
+     * @return true = existiert, false = nicht
+     */
     public boolean attributeExists(reference ref, String name) {
         nodeReference node = (nodeReference) ref;
         treeBucketNode tmp = getInternalNodeByReference(node);
@@ -588,6 +595,13 @@ public class treeBucket {
         return tmp;
     }
 
+    /**
+     * liefert den Wert eiens Attributs
+     *
+     * @param ref  die Referenz des Knotens
+     * @param name der Name des Attributs
+     * @return der Wert des Attributs oder null (wenn es nicht existiert)
+     */
     public String getAttribute(reference ref, String name) {
         nodeReference node = (nodeReference) ref;
         treeBucketNode tmp = getInternalNodeByReference(node);
@@ -719,6 +733,12 @@ public class treeBucket {
         return nodeReference.containsKey(node.getId());
     }
 
+    /**
+     * entfernt ein Attribut einer Referenz
+     *
+     * @param ref  die Referenz des Knotens
+     * @param name der Name des Attributs
+     */
     public void removeAttribute(reference ref, String name) {
         nodeReference node = (nodeReference) ref;
         // der Knoten muss eventuell aufgespalten werden
@@ -924,6 +944,13 @@ public class treeBucket {
         return renameTree(tmp.getTree(), name);
     }
 
+    /**
+     * setzt den Wert eines Attributs (oder überschreibt ihn)
+     *
+     * @param ref   die Referenz des Knotens
+     * @param name  der Name des Attributs
+     * @param value der neue Wert
+     */
     public void setAttribute(reference ref, String name, String value) {
         nodeReference node = (nodeReference) ref;
         // der Knoten muss eventuell aufgespalten werden
