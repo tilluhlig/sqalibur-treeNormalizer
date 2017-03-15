@@ -17,16 +17,19 @@
 package treeNormalizer.structure.document;
 
 import org.jdom.Content;
+import treeNormalizer.structure.reference;
 
 /**
  *
  * @author Till Uhlig <till.uhlig@student.uni-halle.de>
  */
-public class bucketContent extends Content{
+public class bucketContent extends Content {
+
+    protected reference ref = null;
 
     @Override
     public String getValue() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-    
+
 }
