@@ -154,15 +154,15 @@ public class treeBucketNode {
      * @param id         die ID des Knotens
      * @param label      das Label
      * @param type       der Typ (Klasse)
-     * @param attributes die Attribute
+     * @param newattributes die Attribute
      */
     public treeBucketNode(long id, String label, String type, Map<String, String> newattributes) {
-        addAttribute("label", label);
-        addAttribute("type", type);
         newattributes.entrySet().forEach((attribute) -> {
             addAttribute(attribute.getKey(), attribute.getValue());
         });
         this.id = id;
+        addAttribute("label", label);
+        addAttribute("type", type);
     }
 
     public treeBucketNode(long id, Map<String, String> newattributes) {
@@ -177,14 +177,14 @@ public class treeBucketNode {
      *
      * @param label      das Label
      * @param type       der Typ (Klasse)
-     * @param attributes die Attribute
+     * @param newattributes die Attribute
      */
     public treeBucketNode(String label, String type, Map<String, String> newattributes) {
-        addAttribute("label", label);
-        addAttribute("type", type);
         newattributes.entrySet().forEach((attribute) -> {
             addAttribute(attribute.getKey(), attribute.getValue());
         });
+        addAttribute("label", label);
+        addAttribute("type", type);
     }
 
     /**

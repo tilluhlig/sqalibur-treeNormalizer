@@ -24,7 +24,7 @@ import static org.junit.Assert.*;
  *
  * @author Till
  */
-public class edgeTest {
+public class internalEdgeTest {
 
     /**
      * ein Baum
@@ -59,7 +59,7 @@ public class edgeTest {
     /**
      * initialisiert die Testdaten
      */
-    public edgeTest() {
+    public internalEdgeTest() {
         testTree = new internalTree("test");
         nodeA = new nodeReference(testTree, 100);
         nodeB = new nodeReference(testTree, 200);

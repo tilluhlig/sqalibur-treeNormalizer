@@ -23,9 +23,9 @@ import static org.junit.Assert.*;
  *
  * @author Till Uhlig <till.uhlig@student.uni-halle.de>
  */
-public class treeTest {
+public class internalTreeTest {
 
-    public treeTest() {
+    public internalTreeTest() {
     }
 
     /**

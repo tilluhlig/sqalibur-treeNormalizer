@@ -17,6 +17,7 @@
 package treeNormalizer.structure.internal;
 
 import treeNormalizer.structure.edge;
+import treeNormalizer.structure.reference;
 
 /**
  * Diese Klasse stellt Kanten zwischen Knotenreferenzen dar. Dabei enthalten
@@ -39,19 +40,13 @@ public class internalEdge implements edge {
      */
     private nodeReference target = null;
 
-    /**
-     * erzeugt eine neue Kante
-     *
-     * @param source der Quellknoten
-     * @param target der Zielknoten
-     */
-    public internalEdge(nodeReference source, nodeReference target) {
+    public internalEdge(reference source, reference target) {
         if (source.getTree() != target.getTree()) {
             throw new IllegalArgumentException("der Baum von Quelle und Ziel müssen übereinstimmen");
         }
 
-        this.source = source;
-        this.target = target;
+        this.source = (nodeReference) source;
+        this.target = (nodeReference) target;
     }
 
     /**
