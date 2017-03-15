@@ -19,7 +19,6 @@ package treeNormalizer.structure;
 import treeNormalizer.structure.internal.treeBucketNode;
 import treeNormalizer.structure.internal.nodeReference;
 import treeNormalizer.structure.internal.internalTree;
-import treeNormalizer.structure.internal.internalEdge;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -44,7 +43,7 @@ public class treeBucket {
     /**
      * diese Liste von Knotenreferenzen bilden auf die realen Knoten ab
      */
-    private final Map<Integer, treeBucketNode> nodeReference = new HashMap<>();
+    private final Map<Integer, treeBucketNode> nodeReferences = new HashMap<>();
 
     /**
      * diese Sammlung enthält die Teilgraphen (also die realen Knoten anhand
@@ -148,7 +147,7 @@ public class treeBucket {
     private nodeReference createNodeReference(internalTree tree, treeBucketNode node) {
         int newId = getNextReferenceId();
         nodeReference tmp = new nodeReference(tree, newId);
-        nodeReference.put(newId, node);
+        getNodeReferences().put(newId, node);
         node.addNodeReference(tmp);
         return tmp;
     }
@@ -160,7 +159,10 @@ public class treeBucket {
      * @return der Knoten
      */
     private treeBucketNode getInternalNodeByReference(nodeReference node) {
-        return nodeReference.get(node.getId());
+        if (node == null) {
+            return null;
+        }
+        return getNodeReferences().get(node.getId());
     }
 
     /**
@@ -187,9 +189,9 @@ public class treeBucket {
      * @return die neue ReferenzId
      */
     private int getNextReferenceId() {
-        if (nodeReference.containsKey(possibleNextReferenceId)) {
+        if (getNodeReferences().containsKey(possibleNextReferenceId)) {
             possibleNextReferenceId = random.nextNonZero();
-            while (nodeReference.containsKey(increaseToNextPossibleReferenceId())) {
+            while (getNodeReferences().containsKey(increaseToNextPossibleReferenceId())) {
                 // kann endlos laufen
             }
         }
@@ -283,7 +285,7 @@ public class treeBucket {
 
         // setzt alle alten Referenzen auf den neuen Knoten (in der Verwaltung)
         sourceNode.getNodeReferences().forEach((ref) -> {
-            nodeReference.replace(ref.getId(), targetNode);
+            getNodeReferences().replace(ref.getId(), targetNode);
         });
 
         // die Kinder der beiden müssen auch verschmolzen werden
@@ -379,7 +381,7 @@ public class treeBucket {
      */
     private void removeNodeReference(nodeReference node) {
         node.disconnect();
-        nodeReference.remove(node.getId());
+        getNodeReferences().remove(node.getId());
         possibleNextReferenceId = node.getId();
         node.setId(0); // quasi ein zurücksetzen der ID
     }
@@ -409,7 +411,7 @@ public class treeBucket {
 
         // um Fehler zu vermeiden, setzen wir die Referenz vorübergehend auf
         // etwas Ungültiges
-        nodeReference.replace(node.getId(), null);
+        getNodeReferences().replace(node.getId(), null);
 
         // jetzt muss ein neuer Knoten erzeugt werden (eine Kopie)
         // (aber ohne Kinder und Eltern)
@@ -423,7 +425,7 @@ public class treeBucket {
         addNodeSimple(splittedNode); // fügt den Knoten ein
 
         // die Knotenreferenz soll nun auf einen neuen realen Knoten zeigen
-        nodeReference.replace(node.getId(), splittedNode);
+        getNodeReferences().replace(node.getId(), splittedNode);
 
         // der neue Knoten bekommt die Kinder des ursprünglichen Knotens
         // (darunter bleibt ja alles gleich)
@@ -461,7 +463,7 @@ public class treeBucket {
      * @param node der neue Zielknoten
      */
     private void updateNodeReference(int id, treeBucketNode node) {
-        nodeReference.replace(id, node);
+        getNodeReferences().replace(id, node);
     }
 
     /**
@@ -471,7 +473,7 @@ public class treeBucket {
      * @param node          der neue Zielknoten
      */
     private void updateNodeReference(nodeReference nodeReference, treeBucketNode node) {
-        this.nodeReference.replace(nodeReference.getId(), node);
+        this.getNodeReferences().replace(nodeReference.getId(), node);
     }
 
     /**
@@ -549,7 +551,10 @@ public class treeBucket {
         nodeReference node = (nodeReference) ref;
         // der Knoten muss eventuell aufgespalten werden
         treeBucketNode tmp = getInternalNodeByReference(node);
-
+        if (tmp == null) {
+            // fehlerhafter Knoten
+            return;
+        }
         if (newType.equals(tmp.getType())) {
             // der Name hat sich nicht geändert
             return;
@@ -605,6 +610,9 @@ public class treeBucket {
     public String getAttribute(reference ref, String name) {
         nodeReference node = (nodeReference) ref;
         treeBucketNode tmp = getInternalNodeByReference(node);
+        if (tmp == null) {
+            return null;
+        }
         return tmp.getAttribute(name);
     }
 
@@ -730,7 +738,7 @@ public class treeBucket {
         if (node.getId() == 0) {
             return false;
         }
-        return nodeReference.containsKey(node.getId());
+        return getNodeReferences().containsKey(node.getId());
     }
 
     /**
@@ -743,7 +751,9 @@ public class treeBucket {
         nodeReference node = (nodeReference) ref;
         // der Knoten muss eventuell aufgespalten werden
         treeBucketNode tmp = getInternalNodeByReference(node);
-
+        if (tmp == null) {
+            return;
+        }
         if (!tmp.attributeExists(name)) {
             // das Attribut existiert nicht, also muss es nicht entfernt werden
             return;
@@ -955,7 +965,9 @@ public class treeBucket {
         nodeReference node = (nodeReference) ref;
         // der Knoten muss eventuell aufgespalten werden
         treeBucketNode tmp = getInternalNodeByReference(node);
-
+        if (tmp == null) {
+            return;
+        }
         if (tmp.attributeExists(name)) {
             if (tmp.getAttribute(name).equals(value)) {
                 // der Wert existiert so bereits
@@ -1037,6 +1049,13 @@ public class treeBucket {
             return r;
         }
 
+    }
+
+    /**
+     * @return the nodeReference
+     */
+    private Map<Integer, treeBucketNode> getNodeReferences() {
+        return nodeReferences;
     }
 
 }
