@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import org.apache.commons.lang.StringUtils;
+import org.jdom.Document;
 import treeNormalizer.utils.UID;
 
 /**
@@ -33,7 +34,6 @@ import treeNormalizer.utils.UID;
  * @author Till Uhlig <till.uhlig@student.uni-halle.de>
  */
 public class treeBucket {
-
 
     /*
      * erzeugt für uns eindeutige IDs

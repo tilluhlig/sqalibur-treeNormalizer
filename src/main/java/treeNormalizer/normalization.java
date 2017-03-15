@@ -31,7 +31,7 @@ public abstract class normalization {
     /**
      * die Regelliste
      */
-    protected List<rule> rules = new ArrayList<rule>();
+    protected List<rule> rules = new ArrayList<>();
 
     /**
      * @return the submission
