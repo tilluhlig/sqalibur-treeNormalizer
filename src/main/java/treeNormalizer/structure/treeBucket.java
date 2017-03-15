@@ -18,8 +18,10 @@ package treeNormalizer.structure;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import org.apache.commons.lang.StringUtils;
 import treeNormalizer.utils.UID;
 
 /**
@@ -39,7 +41,7 @@ public class treeBucket {
     /*
      * erzeugt für uns eindeutige IDs
      */
-    private final UID UID = new UID();
+    private UID UID_object = null;
 
     /**
      * diese Liste von Knotenreferenzen bilden auf die realen Knoten ab
@@ -61,7 +63,7 @@ public class treeBucket {
      * initialisiert einen Baumbehälter
      */
     public treeBucket() {
-        // Leer
+        this.UID_object = new UID();
     }
 
     /**
@@ -153,7 +155,7 @@ public class treeBucket {
      * @return die neue KnotenId
      */
     private long getNextNodeId() {
-        return UID.nextUID();
+        return this.UID_object.nextUID();
     }
 
     /**
@@ -346,7 +348,8 @@ public class treeBucket {
 
         // jetzt muss ein neuer Knoten erzeugt werden (eine Kopie)
         // (aber ohne Kinder und Eltern)
-        treeBucketNode splittedNode = realNode.cloneNodeBase(getNextNodeId());
+        long nextId = getNextNodeId();
+        treeBucketNode splittedNode = realNode.cloneNodeBase(nextId);
         splittedNode.addNodeReference(node);
 
         // der neue Knoten soll eindeutig sein, damit er beim Einfügen nicht
@@ -411,6 +414,8 @@ public class treeBucket {
      * @param nodeB der Zielknoten
      */
     public void addEdge(nodeReference nodeA, nodeReference nodeB) {
+        Map<Integer, treeBucketNode> list = nodes;
+        
         treeBucketNode nA = splitNode(nodeA);
         treeBucketNode nB = getInternalNodeByReference(nodeB);
 
@@ -434,6 +439,7 @@ public class treeBucket {
             throw new IllegalArgumentException("es darf keine Kante zur Wurzel gezogen werden");
         }
 
+        
         nodeA.addChild(nodeB);
         nodeB.setParent(nodeA);
         nA.addEdgeTo(nB); // ???
@@ -459,7 +465,20 @@ public class treeBucket {
      * @return die Referenz auf den Knoten
      */
     public nodeReference createNode(tree tree, String name) {
-        return createNode(tree, name, "");
+        return createNode(getNextNodeId(), tree, name, "");
+    }
+
+    /**
+     * fügt einen Knoten in einen Baum ein
+     *
+     * @param newId die neue ID des Knotens (normalerweise automatisch gesetzt)
+     *              (wir vorallem für Tests genutzt)
+     * @param tree  der Baum
+     * @param name  der Name des Knotens
+     * @return die Referenz auf den Knoten
+     */
+    public nodeReference createNode(long newId, tree tree, String name) {
+        return createNode(newId, tree, name, "");
     }
 
     /**
@@ -471,8 +490,24 @@ public class treeBucket {
      * @return die Referenz auf den Knoten
      */
     public nodeReference createNode(tree tree, String name, String type) {
-        treeBucketNode tmp = new treeBucketNode(getNextNodeId(), name, type);
+        return createNode(getNextNodeId(), tree, name, type);
+    }
+
+    /**
+     * fügt einen Knoten in einen Baum ein
+     *
+     * @param newId die neue ID des Knotens (normalerweise automatisch gesetzt)
+     *              (wir vorallem für Tests genutzt)
+     * @param tree  der Baum
+     * @param name  der Name des Knotens
+     * @param type  der Typ des Knotens
+     * @return die Referenz auf den Knoten
+     */
+    public nodeReference createNode(long newId, tree tree, String name, String type) {
+        treeBucketNode tmp = new treeBucketNode(newId, name, type);
+        //UID.useUID(newId);
         return addNode(tree, tmp);
+
     }
 
     /**
@@ -617,6 +652,25 @@ public class treeBucket {
             tmp += nodeEntry.getValue().print();
         }
 
+        return tmp;
+    }
+
+    /**
+     * druckt eine Darstellung der realen Knoten, wobei nur deren interen
+     * Knotennummern aufgelistet werden, mit Kindern
+     *
+     * @return die Textdarstellung der Struktur der realen Knoten
+     */
+    public String simplePrint() {
+        String tmp = "";
+        for (Map.Entry<Integer, treeBucketNode> nodeEntry : nodes.entrySet()) {
+            treeBucketNode a = nodeEntry.getValue();
+            List<String> collect = new ArrayList<>();
+            for (treeBucketNode b : a.getChilds()) {
+                collect.add(String.valueOf(b.getId()));
+            }
+            tmp += "{" + a.getId() + "[" + StringUtils.join(collect, ",") + "]}";
+        }
         return tmp;
     }
 

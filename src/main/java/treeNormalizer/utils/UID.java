@@ -22,10 +22,14 @@ package treeNormalizer.utils;
  */
 public class UID {
 
-    private long lastUID = 1;
+    private long nextUID = 0;
 
     public long nextUID() {
-        return lastUID++;
+        return ++this.nextUID;
     }
 
+    /*
+     * public void useUID(long usedId) { nextUID = usedId; nextUID++;
+    }
+     */
 }
