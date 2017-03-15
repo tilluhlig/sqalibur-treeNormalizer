@@ -85,10 +85,7 @@ public class internalTree implements tree {
         if (!Objects.equals(this.name, other.name)) {
             return false;
         }
-        if (!Objects.equals(this.root, other.root)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.root, other.root);
     }
 
     /**

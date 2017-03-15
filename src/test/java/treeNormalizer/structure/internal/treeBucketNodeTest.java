@@ -21,9 +21,7 @@ import treeNormalizer.structure.internal.nodeReference;
 import treeNormalizer.structure.internal.internalTree;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import org.junit.Assert;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -290,7 +288,7 @@ public class treeBucketNodeTest {
         assertTrue(new treeBucketNode("A", "typeA").equals(new treeBucketNode("A", "typeA")));
         assertFalse(new treeBucketNode("A", "typeA").equals(new treeBucketNode("A", "typeB")));
         assertFalse(new treeBucketNode("A", "typeA").equals(new treeBucketNode("B", "typeA")));
-        assertTrue(new treeBucketNode("A", "typeA", new HashMap<String, String>()).equals(new treeBucketNode("A", "typeA", new HashMap<String, String>())));
+        assertTrue(new treeBucketNode("A", "typeA", new HashMap<>()).equals(new treeBucketNode("A", "typeA", new HashMap<>())));
     }
 
     /**

@@ -20,7 +20,6 @@ import treeNormalizer.structure.internal.nodeReference;
 import treeNormalizer.structure.internal.internalTree;
 import treeNormalizer.structure.internal.internalEdge;
 import java.util.ArrayList;
-import java.util.List;
 import org.junit.Test;
 import static org.junit.Assert.*;
 

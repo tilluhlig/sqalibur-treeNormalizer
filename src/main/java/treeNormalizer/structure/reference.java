@@ -36,6 +36,7 @@ public interface reference {
      */
     boolean childExists(nodeReference child);
 
+    @Override
     boolean equals(Object obj);
 
     /**

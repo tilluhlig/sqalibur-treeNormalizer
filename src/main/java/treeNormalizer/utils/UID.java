@@ -27,9 +27,4 @@ public class UID {
     public long nextUID() {
         return ++this.nextUID;
     }
-
-    /*
-     * public void useUID(long usedId) { nextUID = usedId; nextUID++;
-    }
-     */
 }

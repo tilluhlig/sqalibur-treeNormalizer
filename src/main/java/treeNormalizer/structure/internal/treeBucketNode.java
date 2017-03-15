@@ -16,8 +16,6 @@
  */
 package treeNormalizer.structure.internal;
 
-import treeNormalizer.structure.internal.nodeReference;
-import treeNormalizer.structure.internal.internalTree;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -78,7 +76,7 @@ public class treeBucketNode {
      * Diese Liste enthält die Knotenreferenzen, welche auf diesen Knoten
      * zeigen. denn ein Knoten kann von mehreren Pfaden genutzt werden
      */
-    private ArrayList<nodeReference> nodeReferences = new ArrayList<>();
+    private final ArrayList<nodeReference> nodeReferences = new ArrayList<>();
 
     /**
      * die Elternknoten
@@ -216,9 +214,9 @@ public class treeBucketNode {
      * @param childs die neuen Kinder
      */
     public void addChilds(List<treeBucketNode> childs) {
-        for (treeBucketNode child : childs) {
+        childs.forEach((child) -> {
             this.getChilds().add(child);
-        }
+        });
         nodeChanged();
     }
 
@@ -267,9 +265,9 @@ public class treeBucketNode {
      * @param nodeReferences die Referenzen
      */
     public void addNodeReferences(ArrayList<nodeReference> nodeReferences) {
-        for (nodeReference ref : nodeReferences) {
+        nodeReferences.forEach((ref) -> {
             addNodeReference(ref);
-        }
+        });
     }
 
     /**
@@ -308,11 +306,9 @@ public class treeBucketNode {
      */
     public void cleanParents() {
         ArrayList<treeBucketNode> newParents = new ArrayList<>();
-        for (treeBucketNode parent : getParents()) {
-            if (!newParents.contains(parent)) {
-                newParents.add(parent);
-            }
-        }
+        getParents().stream().filter((parent) -> (!newParents.contains(parent))).forEachOrdered((parent) -> {
+            newParents.add(parent);
+        });
         setParents(newParents);
     }
 
@@ -637,7 +633,7 @@ public class treeBucketNode {
      * @return die zugehörigen Bäume
      */
     public ArrayList<internalTree> getReferencedTrees() {
-        ArrayList<internalTree> tmp = new ArrayList<internalTree>();
+        ArrayList<internalTree> tmp = new ArrayList<>();
         for (nodeReference ref : getNodeReferences()) {
             if (!tmp.contains(ref.getTree())) {
                 tmp.add(ref.getTree());
@@ -1015,9 +1011,9 @@ public class treeBucketNode {
      * @param nodeReference die Referenz
      */
     public void removeNodeReference(nodeReference nodeReference) {
-        int id = getNodeReferences().indexOf(nodeReference);
-        if (id >= 0) {
-            getNodeReferences().remove(id);
+        int myid = getNodeReferences().indexOf(nodeReference);
+        if (myid >= 0) {
+            getNodeReferences().remove(myid);
         }
     }
 

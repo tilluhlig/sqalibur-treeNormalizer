@@ -56,7 +56,7 @@ public class treeBucket {
      * diese Sammlung enthält die Teilgraphen (also die realen Knoten anhand
      * deren Hash)
      */
-    private Map<Integer, treeBucketNode> nodes = new HashMap<>();
+    private final Map<Integer, treeBucketNode> nodes = new HashMap<>();
 
     /**
      * enthält alle Zeiger auf die Wurzeln der Bäume
@@ -201,13 +201,12 @@ public class treeBucket {
         // der Zielknoten erhält nun die Eltern vom Quellknoten
         targetNode.addParents(sourceNode.getParents());
         targetNode.cleanParents(); // doppelte Eltern werden entfernt
-
         // die bisherigen Eltern des Quellknoten erhalten nun den Zielknoten
         // als Kind
-        for (treeBucketNode parent : sourceNode.getParents()) {
+        sourceNode.getParents().forEach((parent) -> {
             int sourceid = parent.findChild(sourceNode);
             parent.setChild(sourceid, targetNode);
-        }
+        });
 
         // der Zielknoten nimmt nun die Referenzen des Quellknoten auf
         targetNode.addNodeReferences(sourceNode.getNodeReferences());
@@ -309,9 +308,9 @@ public class treeBucket {
         ArrayList<treeBucketNode> parents = node.getParents();
         node.disconnect();
 
-        for (treeBucketNode parent : parents) {
+        parents.forEach((parent) -> {
             propagadeNode(parent);
-        }
+        });
 
         nodes.remove(node.hashCode());
     }
@@ -376,9 +375,8 @@ public class treeBucket {
         // die Knotenreferenz soll nun auf einen neuen realen Knoten zeigen
         nodeReference.replace(node.getId(), splittedNode);
 
-        ///// TODO: HIER IST DER FEHLER
-        ///// TODO: HIER IST DER FEHLER
-        ///// TODO: HIER IST DER FEHLER
+        // der neue Knoten bekommt die Kinder des ursprünglichen Knotens
+        // (darunter bleibt ja alles gleich)
         splittedNode.addChilds(realNode.getChilds());
 
         // nun muss der Pfad über die Eltern bis zur Wurzel des Baums
@@ -623,7 +621,7 @@ public class treeBucket {
     public boolean isTreeEquivalentTo(tree treeA, tree treeB) {
         internalTree realA = (internalTree) treeA;
         internalTree realB = (internalTree) treeB;
-        
+
         if (realA.equals(realB)) {
             return true;
         }
@@ -685,9 +683,9 @@ public class treeBucket {
         for (Map.Entry<Integer, treeBucketNode> nodeEntry : nodes.entrySet()) {
             treeBucketNode a = nodeEntry.getValue();
             List<String> collect = new ArrayList<>();
-            for (treeBucketNode b : a.getChilds()) {
+            a.getChilds().forEach((b) -> {
                 collect.add(String.valueOf(b.getId()));
-            }
+            });
             tmp += "{" + a.getId() + "[" + StringUtils.join(collect, ",") + "]}";
         }
         return tmp;
@@ -770,9 +768,9 @@ public class treeBucket {
     public void removeSubtree(reference node) {
         // dazu wandern wir zunächst Rekursiv bis zu den Kindern und beginnen
         // dort mit dem Löschen
-        for (nodeReference child : node.getExistingChilds()) {
+        node.getExistingChilds().forEach((child) -> {
             removeSubtree(child);
-        }
+        });
 
         // wenn die Kinder dieses Knotens weg sind, dann können wir diesen
         // Knoten löschen (erst ist dann also ein Blatt)
@@ -798,7 +796,7 @@ public class treeBucket {
      * benennt einen Knoten um (der Knoten wir anschließend automatisch in der
      * Verwaltung aktualisiert)
      *
-     * @param ref    der Knoten
+     * @param ref     der Knoten
      * @param newName der neue Name
      */
     public void renameNode(reference ref, String newName) {
@@ -820,7 +818,7 @@ public class treeBucket {
      * ändert den Typbezeichner eines Knotens (der Knoten wir anschließend
      * automatisch in der Verwaltung aktualisiert)
      *
-     * @param ref    die Referenz auf den Knoten
+     * @param ref     die Referenz auf den Knoten
      * @param newType der neue Bezeichner
      */
     public void changeNodeType(reference ref, String newType) {
@@ -865,11 +863,7 @@ public class treeBucket {
             return false;
         }
 
-        if (realTree.getName() == name) {
-            return false;
-        }
-
-        if (realTree.getName() == null ? name == null : realTree.getName().equals(name)) {
+        if (realTree.getName().equals(name)) {
             return false;
         }
 

@@ -17,8 +17,6 @@
 package treeNormalizer.structure.internal;
 
 import treeNormalizer.structure.reference;
-import treeNormalizer.structure.internal.internalTree;
-import treeNormalizer.structure.internal.internalEdge;
 import java.util.ArrayList;
 
 /**
@@ -103,9 +101,9 @@ public class nodeReference extends Object implements reference {
 
         // entfernt die Kanten zu den Kindern
         if (hasChilds()) {
-            for (nodeReference child : getExistingChilds()) {
+            getExistingChilds().forEach((child) -> {
                 removeEdgeTo(child);
-            }
+            });
         }
     }
 
@@ -152,11 +150,9 @@ public class nodeReference extends Object implements reference {
     @Override
     public ArrayList<nodeReference> getExistingChilds() {
         ArrayList<nodeReference> res = new ArrayList<>();
-        for (nodeReference child : childs) {
-            if (child != null) {
-                res.add(child);
-            }
-        }
+        childs.stream().filter((child) -> (child != null)).forEachOrdered((child) -> {
+            res.add(child);
+        });
         return res;
     }
 
@@ -347,12 +343,7 @@ public class nodeReference extends Object implements reference {
     @Override
     public boolean hasChilds() {
         // die Kinder könnten leer sein
-        for (nodeReference child : childs) {
-            if (child != null) {
-                return true;
-            }
-        }
-        return false;
+        return childs.stream().anyMatch((child) -> (child != null));
     }
 
     /**

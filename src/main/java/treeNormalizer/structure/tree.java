@@ -16,14 +16,13 @@
  */
 package treeNormalizer.structure;
 
-import treeNormalizer.structure.reference;
-
 /**
  *
  * @author Till Uhlig <till.uhlig@student.uni-halle.de>
  */
 public interface tree {
 
+    @Override
     boolean equals(Object obj);
 
     /**
