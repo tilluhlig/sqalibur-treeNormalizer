@@ -16,9 +16,6 @@
  */
 package treeNormalizer.structure.internal;
 
-import treeNormalizer.structure.internal.treeBucketNode;
-import treeNormalizer.structure.internal.nodeReference;
-import treeNormalizer.structure.internal.internalTree;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -324,11 +321,11 @@ public class treeBucketNodeTest {
     public void testGetAttributes() {
         System.out.println("getAttributes");
         treeBucketNode instance = new treeBucketNode("A");
-        assertEquals(0, instance.getAttributes().size());
+        assertEquals(1, instance.getAttributes().size());
         instance.addAttribute("test", "2");
         instance.addAttribute("testA", "3");
         instance.addAttribute("testB", null);
-        assertEquals(3, instance.getAttributes().size());
+        assertEquals(4, instance.getAttributes().size());
     }
 
     /**
@@ -508,7 +505,7 @@ public class treeBucketNodeTest {
     public void testGetType() {
         System.out.println("getType");
         treeBucketNode instance = new treeBucketNode("A");
-        assertEquals("", instance.getType());
+        assertEquals(null, instance.getType());
     }
 
     /**
@@ -1241,7 +1238,7 @@ public class treeBucketNodeTest {
         assertEquals(instance.getType(), instance2.getType());
         assertEquals(instance.getAttributes(), instance2.getAttributes());
         assertNotEquals(System.identityHashCode(instance), System.identityHashCode(instance2));
-        instance.setLabel("B");
+        instance2.setLabel("B");
         assertNotEquals(instance.getLabel(), instance2.getLabel());
     }
 

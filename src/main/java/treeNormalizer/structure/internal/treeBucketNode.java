@@ -58,12 +58,6 @@ public class treeBucketNode {
     private int storeId = 0;
 
     /**
-     * der Name des Knotens/Bezeichner (beispielsweise sowas wie "1" oder "+").
-     * Man könnte das Feld auch content nennen.
-     */
-    private String label = "";
-
-    /**
      * eine ID des realen Knotens, diese ID wird durch eine übergeordnete
      * Verwaltung (in einer HashMap) behandelt und soll zu der ID einen
      * entsprechenden Knoten liefern (diese id ist also global eindeutig)
@@ -82,12 +76,6 @@ public class treeBucketNode {
      * die Elternknoten
      */
     private ArrayList<treeBucketNode> parents = new ArrayList<>();
-
-    /**
-     * die klassifizierung des Knotens (sowas wie binOperator, const oder
-     * select)
-     */
-    private String type = "";
 
     /**
      * die uniqueID wird genutzt, um unterschiedliche hash-Werte für eigentlich
@@ -123,7 +111,7 @@ public class treeBucketNode {
      * @param label der Name
      */
     public treeBucketNode(long id, String label) {
-        this.label = label;
+        addAttribute("label", label);
         this.id = id;
     }
 
@@ -133,7 +121,7 @@ public class treeBucketNode {
      * @param label der Name
      */
     public treeBucketNode(String label) {
-        this.label = label;
+        addAttribute("label", label);
     }
 
     /**
@@ -144,8 +132,8 @@ public class treeBucketNode {
      * @param type  der Typ (Klasse)
      */
     public treeBucketNode(long id, String label, String type) {
-        this.label = label;
-        this.type = type;
+        addAttribute("label", label);
+        addAttribute("type", type);
         this.id = id;
     }
 
@@ -156,8 +144,8 @@ public class treeBucketNode {
      * @param type  der Typ (Klasse)
      */
     public treeBucketNode(String label, String type) {
-        this.label = label;
-        this.type = type;
+        addAttribute("label", label);
+        addAttribute("type", type);
     }
 
     /**
@@ -168,10 +156,19 @@ public class treeBucketNode {
      * @param type       der Typ (Klasse)
      * @param attributes die Attribute
      */
-    public treeBucketNode(long id, String label, String type, Map<String, String> attributes) {
-        this.label = label;
-        this.type = type;
-        this.attributes = attributes;
+    public treeBucketNode(long id, String label, String type, Map<String, String> newattributes) {
+        addAttribute("label", label);
+        addAttribute("type", type);
+        newattributes.entrySet().forEach((attribute) -> {
+            addAttribute(attribute.getKey(), attribute.getValue());
+        });
+        this.id = id;
+    }
+
+    public treeBucketNode(long id, Map<String, String> newattributes) {
+        newattributes.entrySet().forEach((attribute) -> {
+            addAttribute(attribute.getKey(), attribute.getValue());
+        });
         this.id = id;
     }
 
@@ -182,10 +179,12 @@ public class treeBucketNode {
      * @param type       der Typ (Klasse)
      * @param attributes die Attribute
      */
-    public treeBucketNode(String label, String type, Map<String, String> attributes) {
-        this.label = label;
-        this.type = type;
-        this.attributes = attributes;
+    public treeBucketNode(String label, String type, Map<String, String> newattributes) {
+        addAttribute("label", label);
+        addAttribute("type", type);
+        newattributes.entrySet().forEach((attribute) -> {
+            addAttribute(attribute.getKey(), attribute.getValue());
+        });
     }
 
     /**
@@ -194,7 +193,7 @@ public class treeBucketNode {
      * @param name  der Name
      * @param value der Wert
      */
-    public void addAttribute(String name, String value) {
+    public final void addAttribute(String name, String value) {
         setAttribute(name, value);
     }
 
@@ -320,7 +319,7 @@ public class treeBucketNode {
      * @return der neue Knoten
      */
     public treeBucketNode cloneNodeBase(long newId) {
-        treeBucketNode tmp = new treeBucketNode(newId, getLabel(), getType(), getAttributes());
+        treeBucketNode tmp = new treeBucketNode(newId, getAttributes());
         return tmp;
     }
 
@@ -402,7 +401,7 @@ public class treeBucketNode {
      */
     public String getAttribute(String name) {
         if (attributeExists(name)) {
-            return getAttributes().get(name);
+            return attributes.get(name);
         }
         return null;
     }
@@ -422,7 +421,7 @@ public class treeBucketNode {
      *
      * @return die Attribute
      */
-    public Map<String, String> getAttributes() {
+    public final Map<String, String> getAttributes() {
         return attributes;
     }
 
@@ -568,7 +567,7 @@ public class treeBucketNode {
      * @return der Name
      */
     public String getLabel() {
-        return label;
+        return getAttribute("label");
     }
 
     /**
@@ -577,7 +576,7 @@ public class treeBucketNode {
      * @param label der neue Name
      */
     public void setLabel(String label) {
-        this.label = label;
+        setAttribute("label", label);
         nodeChanged();
     }
 
@@ -648,7 +647,7 @@ public class treeBucketNode {
      * @return der Typ
      */
     public String getType() {
-        return type;
+        return getAttribute("type");
     }
 
     /**
@@ -657,7 +656,7 @@ public class treeBucketNode {
      * @param type der Typ
      */
     public void setType(String type) {
-        this.type = type;
+        addAttribute("type", type);
         nodeChanged();
     }
 
@@ -1061,9 +1060,9 @@ public class treeBucketNode {
      */
     public void setAttribute(String name, String value) {
         if (attributeExists(name)) {
-            getAttributes().replace(name, value);
+            attributes.replace(name, value);
         } else {
-            getAttributes().put(name, value);
+            attributes.put(name, value);
         }
         nodeChanged();
     }

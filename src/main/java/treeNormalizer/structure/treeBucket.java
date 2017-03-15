@@ -836,6 +836,50 @@ public class treeBucket {
         propagadeNode(preparedNode);
     }
 
+    public void setAttribute(reference ref, String name, String value) {
+        nodeReference node = (nodeReference) ref;
+        // der Knoten muss eventuell aufgespalten werden
+        treeBucketNode tmp = getInternalNodeByReference(node);
+
+        if (tmp.attributeExists(name)) {
+            if (tmp.getAttribute(name).equals(value)) {
+                // der Wert existiert so bereits
+                return;
+            }
+        }
+
+        treeBucketNode preparedNode = getPreparedNode(node);
+        preparedNode.setAttribute(name, value);
+        propagadeNode(preparedNode);
+    }
+
+    public String getAttribute(reference ref, String name) {
+        nodeReference node = (nodeReference) ref;
+        treeBucketNode tmp = getInternalNodeByReference(node);
+        return tmp.getAttribute(name);
+    }
+
+    public boolean attributeExists(reference ref, String name) {
+        nodeReference node = (nodeReference) ref;
+        treeBucketNode tmp = getInternalNodeByReference(node);
+        return tmp.attributeExists(name);
+    }
+
+    public void removeAttribute(reference ref, String name) {
+        nodeReference node = (nodeReference) ref;
+        // der Knoten muss eventuell aufgespalten werden
+        treeBucketNode tmp = getInternalNodeByReference(node);
+
+        if (!tmp.attributeExists(name)) {
+            // das Attribut existiert nicht, also muss es nicht entfernt werden
+            return;
+        }
+
+        treeBucketNode preparedNode = getPreparedNode(node);
+        preparedNode.removeAttribute(name);
+        propagadeNode(preparedNode);
+    }
+
     /**
      * benennt einen Knoten um der Baum ist hierbei eigentlich nicht notwendig
      *

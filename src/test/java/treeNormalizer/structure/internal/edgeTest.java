@@ -16,7 +16,6 @@
  */
 package treeNormalizer.structure.internal;
 
-import treeNormalizer.structure.internal.internalEdge;
 import org.junit.Test;
 import static org.junit.Assert.*;
 

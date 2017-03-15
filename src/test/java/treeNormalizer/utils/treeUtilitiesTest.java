@@ -41,6 +41,7 @@ public class treeUtilitiesTest {
 
     /**
      * Test of getLeafs method, of class treeUtilities.
+     * @throws org.jdom.JDOMException
      */
     @Test
     public void testGetLeafs() throws JDOMException {

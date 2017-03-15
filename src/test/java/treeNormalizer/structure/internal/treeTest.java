@@ -16,8 +16,6 @@
  */
 package treeNormalizer.structure.internal;
 
-import treeNormalizer.structure.internal.nodeReference;
-import treeNormalizer.structure.internal.internalTree;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
