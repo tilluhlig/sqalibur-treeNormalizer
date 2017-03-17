@@ -144,6 +144,7 @@ public class internalTree implements tree {
 
     @Override
     public int hashCode() {
+        // der hash bezieht sich nur auf den Namen
         int hash = 3;
         hash = 71 * hash + Objects.hashCode(this.name);
         return hash;

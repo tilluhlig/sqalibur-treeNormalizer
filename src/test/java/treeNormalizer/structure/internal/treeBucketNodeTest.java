@@ -891,7 +891,16 @@ public class treeBucketNodeTest {
     @Test
     public void testUnsetEdgeTo() {
         System.out.println("unsetEdgeTo");
-        fail("The test case is a prototype.");
+        treeBucketNode instance = new treeBucketNode("A");
+        treeBucketNode instance2 = new treeBucketNode("B");
+        treeBucketNode instance3 = new treeBucketNode("C");
+        instance2.addEdgeTo(instance);
+        instance3.addEdgeTo(instance);
+        instance2.unsetEdgeTo(instance);
+        instance3.unsetEdgeTo(instance);
+        assertTrue(instance2.hasChilds());
+        assertTrue(instance3.hasChilds());
+        assertFalse(instance.hasParents());
     }
 
     /**
@@ -1004,7 +1013,15 @@ public class treeBucketNodeTest {
     @Test
     public void testRemoveParentEdges() {
         System.out.println("removeParentEdges");
-        fail("The test case is a prototype.");
+        treeBucketNode instance = new treeBucketNode("A");
+        treeBucketNode instance2 = new treeBucketNode("B");
+        treeBucketNode instance3 = new treeBucketNode("C");
+        instance2.addEdgeTo(instance);
+        instance3.addEdgeTo(instance);
+        instance.removeParentEdges();
+        assertFalse(instance2.hasChilds());
+        assertFalse(instance3.hasChilds());
+        assertFalse(instance.hasParents());
     }
 
     /**
@@ -1213,23 +1230,6 @@ public class treeBucketNodeTest {
      * Test of cloneNodeBase method, of class treeBucketNode.
      */
     @Test
-    public void testCloneNodeBase_int() {
-        System.out.println("cloneNodeBase");
-        treeBucketNode instance = new treeBucketNode(2, "A");
-        treeBucketNode instance2 = instance.cloneNodeBase(3);
-        assertEquals(3, instance2.getId());
-        assertEquals(instance.getLabel(), instance2.getLabel());
-        assertEquals(instance.getType(), instance2.getType());
-        assertEquals(instance.getAttributes(), instance2.getAttributes());
-        assertNotEquals(System.identityHashCode(instance), System.identityHashCode(instance2));
-        instance.setLabel("B");
-        assertNotEquals(instance.getLabel(), instance2.getLabel());
-    }
-
-    /**
-     * Test of cloneNodeBase method, of class treeBucketNode.
-     */
-    @Test
     public void testCloneNodeBase_0args() {
         System.out.println("cloneNodeBase");
         treeBucketNode instance = new treeBucketNode("A");
@@ -1340,6 +1340,23 @@ public class treeBucketNodeTest {
         assertEquals(3, instance.getChilds().size());
         instance.resetChilds();
         assertEquals(0, instance.getChilds().size());
+    }
+
+    /**
+     * Test of cloneNodeBase method, of class treeBucketNode.
+     */
+    @Test
+    public void testCloneNodeBase_long() {
+        System.out.println("cloneNodeBase");
+        treeBucketNode instance = new treeBucketNode(2, "A");
+        treeBucketNode instance2 = instance.cloneNodeBase(3);
+        assertEquals(3, instance2.getId());
+        assertEquals(instance.getLabel(), instance2.getLabel());
+        assertEquals(instance.getType(), instance2.getType());
+        assertEquals(instance.getAttributes(), instance2.getAttributes());
+        assertNotEquals(System.identityHashCode(instance), System.identityHashCode(instance2));
+        instance.setLabel("B");
+        assertNotEquals(instance.getLabel(), instance2.getLabel());
     }
 
 }

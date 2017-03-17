@@ -129,4 +129,16 @@ public class internalTreeTest {
         assertNotNull(instance.print());
     }
 
+    /**
+     * Test of hashCode method, of class internalTree.
+     */
+    @Test
+    public void testHashCode() {
+        System.out.println("hashCode");
+        internalTree instance = new internalTree("test");
+        internalTree instance2 = new internalTree("test2");
+        assertNotNull(instance.hashCode());
+        assertNotEquals(instance.hashCode(), instance2.hashCode());
+    }
+
 }

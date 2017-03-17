@@ -817,7 +817,12 @@ public class nodeReferenceTest {
     @Test
     public void testHashCode() {
         System.out.println("hashCode");
-        System.out.println("The test case is a prototype.");
+        nodeReference instance = new nodeReference(null, 31);
+        nodeReference instance2 = new nodeReference(null, 1);
+        assertNotEquals(instance.hashCode(), instance2.hashCode() );
+        int a = instance.hashCode();
+        instance.setId(5);
+        assertNotEquals(a, instance.hashCode() );
     }
 
 }

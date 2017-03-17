@@ -30,33 +30,6 @@ public class treeBucketTest {
     }
 
     /**
-     * Test of createNode method, of class treeBucket.
-     */
-    @Test
-    public void testCreateNode_tree_String() {
-        System.out.println("createNode");
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of createNode method, of class treeBucket.
-     */
-    @Test
-    public void testCreateNode_3args() {
-        System.out.println("createNode");
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of createTree method, of class treeBucket.
-     */
-    @Test
-    public void testCreateTree() {
-        System.out.println("createTree");
-        fail("The test case is a prototype.");
-    }
-
-    /**
      * Test of getTreeByName method, of class treeBucket.
      */
     @Test
@@ -79,24 +52,6 @@ public class treeBucketTest {
     }
 
     /**
-     * Test of isTreeEquivalentTo method, of class treeBucket.
-     */
-    @Test
-    public void testIsTreeEquivalentTo_tree_tree() {
-        System.out.println("isTreeEquivalentTo");
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of isTreeEquivalentTo method, of class treeBucket.
-     */
-    @Test
-    public void testIsTreeEquivalentTo_nodeReference_nodeReference() {
-        System.out.println("isTreeEquivalentTo");
-        fail("The test case is a prototype.");
-    }
-
-    /**
      * Test of print method, of class treeBucket.
      */
     @Test
@@ -104,42 +59,6 @@ public class treeBucketTest {
         System.out.println("print");
         treeBucket instance = initMinimalBucket();
         assertNotNull(instance.print());
-    }
-
-    /**
-     * Test of removeEdge method, of class treeBucket.
-     */
-    @Test
-    public void testRemoveEdge_nodeReference_nodeReference() {
-        System.out.println("removeEdge");
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of removeEdge method, of class treeBucket.
-     */
-    @Test
-    public void testRemoveEdge_edge() {
-        System.out.println("removeEdge");
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of removeNode method, of class treeBucket.
-     */
-    @Test
-    public void testRemoveNode() {
-        System.out.println("removeNode");
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of removeSubtree method, of class treeBucket.
-     */
-    @Test
-    public void testRemoveSubtree() {
-        System.out.println("removeSubtree");
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -233,15 +152,6 @@ public class treeBucketTest {
         return instance;
     }
 
-    /**
-     * Test of referenceExists method, of class treeBucket.
-     */
-    @Test
-    public void testReferenceExists() {
-        System.out.println("referenceExists");
-        fail("The test case is a prototype.");
-    }
-
     @Test
     public void testRandom() {
         System.out.println("random.nextPositive");
@@ -253,33 +163,6 @@ public class treeBucketTest {
     }
 
     /**
-     * Test of createNode method, of class treeBucket.
-     */
-    @Test
-    public void testCreateNode_3args_1() {
-        System.out.println("createNode");
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of createNode method, of class treeBucket.
-     */
-    @Test
-    public void testCreateNode_3args_2() {
-        System.out.println("createNode");
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of createNode method, of class treeBucket.
-     */
-    @Test
-    public void testCreateNode_4args() {
-        System.out.println("createNode");
-        fail("The test case is a prototype.");
-    }
-
-    /**
      * Test of simplePrint method, of class treeBucket.
      */
     @Test
@@ -287,15 +170,6 @@ public class treeBucketTest {
         System.out.println("simplePrint");
         treeBucket instance = initMinimalBucket();
         assertNotNull(instance.simplePrint());
-    }
-
-    /**
-     * Test of addEdge method, of class treeBucket.
-     */
-    @Test
-    public void testAddEdge_reference_reference() {
-        System.out.println("addEdge");
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -356,24 +230,6 @@ public class treeBucketTest {
     }
 
     /**
-     * Test of setTreeRoot method, of class treeBucket.
-     */
-    @Test
-    public void testSetTreeRoot_reference() {
-        System.out.println("setTreeRoot");
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of isTreeEquivalentTo method, of class treeBucket.
-     */
-    @Test
-    public void testIsTreeEquivalentTo_reference_reference() {
-        System.out.println("isTreeEquivalentTo");
-        fail("The test case is a prototype.");
-    }
-
-    /**
      * Test of removeAttribute method, of class treeBucket.
      */
     @Test
@@ -384,7 +240,7 @@ public class treeBucketTest {
         reference refA = instance.createNode(treeA, "1", "2");
         instance.setTreeRoot(refA);
         instance.setAttribute(refA, "blabla", "5");
-        
+
         instance.removeAttribute(null, "type");
         assertEquals("2", instance.getAttribute(refA, "type"));
         instance.removeAttribute(refA, "type");
@@ -392,33 +248,6 @@ public class treeBucketTest {
         instance.removeAttribute(refA, "label");
         assertEquals(null, instance.getAttribute(refA, "type"));
         instance.removeAttribute(refA, "blublub");
-    }
-
-    /**
-     * Test of removeEdge method, of class treeBucket.
-     */
-    @Test
-    public void testRemoveEdge_reference_reference() {
-        System.out.println("removeEdge");
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of renameNode method, of class treeBucket.
-     */
-    @Test
-    public void testRenameNode_reference_String() {
-        System.out.println("renameNode");
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of renameNode method, of class treeBucket.
-     */
-    @Test
-    public void testRenameNode_3args() {
-        System.out.println("renameNode");
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -447,7 +276,271 @@ public class treeBucketTest {
     @Test
     public void testSetAttribute() {
         System.out.println("setAttribute");
-        fail("The test case is a prototype.");
+        treeBucket instance = new treeBucket();
+        tree treeA = instance.createTree("A");
+        reference refA = instance.createNode(treeA, "1", "2");
+        instance.setTreeRoot(refA);
+        instance.setAttribute(refA, "blabla", "5");
+        assertEquals("5", instance.getAttribute(refA, "blabla"));
+        instance.setAttribute(refA, "label", "15");
+        assertEquals("15", instance.getAttribute(refA, "label"));
+        instance.setAttribute(refA, "blabla", null);
+        assertEquals(null, instance.getAttribute(refA, "blabla"));
+        assertTrue(instance.attributeExists(refA, "blabla"));
+    }
+
+    /**
+     * Test of addEdge method, of class treeBucket.
+     */
+    @Test
+    public void testAddEdge_reference_reference() {
+        System.out.println("addEdge");
+        treeBucket instance = new treeBucket();
+        tree treeA = instance.createTree("A");
+        reference refA = instance.createNode(treeA, "1");
+        instance.setTreeRoot(refA);
+        reference refB = instance.createNode(treeA, "2");
+        instance.addEdge(refA, refB);
+        assertEquals(1, refA.getChilds().size());
+        assertTrue(refB.hasParent());
+    }
+
+    /**
+     * Test of addEdge method, of class treeBucket.
+     */
+    @Test
+    public void testAddEdge_edge() {
+        System.out.println("addEdge");
+        treeBucket instance = new treeBucket();
+        tree treeA = instance.createTree("A");
+        reference refA = instance.createNode(treeA, "1");
+        instance.setTreeRoot(refA);
+        reference refB = instance.createNode(treeA, "2");
+        instance.addEdge(new internalEdge(refA, refB));
+        assertEquals(1, refA.getChilds().size());
+        assertTrue(refB.hasParent());
+    }
+
+    /**
+     * Test of createNode method, of class treeBucket.
+     */
+    @Test
+    public void testCreateNode_tree_String() {
+        System.out.println("createNode");
+        treeBucket instance = new treeBucket();
+        tree treeA = instance.createTree("A");
+        reference refA = instance.createNode(treeA, "1");
+        assertTrue(instance.referenceExists(refA));
+        assertEquals("1", instance.getAttribute(refA, "label"));
+    }
+
+    /**
+     * Test of createNode method, of class treeBucket.
+     */
+    @Test
+    public void testCreateNode_3args() {
+        System.out.println("createNode");
+        treeBucket instance = new treeBucket();
+        tree treeA = instance.createTree("A");
+        reference refA = instance.createNode(treeA, "1", "t");
+        assertTrue(instance.referenceExists(refA));
+        assertEquals("1", instance.getAttribute(refA, "label"));
+        assertEquals("t", instance.getAttribute(refA, "type"));
+    }
+
+    /**
+     * Test of createTree method, of class treeBucket.
+     */
+    @Test
+    public void testCreateTree() {
+        System.out.println("createTree");
+        treeBucket instance = new treeBucket();
+        tree treeA = instance.createTree("A");
+        assertEquals(treeA, instance.getTreeByName("A"));
+        assertEquals(1, instance.getTrees().size());
+    }
+
+    /**
+     * Test of setTreeRoot method, of class treeBucket.
+     */
+    @Test
+    public void testSetTreeRoot_reference() {
+        System.out.println("setTreeRoot");
+        treeBucket instance = new treeBucket();
+        tree treeA = instance.createTree("A");
+        reference refA = instance.createNode(treeA, "1");
+        instance.setTreeRoot(refA);
+        assertEquals(refA, treeA.getRoot());
+    }
+
+    /**
+     * Test of isTreeEquivalentTo method, of class treeBucket.
+     */
+    @Test
+    public void testIsTreeEquivalentTo_tree_tree() {
+        System.out.println("isTreeEquivalentTo");
+        treeBucket instance = new treeBucket();
+        tree treeA = instance.createTree("A");
+        tree treeB = instance.createTree("B");
+        reference refA = instance.createNode(treeA, "1");
+        reference refB = instance.createNode(treeB, "1");
+        instance.setTreeRoot(refA);
+        instance.setTreeRoot(refB);
+        assertTrue(instance.isTreeEquivalentTo(treeA, treeB));
+        
+        reference refC = instance.createNode(treeB, "1");
+        instance.addEdge(refB, refC);
+        assertFalse(instance.isTreeEquivalentTo(treeA, treeB));
+        
+        reference refD = instance.createNode(treeA, "1");
+        instance.addEdge(refA, refD);
+        assertTrue(instance.isTreeEquivalentTo(treeA, treeB));
+        
+        instance.setAttribute(refA, "label", "2");
+        assertFalse(instance.isTreeEquivalentTo(treeA, treeB));
+    }
+
+    /**
+     * Test of isTreeEquivalentTo method, of class treeBucket.
+     */
+    @Test
+    public void testIsTreeEquivalentTo_reference_reference() {
+        System.out.println("isTreeEquivalentTo");
+        treeBucket instance = new treeBucket();
+        tree treeA = instance.createTree("A");
+        tree treeB = instance.createTree("B");
+        reference refA = instance.createNode(treeA, "1");
+        reference refB = instance.createNode(treeB, "1");
+        instance.setTreeRoot(refA);
+        instance.setTreeRoot(refB);
+        assertTrue(instance.isTreeEquivalentTo(refA, refB));
+        
+        reference refC = instance.createNode(treeB, "1");
+        instance.addEdge(refB, refC);
+        assertFalse(instance.isTreeEquivalentTo(refA, refB));
+        
+        reference refD = instance.createNode(treeA, "1");
+        instance.addEdge(refA, refD);
+        assertTrue(instance.isTreeEquivalentTo(refA, refB));
+        
+        instance.setAttribute(refA, "label", "2");
+        assertFalse(instance.isTreeEquivalentTo(refA, refB));
+    }
+
+    /**
+     * Test of referenceExists method, of class treeBucket.
+     */
+    @Test
+    public void testReferenceExists() {
+        System.out.println("referenceExists");
+        treeBucket instance = new treeBucket();
+        tree treeA = instance.createTree("A");
+        reference refA = instance.createNode(treeA, "1", "t");
+        assertTrue(instance.referenceExists(refA));
+        instance.removeNode(refA);
+        assertFalse(instance.referenceExists(refA));
+    }
+
+    /**
+     * Test of removeEdge method, of class treeBucket.
+     */
+    @Test
+    public void testRemoveEdge_reference_reference() {
+        System.out.println("removeEdge");
+        treeBucket instance = new treeBucket();
+        tree treeA = instance.createTree("A");
+        reference refA = instance.createNode(treeA, "1");
+        reference refB = instance.createNode(treeA, "2");
+        instance.setTreeRoot(refA);
+        instance.addEdge(refA, refB);
+        instance.removeEdge(refA, refB);
+        assertFalse(refA.hasChilds());
+        assertFalse(refB.hasParent());
+    }
+
+    /**
+     * Test of removeEdge method, of class treeBucket.
+     */
+    @Test
+    public void testRemoveEdge_edge() {
+        System.out.println("removeEdge");
+        treeBucket instance = new treeBucket();
+        tree treeA = instance.createTree("A");
+        reference refA = instance.createNode(treeA, "1");
+        reference refB = instance.createNode(treeA, "2");
+        instance.setTreeRoot(refA);
+        instance.addEdge(refA, refB);
+        instance.removeEdge(refA, refB);
+        assertFalse(refA.hasChilds());
+        assertFalse(refB.hasParent());
+    }
+
+    /**
+     * Test of removeNode method, of class treeBucket.
+     */
+    @Test
+    public void testRemoveNode() {
+        System.out.println("removeNode");
+        treeBucket instance = new treeBucket();
+        tree treeA = instance.createTree("A");
+        reference refA = instance.createNode(treeA, "1");
+        instance.removeNode(refA);
+        assertFalse(instance.referenceExists(refA));
+    }
+
+    /**
+     * Test of removeSubtree method, of class treeBucket.
+     */
+    @Test
+    public void testRemoveSubtree() {
+        System.out.println("removeSubtree");
+        treeBucket instance = new treeBucket();
+        tree treeA = instance.createTree("A");
+        reference refA = instance.createNode(treeA, "1");
+        instance.removeSubtree(refA);
+        assertFalse(instance.referenceExists(refA));
+        
+        reference refB = instance.createNode(treeA, "1");
+        reference refC = instance.createNode(treeA, "2");
+        reference refD = instance.createNode(treeA, "3");
+        instance.setTreeRoot(refB);
+        instance.addEdge(refB, refC);
+        instance.addEdge(refC, refD);
+        instance.removeSubtree(refC);
+        assertTrue(instance.referenceExists(refB));
+        assertFalse(instance.referenceExists(refC));
+        assertFalse(instance.referenceExists(refD));
+        assertFalse(refB.hasChilds());
+        assertFalse(refC.hasChilds());
+        assertFalse(refD.hasChilds());
+        assertFalse(refC.hasParent());
+        assertFalse(refD.hasParent());
+    }
+
+    /**
+     * Test of renameNode method, of class treeBucket.
+     */
+    @Test
+    public void testRenameNode_reference_String() {
+        System.out.println("renameNode");
+        treeBucket instance = new treeBucket();
+        tree treeA = instance.createTree("A");
+        reference refA = instance.createNode(treeA, "1");
+        instance.renameNode(refA, "2");
+        assertEquals("2", instance.getAttribute(refA, "label"));
+    }
+
+    /**
+     * Test of renameNode method, of class treeBucket.
+     */
+    @Test
+    public void testRenameNode_3args() {
+        System.out.println("renameNode");
+        treeBucket instance = new treeBucket();
+        tree treeA = instance.createTree("A");
+        reference refA = instance.createNode(treeA, "1");
+        instance.renameNode(treeA, refA, "2");
+        assertEquals("2", instance.getAttribute(refA, "label"));
     }
 
     /**
@@ -456,7 +549,11 @@ public class treeBucketTest {
     @Test
     public void testSetTreeRoot_tree_reference() {
         System.out.println("setTreeRoot");
-        fail("The test case is a prototype.");
+        treeBucket instance = new treeBucket();
+        tree treeA = instance.createTree("A");
+        reference refA = instance.createNode(treeA, "1");
+        instance.setTreeRoot(treeA, refA);
+        assertEquals(refA, treeA.getRoot());
     }
 
 }

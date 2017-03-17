@@ -500,6 +500,10 @@ public class treeBucket {
             throw new IllegalArgumentException("der Knoten hat bereits einen Vater");
         }
 
+        if (nodeA.getTree() == null || nodeB.getTree() == null) {
+            throw new IllegalArgumentException("der Baum benötigt eine Wurzel");
+        }
+
         if (!nodeA.getTree().equals(nodeB.getTree())) {
             throw new IllegalArgumentException("die Knoten gehören nicht zum gleichen Baum");
         }
