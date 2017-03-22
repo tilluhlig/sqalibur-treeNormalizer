@@ -487,7 +487,7 @@ public class treeBucket {
     public void addEdge(reference referenceA, reference referenceB) {
         nodeReference nodeA = (nodeReference) referenceA;
         nodeReference nodeB = (nodeReference) referenceB;
-        treeBucketNode nA = splitNode(nodeA);
+        treeBucketNode nA = splitNode(nodeA); // dieser Knoten wird sicher verändern
         treeBucketNode nB = getInternalNodeByReference(nodeB);
 
         if (nA == null) {
@@ -499,7 +499,8 @@ public class treeBucket {
         }
 
         if (nodeB.hasParent()) {
-            throw new IllegalArgumentException("der Knoten hat bereits einen Vater");
+            throw new IllegalArgumentException("der Knoten hat bereits einen"+
+                    "Vater");
         }
 
         if (nodeA.getTree() == null || nodeB.getTree() == null) {
@@ -507,11 +508,13 @@ public class treeBucket {
         }
 
         if (!nodeA.getTree().equals(nodeB.getTree())) {
-            throw new IllegalArgumentException("die Knoten gehören nicht zum gleichen Baum");
+            throw new IllegalArgumentException("die Knoten gehören nicht zum"+
+                    "gleichen Baum");
         }
 
         if (nodeA.getTreeRoot().equals(nodeB)) {
-            throw new IllegalArgumentException("es darf keine Kante zur Wurzel gezogen werden");
+            throw new IllegalArgumentException("es darf keine Kante zur Wurzel"+
+                    "gezogen werden");
         }
 
         // jetzt werden die zwei miteinander verbunden, dabei werden die
