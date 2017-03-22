@@ -805,10 +805,10 @@ public class nodeReferenceTest {
         instance.addChild(instance3);
         instance.addChild(null);
         instance.addChild(instance4);
-        assertEquals(instance2,instance.getChild(0));
-        assertEquals(instance3,instance.getChild(1));
-        assertEquals(null,instance.getChild(2));
-        assertEquals(instance4,instance.getChild(3));
+        assertEquals(instance2, instance.getChild(0));
+        assertEquals(instance3, instance.getChild(1));
+        assertEquals(null, instance.getChild(2));
+        assertEquals(instance4, instance.getChild(3));
     }
 
     /**
@@ -819,10 +819,10 @@ public class nodeReferenceTest {
         System.out.println("hashCode");
         nodeReference instance = new nodeReference(null, 31);
         nodeReference instance2 = new nodeReference(null, 1);
-        assertNotEquals(instance.hashCode(), instance2.hashCode() );
+        assertNotEquals(instance.hashCode(), instance2.hashCode());
         int a = instance.hashCode();
         instance.setId(5);
-        assertNotEquals(a, instance.hashCode() );
+        assertNotEquals(a, instance.hashCode());
     }
 
 }

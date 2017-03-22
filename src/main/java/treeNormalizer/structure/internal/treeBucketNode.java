@@ -248,7 +248,7 @@ public class treeBucketNode {
      * @param targetNode der Zielknoten
      */
     public void addEdgeTo(treeBucketNode targetNode) {
-        if (this == targetNode){
+        if (this == targetNode) {
             return;
             // kein Kante zu sich selbst
         }

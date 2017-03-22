@@ -273,6 +273,7 @@ public class treeBucket {
         // der Zielknoten erhält nun die Eltern vom Quellknoten
         targetNode.addParents(sourceNode.getParents());
         targetNode.cleanParents(); // doppelte Eltern werden entfernt
+
         // die bisherigen Eltern des Quellknoten erhalten nun den Zielknoten
         // als Kind
         sourceNode.getParents().forEach((parent) -> {
@@ -298,13 +299,14 @@ public class treeBucket {
                     mergeNode(targetChilds.get(i), sourceChilds.get(i));
                 } else {
                     // die beiden Kinder sind bereits verschmolzen, sodass nun
-                    // doppelte Eltern entstehen
-                    //targetChilds.get(i).cleanParents();
+                    // doppelte Eltern entstehen und der Vater einmal entfernt
+                    // werden kann
                     targetChilds.get(i).removeParent(sourceNode);
                 }
             }
         }
-        // source node muss noch entfernt werden
+        // der Quellknoten kann nun gelöscht werden
+        nodes.remove(sourceNode.getStoreId());
     }
 
     /**
@@ -371,7 +373,7 @@ public class treeBucket {
             propagadeNode(parent);
         });
 
-        nodes.remove(node.hashCode());
+        nodes.remove(node.getStoreId());
     }
 
     /**

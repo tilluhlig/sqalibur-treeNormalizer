@@ -387,15 +387,15 @@ public class treeBucketTest {
         instance.setTreeRoot(refA);
         instance.setTreeRoot(refB);
         assertTrue(instance.isTreeEquivalentTo(treeA, treeB));
-        
+
         reference refC = instance.createNode(treeB, "1");
         instance.addEdge(refB, refC);
         assertFalse(instance.isTreeEquivalentTo(treeA, treeB));
-        
+
         reference refD = instance.createNode(treeA, "1");
         instance.addEdge(refA, refD);
         assertTrue(instance.isTreeEquivalentTo(treeA, treeB));
-        
+
         instance.setAttribute(refA, "label", "2");
         assertFalse(instance.isTreeEquivalentTo(treeA, treeB));
     }
@@ -414,15 +414,15 @@ public class treeBucketTest {
         instance.setTreeRoot(refA);
         instance.setTreeRoot(refB);
         assertTrue(instance.isTreeEquivalentTo(refA, refB));
-        
+
         reference refC = instance.createNode(treeB, "1");
         instance.addEdge(refB, refC);
         assertFalse(instance.isTreeEquivalentTo(refA, refB));
-        
+
         reference refD = instance.createNode(treeA, "1");
         instance.addEdge(refA, refD);
         assertTrue(instance.isTreeEquivalentTo(refA, refB));
-        
+
         instance.setAttribute(refA, "label", "2");
         assertFalse(instance.isTreeEquivalentTo(refA, refB));
     }
@@ -499,7 +499,7 @@ public class treeBucketTest {
         reference refA = instance.createNode(treeA, "1");
         instance.removeSubtree(refA);
         assertFalse(instance.referenceExists(refA));
-        
+
         reference refB = instance.createNode(treeA, "1");
         reference refC = instance.createNode(treeA, "2");
         reference refD = instance.createNode(treeA, "3");
