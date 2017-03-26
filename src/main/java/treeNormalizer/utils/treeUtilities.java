@@ -185,6 +185,9 @@ public class treeUtilities {
      * @return die Textdarstellung
      */
     public static String printDocument(Document tree) {
+        if (tree == null) {
+            return "";
+        }
         return xsltProcessor.DocumentToXml(tree);
     }
 

@@ -114,6 +114,10 @@ public class xsltProcessor {
      * @return das Dokument als XML
      */
     public static String DocumentToXml(Document document) {
+        if (document == null) {
+            return "";
+        }
+
         XMLOutputter out = new XMLOutputter(Format.getPrettyFormat());
         Writer writer = new StringWriter();
         try {
