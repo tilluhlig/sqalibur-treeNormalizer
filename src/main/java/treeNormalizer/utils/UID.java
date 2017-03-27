@@ -17,8 +17,9 @@
 package treeNormalizer.utils;
 
 /**
+ * diese Klasse erzeugt eindeutige IDs
  *
- * @author Till Uhlig <till.uhlig@student.uni-halle.de>
+ * @author Till Uhlig {@literal <till.uhlig@student.uni-halle.de>}
  */
 public class UID {
 
@@ -27,4 +28,5 @@ public class UID {
     public long nextUID() {
         return ++this.nextUID;
     }
+
 }

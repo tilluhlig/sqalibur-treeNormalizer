@@ -24,7 +24,7 @@ import org.jdom.Element;
 /**
  * diese Klasse stellt Hilfsfunktionen zum Umgang mit Bäumen bereit
  *
- * @author Till
+ * @author Till Uhlig {@literal <till.uhlig@student.uni-halle.de>}
  */
 public class treeUtilities {
 

@@ -21,7 +21,7 @@ import treeNormalizer.structure.reference;
 
 /**
  *
- * @author Till Uhlig <till.uhlig@student.uni-halle.de>
+ * @author Till Uhlig {@literal <till.uhlig@student.uni-halle.de>}
  */
 public class bucketContent extends Content {
 

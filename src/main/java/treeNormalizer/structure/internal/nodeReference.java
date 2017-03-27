@@ -23,7 +23,7 @@ import java.util.ArrayList;
  * Diese Knotenreferenzen beziehen sich auf treeBucketNode Objekte, sodass diese
  * Klasse die Element zur Nachbildung eines Baums darstellt.
  *
- * @author Till
+ * @author Till Uhlig {@literal <till.uhlig@student.uni-halle.de>}
  */
 public class nodeReference extends Object implements reference {
 

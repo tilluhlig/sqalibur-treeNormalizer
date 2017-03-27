@@ -22,7 +22,7 @@ import static org.junit.Assert.*;
 /**
  * diese Klasse testet die internalEdge-Klasse
  *
- * @author Till
+ * @author Till Uhlig {@literal <till.uhlig@student.uni-halle.de>}
  */
 public class internalEdgeTest {
 

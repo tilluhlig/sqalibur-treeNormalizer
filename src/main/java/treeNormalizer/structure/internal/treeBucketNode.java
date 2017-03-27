@@ -30,7 +30,7 @@ import org.apache.commons.lang.ArrayUtils;
  *
  * Jeder Knoten kann mehrere Kinder und mehrere Eltern besitzen.
  *
- * @author Till Uhlig <till.uhlig@student.uni-halle.de>
+ * @author Till Uhlig {@literal <till.uhlig@student.uni-halle.de>}
  */
 public class treeBucketNode {
 

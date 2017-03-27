@@ -18,7 +18,7 @@ package treeNormalizer.structure;
 
 /**
  *
- * @author Till Uhlig <till.uhlig@student.uni-halle.de>
+ * @author Till Uhlig {@literal <till.uhlig@student.uni-halle.de>}
  */
 public interface tree {
 

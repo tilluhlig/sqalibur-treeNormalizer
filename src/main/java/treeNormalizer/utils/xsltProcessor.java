@@ -43,7 +43,7 @@ import org.jdom.transform.JDOMSource;
 /**
  * diese Klasse bietet einen XSLT Prozessor an
  *
- * @author Till Uhlig <till.uhlig@student.uni-halle.de>
+ * @author Till Uhlig {@literal <till.uhlig@student.uni-halle.de>}
  */
 public class xsltProcessor {
 

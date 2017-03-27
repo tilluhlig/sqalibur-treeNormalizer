@@ -20,7 +20,7 @@ package treeNormalizer;
  * diese Klasse stellt den Aufbau einer Regel dar (die Klasse wurde nicht als
  * abstract implementiert, weil static nicht mit abstract zusammen arbeitet)
  *
- * @author Till
+ * @author Till Uhlig {@literal <till.uhlig@student.uni-halle.de>}
  */
 public class rule {
 

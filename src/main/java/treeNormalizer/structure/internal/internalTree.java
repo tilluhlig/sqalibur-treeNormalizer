@@ -27,7 +27,7 @@ import java.util.Objects;
  *
  * Damit ist internalTree eine Hilfskonstrukt.
  *
- * @author Till
+ * @author Till Uhlig {@literal <till.uhlig@student.uni-halle.de>}
  */
 public class internalTree implements tree {
 

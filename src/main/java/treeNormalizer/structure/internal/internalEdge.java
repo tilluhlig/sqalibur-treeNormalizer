@@ -26,7 +26,7 @@ import treeNormalizer.structure.reference;
  *
  * Damit ist diese Klasse ein Hilfskonstrukt.
  *
- * @author Till
+ * @author Till Uhlig {@literal <till.uhlig@student.uni-halle.de>}
  */
 public class internalEdge implements edge {
 

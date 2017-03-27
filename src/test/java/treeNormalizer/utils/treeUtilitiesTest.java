@@ -32,7 +32,7 @@ import static org.junit.Assert.*;
 
 /**
  *
- * @author Till Uhlig <till.uhlig@student.uni-halle.de>
+ * @author Till Uhlig {@literal <till.uhlig@student.uni-halle.de>}
  */
 public class treeUtilitiesTest {
 

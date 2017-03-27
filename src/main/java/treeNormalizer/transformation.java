@@ -24,7 +24,7 @@ import treeNormalizer.utils.treeUtilities;
  * soll. Dabei enthält context eventuelle Zusatzinfos für den Kontext
  * (beispielsweise als createTabel Statement) bereit.
  *
- * @author Till
+ * @author Till Uhlig {@literal <till.uhlig@student.uni-halle.de>}
  */
 public class transformation {
 

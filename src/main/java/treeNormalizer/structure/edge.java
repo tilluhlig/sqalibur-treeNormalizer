@@ -20,7 +20,7 @@ import treeNormalizer.structure.internal.nodeReference;
 
 /**
  *
- * @author Till Uhlig <till.uhlig@student.uni-halle.de>
+ * @author Till Uhlig {@literal <till.uhlig@student.uni-halle.de>}
  */
 public interface edge {
 
@@ -44,5 +44,5 @@ public interface edge {
      * @return die Wurzel des Baums
      */
     nodeReference getTreeRoot();
-    
+
 }

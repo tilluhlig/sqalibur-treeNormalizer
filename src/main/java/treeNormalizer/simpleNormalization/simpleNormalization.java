@@ -29,7 +29,7 @@ import treeNormalizer.utils.treeUtilities;
  * als Datengrundlage genutzt und keine zusätzliche Entscheidung für die Auswahl
  * der Regeln getroffen (also Simpel)
  *
- * @author Till Uhlig <till.uhlig@student.uni-halle.de>
+ * @author Till Uhlig {@literal <till.uhlig@student.uni-halle.de>}
  */
 public class simpleNormalization extends normalization {
 

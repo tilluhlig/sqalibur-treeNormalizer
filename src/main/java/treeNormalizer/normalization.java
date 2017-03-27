@@ -24,7 +24,7 @@ import org.jdom.Document;
  * Diese Klasse stellt die Struktur einer allgemeinen Normalisierungsumgebung
  * dar
  *
- * @author Till Uhlig <till.uhlig@student.uni-halle.de>
+ * @author Till Uhlig {@literal <till.uhlig@student.uni-halle.de>}
  */
 public abstract class normalization {
 
