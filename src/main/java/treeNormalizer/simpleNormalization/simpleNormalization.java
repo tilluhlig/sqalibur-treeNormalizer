@@ -57,7 +57,12 @@ public class simpleNormalization extends normalization {
     public boolean equivalent() {
         Document solutionDocument = getSolution().getTree();
         Document submissionDocument = getSubmission().getTree();
-        if (solutionDocument == null && submissionDocument == null) {
+        if (treeUtilities.printDocument(solutionDocument).equals(treeUtilities.printDocument(submissionDocument))){
+            return true;
+        }
+        return false;
+        
+        /*if (solutionDocument == null && submissionDocument == null) {
             return true;
         }
         if (solutionDocument == null && submissionDocument != null) {
@@ -67,7 +72,7 @@ public class simpleNormalization extends normalization {
             return false;
         }
 
-        return elementEquivalence(submissionDocument.getRootElement(), solutionDocument.getRootElement());
+        return elementEquivalence(submissionDocument.getRootElement(), solutionDocument.getRootElement());*/
     }
 
     /**
